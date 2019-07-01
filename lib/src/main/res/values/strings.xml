@@ -25,4 +25,8 @@
 	<string name="stockCheckInText">คลังที่ต้องการเช็คอิน</string>
 	<string name="choiceText">เลือก</string>
 	<string name="stockStation">stockStation</string>
+	<string name="checkin_text">ลงชื่อเข้างาน</string>
+	<string name="checkout_text">ลงชื่อออกงาน</string>
+	<string name="check_between_text">ลงชื่อระหว่างวัน</string>
+	<string name="generate_qrcode">generate QRcode</string>
 </resources>
