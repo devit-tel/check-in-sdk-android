@@ -1,10 +1,12 @@
 package com.trueelogistics.checkin.scanqr
 
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.activity.GenQrActivity
+import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 
 class MainScanQrActivity : AppCompatActivity() {
@@ -14,43 +16,44 @@ class MainScanQrActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_scan_qr)
 
         checkInBtn.setOnClickListener {
-            openScanQr()
+            openScanQr(this)
         }
         checkBetBtn.setOnClickListener {
-            openScanQr()
+            openScanQr(this)
         }
         checkOutBtn.setOnClickListener {
-            openScanQr()
+            openScanQr(this)
         }
         genQr.setOnClickListener {
             CheckInTEL.checkInTEL?.openGenarateQRCode(this, object : CheckInTELCallBack {
                 override fun onCancel() {
-                    Toast.makeText(this, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainScanQrActivity, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onCheckInFailure(message: String) {
-                    Toast.makeText(this, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainScanQrActivity, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onCheckInSuccess(result: String) {
-                    Toast.makeText(this, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainScanQrActivity, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
                 }
 
             })
         }
     }
-    private fun openScanQr(){
-        CheckInTEL.checkInTEL?.openScanQRCode(activity, object : CheckInTELCallBack {
+
+    private fun openScanQr(context: Context) {
+        CheckInTEL.checkInTEL?.openScanQRCode(this, object : CheckInTELCallBack {
             override fun onCancel() {
-                Toast.makeText(this, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
             }
 
             override fun onCheckInFailure(message: String) {
-                Toast.makeText(this, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
             }
 
             override fun onCheckInSuccess(result: String) {
-                Toast.makeText(this, " ScanQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, " ScanQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
             }
 
         })
