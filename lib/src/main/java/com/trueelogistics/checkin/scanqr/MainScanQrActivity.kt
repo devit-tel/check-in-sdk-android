@@ -14,20 +14,45 @@ class MainScanQrActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_scan_qr)
 
         checkInBtn.setOnClickListener {
-            val intent = Intent(this, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            openScanQr()
         }
         checkBetBtn.setOnClickListener {
-            val intent = Intent(this, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            openScanQr()
         }
         checkOutBtn.setOnClickListener {
-            val intent = Intent(this, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            openScanQr()
         }
         genQr.setOnClickListener {
-            val intent = Intent(this, GenQrActivity::class.java)
-            this.startActivity(intent)
+            CheckInTEL.checkInTEL?.openGenarateQRCode(this, object : CheckInTELCallBack {
+                override fun onCancel() {
+                    Toast.makeText(this, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onCheckInFailure(message: String) {
+                    Toast.makeText(this, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onCheckInSuccess(result: String) {
+                    Toast.makeText(this, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
+                }
+
+            })
         }
+    }
+    private fun openScanQr(){
+        CheckInTEL.checkInTEL?.openScanQRCode(activity, object : CheckInTELCallBack {
+            override fun onCancel() {
+                Toast.makeText(this, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCheckInFailure(message: String) {
+                Toast.makeText(this, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCheckInSuccess(result: String) {
+                Toast.makeText(this, " ScanQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }

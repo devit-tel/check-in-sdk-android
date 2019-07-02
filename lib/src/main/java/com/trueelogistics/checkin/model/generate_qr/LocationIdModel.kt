@@ -1,7 +1,7 @@
 package com.trueelogistics.checkin.model.generate_qr
 
 data class LocationIdModel (
-    var LocationPointModel: LocationPointModel,
+    var locationPoint: LocationPointModel,
     var deleted : Boolean? = false,
     var _id : String? = null,
     var locationName : String? = null,
