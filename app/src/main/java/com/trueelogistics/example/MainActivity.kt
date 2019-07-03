@@ -15,7 +15,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CheckInTEL.packageName(this)
+
+        //CheckInTEL.getSha1(this)
         nav_view.setNavigationItemSelectedListener(this)
 
         supportFragmentManager.beginTransaction()

@@ -32,9 +32,7 @@ class ScanQrActivity : AppCompatActivity() {
                 ).show()
                 checkInTELCallBack?.onCheckInFailure("Permission Denied") // set
                 finish()
-
             }
             .ask()
-
     }
 }

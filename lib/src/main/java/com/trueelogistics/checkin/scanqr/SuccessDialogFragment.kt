@@ -15,7 +15,6 @@ class SuccessDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_success_checkin, container, false)
     }
 
@@ -29,10 +28,8 @@ class SuccessDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-
         val width = ViewGroup.LayoutParams.WRAP_CONTENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
     }
-
 }

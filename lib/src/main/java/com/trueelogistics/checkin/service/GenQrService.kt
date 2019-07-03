@@ -10,5 +10,4 @@ interface GenQrService{
     fun getData(
         @Field("qrcodeCreateBy") qrcodeCreateBy:String,
         @Field("locationId")locationId:String) : Call<RootModel>
-
 }

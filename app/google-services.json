@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:489439230608:android:8644f51bcb1a0f0d",
         "android_client_info": {
-          "package_name": "com.example.testwithfirebase"
+          "package_name": "com.trueelogistics.checkin"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "489439230608-e2ildpos5kfnrarp2b04g32olelvmb4q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.testwithfirebase",
+            "package_name": "com.trueelogistics.checkin",
             "certificate_hash": "c9a810ed6f9934f797442ec696cb16d5b672b6d1"
           }
         },

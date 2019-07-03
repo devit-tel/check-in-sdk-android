@@ -21,9 +21,7 @@ class GenQrActivity : AppCompatActivity() {
         setContentView(R.layout.activity_gen_qr)
 
         getQr()
-
         val countTime = object : CountDownTimer(10000, 500) { // 1 second to onTick & 1 minit to onFinish
-
             override fun onTick(millisUntilFinished: Long) {
                 timeCount.text = (millisUntilFinished/1000).toString()
             }
@@ -32,7 +30,6 @@ class GenQrActivity : AppCompatActivity() {
                 this.start()
             }
         }.start()
-
         refreshTime.setOnClickListener {
             getQr()
             countTime.start()
@@ -41,13 +38,11 @@ class GenQrActivity : AppCompatActivity() {
     fun getQr()
     {
         val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenQrService::class.java)
-        val call = retrofit?.getData("Leader","5d01d417136e06003c23024e")
-
+        val call = retrofit?.getData("LeaderNo4","5d01d704136e06003c23024f")
         call?.enqueue( object : Callback<RootModel>{
             override fun onFailure(call: Call<RootModel>, t: Throwable) {
                 Log.e(" onFailure !!"," Something wrong")
             }
-
             override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
                 if ( response.code() == 200){
                     val root : RootModel? = response.body()
@@ -64,5 +59,4 @@ class GenQrActivity : AppCompatActivity() {
             }
         })
     }
-
 }

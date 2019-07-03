@@ -40,7 +40,6 @@ class NearByActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-
             override fun onLost(message: Message?) {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
@@ -61,7 +60,6 @@ class NearByActivity : AppCompatActivity() {
                 Nearby.getMessagesClient(it).subscribe(mML)
             }
         }
-
     }
 
     override fun onStop() {
@@ -77,5 +75,4 @@ class NearByActivity : AppCompatActivity() {
         }
         super.onStop()
     }
-
 }

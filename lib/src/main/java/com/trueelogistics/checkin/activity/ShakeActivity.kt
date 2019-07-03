@@ -32,15 +32,12 @@ class ShakeActivity : AppCompatActivity() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location ->
                 localLocation = location
-
             }
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 for (location in locationResult.locations) {
                     localLocation = location
-
                 }
             }
         }
@@ -54,7 +51,6 @@ class ShakeActivity : AppCompatActivity() {
                     ref.child("latitude").setValue(localLocation.latitude)
                     ref.child("longitude").setValue(localLocation.longitude)
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(
                         this@ShakeActivity,
@@ -64,7 +60,6 @@ class ShakeActivity : AppCompatActivity() {
                 }
             })
             getManagerFirebase(localLocation)
-
         }
         ShakeDetector.destroy()
         updateValuesFromBundle(savedInstanceState)
@@ -101,7 +96,6 @@ class ShakeActivity : AppCompatActivity() {
 
     private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
         savedInstanceState ?: return
-
         // Update the value of requestingLocationUpdates from the Bundle.
         if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
             requestingLocationUpdates = savedInstanceState.getBoolean(
@@ -135,7 +129,6 @@ class ShakeActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {

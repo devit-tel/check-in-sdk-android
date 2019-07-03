@@ -28,8 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocationClickListener {
 
-
-    private var doSomething : ((item: PersonModel)-> Unit) ? = null
+    private var doSomething: ((item: PersonModel) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,37 +42,26 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
         super.onViewCreated(view, savedInstanceState)
 
         getRrtrofit()
-
-            choiceStock.setOnClickListener {
-                if (choiceStock.background is ColorDrawable)
-
-                    dismiss()
-            }
-
-
+        choiceStock.setOnClickListener {
+            if (choiceStock.background is ColorDrawable)
+                dismiss()
+        }
     }
 
     private fun getRrtrofit() {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
-
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-
         val retrofit = Retrofit.Builder().baseUrl("http://rakgun.com")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create()).build()
         val service = retrofit.create(DataService::class.java)
-
         val call = service.getData("69i57j0l5910j0j7f4d5s4fs64g")
-
         call.enqueue(object : Callback<ResponseModel> {
             override fun onFailure(call: Call<ResponseModel>?, t: Throwable?) {
                 Log.e("call === ", call.toString())
             }
-
             override fun onResponse(call: Call<ResponseModel>?, response: Response<ResponseModel>) {
-
-
                 if (response.code() == 200) {
                     val logModel: ResponseModel? = response.body()
                     activity?.also {
@@ -88,24 +76,21 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
                     response.errorBody()
                 }
             }
-
         })
     }
-    override fun onItemLocationClick(item: PersonModel, oldRadioButton : RadioButton?, newRadioButton : RadioButton?) {
 
-        oldRadioButton?.isChecked =false
+    override fun onItemLocationClick(item: PersonModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
+        oldRadioButton?.isChecked = false
         newRadioButton?.isChecked = true
-
-        activity?.let{
-            choiceStock.setBackgroundColor(ContextCompat.getColor(it,R.color.purple))
+        activity?.let {
+            choiceStock.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
         }
-        doSomething?.let{
+        doSomething?.let {
             it(item)
         }
     }
 
-    fun setOnItemLocationClick(doSomething : ((item: PersonModel)-> Unit)?=null ){ // save stucture from stock to value name doSomething
-       this.doSomething = doSomething  //save class who call this function
+    fun setOnItemLocationClick(doSomething: ((item: PersonModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
+        this.doSomething = doSomething  //save class who call this function
     }
-
 }

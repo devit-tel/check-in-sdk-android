@@ -25,19 +25,16 @@ class MainScanQrActivity : AppCompatActivity() {
             openScanQr(this)
         }
         genQr.setOnClickListener {
-            CheckInTEL.checkInTEL?.openGenarateQRCode(this, object : CheckInTELCallBack {
+            CheckInTEL.checkInTEL?.openGenerateQRCode(this, object : CheckInTELCallBack {
                 override fun onCancel() {
                     Toast.makeText(this@MainScanQrActivity, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }
-
                 override fun onCheckInFailure(message: String) {
                     Toast.makeText(this@MainScanQrActivity, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
                 }
-
                 override fun onCheckInSuccess(result: String) {
                     Toast.makeText(this@MainScanQrActivity, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
                 }
-
             })
         }
     }
@@ -47,15 +44,12 @@ class MainScanQrActivity : AppCompatActivity() {
             override fun onCancel() {
                 Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
             }
-
             override fun onCheckInFailure(message: String) {
                 Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
             }
-
             override fun onCheckInSuccess(result: String) {
                 Toast.makeText(context, " ScanQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
             }
-
         })
     }
 }

@@ -25,7 +25,6 @@ class ManualCheckinFragment : Fragment() {
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
-
         checkin_pic.setOnClickListener {
             if (checkin_pic.drawable.constantState == resources
                     .getDrawable( R.drawable.ic_checkin_gray).constantState)
@@ -34,7 +33,6 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-
         }
         between_pic.setOnClickListener {
             if (between_pic.drawable.constantState == resources
