@@ -127,6 +127,7 @@
 			android:padding="10dp">
 		<Button
 				android:id="@+id/confirm"
+				android:enabled="true"
 				android:background="@color/gray"
 				android:text="@string/confirmText"
 				android:textColor="@color/white"

@@ -84,6 +84,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
         newRadioButton?.isChecked = true
         activity?.let {
             choiceStock.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
+            choiceStock.isEnabled = true
         }
         doSomething?.let {
             it(item)

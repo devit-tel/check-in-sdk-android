@@ -69,5 +69,6 @@ class ManualCheckinFragment : Fragment() {
         stockName.setTextColor(resources.getColor(R.color.black))
         confirm.setBackgroundColor(resources.getColor(R.color.purple))
         confirm.setTextColor(resources.getColor(R.color.white))
+        confirm.isEnabled = true
     }
 }
