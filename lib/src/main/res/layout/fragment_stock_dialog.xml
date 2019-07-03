@@ -6,7 +6,6 @@
 		android:layout_height="match_parent"
 		android:orientation="vertical"
 		app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
 	<TextView
 			android:padding="20dp"
 			android:layout_width="match_parent"
@@ -22,7 +21,6 @@
 				android:id="@+id/recycleView"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
-
 		</android.support.v7.widget.RecyclerView>
 	</ScrollView>
 	<LinearLayout
@@ -31,7 +29,6 @@
 			android:gravity="bottom"
 			android:orientation="vertical"
 			android:padding="20dp">
-
 		<Button
 				android:id="@+id/choiceStock"
 				android:layout_width="match_parent"
@@ -39,8 +36,6 @@
 				android:text="@string/choiceText"
 				android:textSize="20sp"
 				android:textColor="@color/white"
-				android:background="@color/gray"
-		/>
-
+				android:background="@color/gray"/>
 	</LinearLayout>
 </LinearLayout>

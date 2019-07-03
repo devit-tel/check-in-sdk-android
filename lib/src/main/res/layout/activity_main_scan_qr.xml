@@ -2,29 +2,23 @@
 <android.support.design.widget.CoordinatorLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-		android:layout_height="match_parent"
->
+		android:layout_height="match_parent">
 	<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:padding="50dp"
-	>
+			android:padding="50dp">
 		<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/checkin_text"
 				android:textSize="30sp"
-				android:textColor="@color/black"
-		/>
-
+				android:textColor="@color/black"/>
 	</LinearLayout>
 	<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:orientation="vertical"
-			android:gravity="center"
-
-	>
+			android:gravity="center">
 		<ImageView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -40,8 +34,7 @@
 				android:layout_margin="10dp"
 				android:textColor="@color/white"
 				android:padding="10sp"
-				android:background="@color/purple"
-		/>
+				android:background="@color/purple"/>
 		<Button
 				android:id="@+id/checkBetBtn"
 				android:textSize="20sp"
@@ -51,9 +44,7 @@
 				android:layout_margin="10dp"
 				android:textColor="@color/white"
 				android:padding="10sp"
-				android:background="@color/purple"
-
-		/>
+				android:background="@color/purple"/>
 		<Button
 				android:id="@+id/checkOutBtn"
 				android:textSize="20sp"
@@ -63,8 +54,7 @@
 				android:layout_margin="10dp"
 				android:padding="10sp"
 				android:textColor="@color/white"
-				android:background="@color/purple"
-		/>
+				android:background="@color/purple"/>
 		<TextView
 				android:id="@+id/genQr"
 				android:layout_width="wrap_content"
