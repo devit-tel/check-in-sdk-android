@@ -18,6 +18,9 @@
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon,UnusedAttribute">
+		<meta-data
+				android:name="com.google.android.nearby.messages.API_KEY"
+				android:value="AIzaSyCcmF_15_J1oLxPY-s8beNDjjwpzH_Tj_k" />
 		<activity android:name="com.trueelogistics.checkin.activity.GenQrActivity">
 		</activity>
 		<activity

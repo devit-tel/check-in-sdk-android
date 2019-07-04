@@ -12,6 +12,7 @@ import com.trueelogistics.checkin.R
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class SuccessDialogFragment : DialogFragment() {
 
@@ -26,10 +27,8 @@ class SuccessDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ISO_TIME
-        val formatted = current.format(formatter)
-        timeCheckIn.text = formatted.substring(0,5)
+        val current = Date()
+        timeCheckIn.text = current.toString().substring(11,16)
         isCancelable = false
         confirm.setOnClickListener {
             activity?.finish() //activity where call this fragment will finish
