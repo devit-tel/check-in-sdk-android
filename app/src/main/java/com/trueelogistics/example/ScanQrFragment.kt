@@ -10,10 +10,8 @@ import android.view.ViewGroup
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
-import me.dm7.barcodescanner.zxing.ZXingScannerView
 
 class ScanQrFragment : Fragment() {
-    private var zXingScannerView: ZXingScannerView? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

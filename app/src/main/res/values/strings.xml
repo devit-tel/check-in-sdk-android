@@ -22,5 +22,9 @@
 	<string name="history_check">ประวัติการเช็คอิน</string>
 	<string name="request_absence">คำขอวันลา</string>
 	<string name="generate_qrcode">Generate QrCode</string>
+	<string name="shakePhoneText">เขย่าโทรศัพท์ของคุณ</string>
+	<string name="nearByFine">ค้นหาโทรศัพท์รอบๆตัวคุณด้วย NearBy</string>
+	<string name="finePhone">ค้นหาโทรศัพท์</string>
+	<string name="orPressBt">หรือกดปุ่ม</string>
 
 </resources>
