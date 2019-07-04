@@ -6,7 +6,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
-import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -49,8 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.history -> {
                 Toast.makeText(this, "sideShow", Toast.LENGTH_LONG).show()
             }
-            R.id.absent -> {
-                Toast.makeText(this, "absent show", Toast.LENGTH_LONG).show()
+            R.id.absence -> {
+                Toast.makeText(this, "absence show", Toast.LENGTH_LONG).show()
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)

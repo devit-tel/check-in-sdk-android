@@ -7,13 +7,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
-import android.util.Log
 import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
-import java.net.URLEncoder
 import java.security.MessageDigest
 
 
@@ -40,8 +38,11 @@ class CheckInTEL {
         @SuppressLint("PackageManagerGetSignatures")
         if (SDK_INT >= 28) {
             val packageManager =
-                application.run { packageManager.getPackageInfo(
-                    packageName, PackageManager.GET_SIGNING_CERTIFICATES) }
+                application.run {
+                    packageManager.getPackageInfo(
+                        packageName, PackageManager.GET_SIGNING_CERTIFICATES
+                    )
+                }
             val signatures = packageManager.signingInfo.apkContentsSigners
             val md = MessageDigest.getInstance("SHA-1")
             for (signature in signatures) {
@@ -50,8 +51,11 @@ class CheckInTEL {
             }
         } else {
             val packageManagers =
-                application.run {packageManager.getPackageInfo(
-                packageName, PackageManager.GET_SIGNATURES) }
+                application.run {
+                    packageManager.getPackageInfo(
+                        packageName, PackageManager.GET_SIGNATURES
+                    )
+                }
             for (signature in packageManagers.signatures) {
                 val md = MessageDigest.getInstance("SHA-1")
                 md.update(signature.toByteArray())

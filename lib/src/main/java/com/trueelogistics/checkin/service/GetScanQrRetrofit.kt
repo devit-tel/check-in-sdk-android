@@ -23,7 +23,7 @@ class GetScanQrRetrofit {
                     .addHeader("packageName", CheckInTEL?.packageName)
                     .addHeader("userId", "whatever_YOU_recieved_FROM_2STAGE_or_ONDEMAND")
                     .addHeader("sha1", CheckInTEL?.sha1)
-                    .addHeader("APIKey", "10a34637ad661d98ba3344717656fcc76209c2f810a34637ad661d98ba3344717656fcc76209c2f8")
+                    .addHeader("APIKey", "SATBUDWEXFZH2J3K5N6P7R9SATCVDWEYGZH2K4M5N7Q8R9TBUCVEXFYGZJ")
                     .build()
                 chain.proceed(newRequest)
             }

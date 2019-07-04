@@ -20,7 +20,7 @@
 	<string name="shake_fine">เขย่าเพื่อค้นหาคลัง</string>
 	<string name="nearby_fine">ค้นหาคลังรอบตัว</string>
 	<string name="history_check">ประวัติการเช็คอิน</string>
-	<string name="request_absent">คำขอวันลา</string>
+	<string name="request_absence">คำขอวันลา</string>
 	<string name="generate_qrcode">Generate QrCode</string>
 
 </resources>

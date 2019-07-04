@@ -38,12 +38,13 @@ class ShakeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { fragActivity ->
             val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
-            ActivityCompat.requestPermissions(fragActivity, permissions,0)
+            ActivityCompat.requestPermissions(fragActivity, permissions, 0)
             KotlinPermissions.with(fragActivity) // where this is an FragmentActivity instance --> KotlinPermissions.with
                 .permissions(
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ).onAccepted {
-                    val fusedLocationClient : FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(fragActivity)
+                    val fusedLocationClient: FusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(fragActivity)
                     ShakeDetector.start()
                     ShakeDetector.create(fragActivity) {
                         fusedLocationClient.lastLocation
@@ -53,12 +54,13 @@ class ShakeFragment : Fragment() {
 
                                 FirebaseApp.initializeApp(fragActivity)
 
-                                val ref= FirebaseDatabase.getInstance().getReference("driverLocation")
-                                ref.addValueEventListener( object : ValueEventListener {
+                                val ref = FirebaseDatabase.getInstance().getReference("driverLocation")
+                                ref.addValueEventListener(object : ValueEventListener {
                                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                                         ref.child("latitude").setValue(latitude)
                                         ref.child("longitude").setValue(longitude)
                                     }
+
                                     override fun onCancelled(error: DatabaseError) {
                                         Toast.makeText(
                                             activity,
@@ -67,7 +69,7 @@ class ShakeFragment : Fragment() {
                                         ).show()
                                     }
                                 })
-                                location?.let{
+                                location?.let {
                                     getManagerFirebase(it)
                                 }
                             }
@@ -76,6 +78,7 @@ class ShakeFragment : Fragment() {
                             override fun onTick(millisUntilFinished: Long) {
 
                             }
+
                             override fun onFinish() {
 
                             }
@@ -85,17 +88,17 @@ class ShakeFragment : Fragment() {
                 }.ask()
         }
     }
-    private fun getManagerFirebase(location: Location)
-    {
-        val managerRef= FirebaseDatabase.getInstance().getReference("managerLocation")
-        managerRef.addValueEventListener( object : ValueEventListener {
+
+    private fun getManagerFirebase(location: Location) {
+        val managerRef = FirebaseDatabase.getInstance().getReference("managerLocation")
+        managerRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val latDriver  = dataSnapshot.child("latitude").value.toString()
+                val latDriver = dataSnapshot.child("latitude").value.toString()
                 val longDriver = dataSnapshot.child("longitude").value.toString()
                 val managerLocation = Location(LocationManager.GPS_PROVIDER)
                 managerLocation.latitude = latDriver.toDouble()
                 managerLocation.longitude = longDriver.toDouble()
-                val distance : Float? = location.distanceTo(managerLocation)
+                val distance: Float? = location.distanceTo(managerLocation)
                 activity?.let {
                     if (distance != null) {
                         if (distance < 500)
@@ -113,6 +116,7 @@ class ShakeFragment : Fragment() {
                     }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     activity,
@@ -122,17 +126,17 @@ class ShakeFragment : Fragment() {
             }
         })
     }
-    fun getDriverFirebase(location: Location)
-    {
-        val managerRef= FirebaseDatabase.getInstance().getReference("driverLocation")
-        managerRef.addValueEventListener( object : ValueEventListener {
+
+    fun getDriverFirebase(location: Location) {
+        val managerRef = FirebaseDatabase.getInstance().getReference("driverLocation")
+        managerRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val latDriver  = dataSnapshot.child("latitude").value.toString()
+                val latDriver = dataSnapshot.child("latitude").value.toString()
                 val longDriver = dataSnapshot.child("longitude").value.toString()
                 val driverLocation = Location(LocationManager.GPS_PROVIDER)
                 driverLocation.latitude = latDriver.toDouble()
                 driverLocation.longitude = longDriver.toDouble()
-                val distance : Float? = location.distanceTo(driverLocation)
+                val distance: Float? = location.distanceTo(driverLocation)
                 activity?.let {
                     if (distance != null) {
                         if (distance < 500)
@@ -150,6 +154,7 @@ class ShakeFragment : Fragment() {
                     }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     activity,
