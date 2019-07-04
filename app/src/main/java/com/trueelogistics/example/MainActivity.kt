@@ -37,10 +37,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.shake_fine -> {
-
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frag_main, ShakeFragment())
+                    .commit()
             }
             R.id.nearby_fine -> {
-
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frag_main, NearByFragment())
+                    .commit()
             }
             R.id.history -> {
                 Toast.makeText(this, "sideShow", Toast.LENGTH_LONG).show()
