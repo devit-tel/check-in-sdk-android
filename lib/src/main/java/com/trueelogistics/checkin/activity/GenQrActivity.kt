@@ -41,14 +41,12 @@ class GenQrActivity : AppCompatActivity() {
         val call = retrofit?.getData("LeaderNo4","5d01d704136e06003c23024f")
         call?.enqueue( object : Callback<RootModel>{
             override fun onFailure(call: Call<RootModel>, t: Throwable) {
-                Log.e(" onFailure !!"," Something wrong")
             }
             override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
                 if ( response.code() == 200){
                     val root : RootModel? = response.body()
                     if(root?.status == "OK"){
                         val qrText = root.data.qrcodeUniqueKey.toString()
-                        Log.e(" == root. ==", qrText)
                         val result = QRCode.from(qrText).withSize(1000, 1000).bitmap()
                         qrCode.setImageBitmap(result)
                     }

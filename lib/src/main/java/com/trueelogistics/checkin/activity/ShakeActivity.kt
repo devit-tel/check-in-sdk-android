@@ -95,14 +95,12 @@ class ShakeActivity : AppCompatActivity() {
     }
 
     private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
-        savedInstanceState ?: return
-        // Update the value of requestingLocationUpdates from the Bundle.
+        savedInstanceState ?: return  // Update the value of requestingLocationUpdates from the Bundle.
         if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
             requestingLocationUpdates = savedInstanceState.getBoolean(
                 REQUESTING_LOCATION_UPDATES_KEY
             )
         }
-
     }
 
     private fun getManagerFirebase(location: Location) {

@@ -46,10 +46,7 @@ class CheckInTEL {
             val md = MessageDigest.getInstance("SHA-1")
             for (signature in signatures) {
                 md.update(signature.toByteArray())
-                var signatureBase64 = String(Base64.encode(md.digest(), Base64.NO_WRAP))
-                signatureBase64 = URLEncoder.encode(signatureBase64, "UTF-8")
-                Log.e("Signature Base64", signatureBase64)
-//                yagQ7W+ZNPeXRC7GlssW1bZyttE=
+                sha1 = String(Base64.encode(md.digest(), Base64.NO_WRAP))
             }
         } else {
             val packageManagers =
@@ -59,12 +56,8 @@ class CheckInTEL {
                 val md = MessageDigest.getInstance("SHA-1")
                 md.update(signature.toByteArray())
                 sha1 = Base64.encodeToString(md.digest(), Base64.NO_WRAP)
-                Log.e("Signature LT 28", sha1)
-//               yagQ7W+ZNPeXRC7GlssW1bZyttE=
-//               Real sha1 = 7D:2B:89:70:00:35:66:11:77:14:BB:ED:11:EC:0F:E8:50:C0:B1:24
             }
         }
-        Log.e("= package Name == ", packageName)
     }
 
     fun openScanQRCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
@@ -99,7 +92,7 @@ class CheckInTEL {
                         checkInTELCallBack?.onCheckInSuccess(data.getStringExtra("result"))
                     }
                 Activity.RESULT_CANCELED -> checkInTELCallBack?.onCancel()
-                else -> Log.e(" ERROR ", "!!!!!")
+                else -> checkInTELCallBack?.onCheckInFailure(" Fail in ActivityResult ")
             }
         }
     }

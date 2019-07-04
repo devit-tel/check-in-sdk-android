@@ -20,9 +20,9 @@ class GetScanQrRetrofit {
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("packageName", CheckInTEL?.packageName) //  2STAGE
+                    .addHeader("packageName", CheckInTEL?.packageName)
                     .addHeader("userId", "whatever_YOU_recieved_FROM_2STAGE_or_ONDEMAND")
-                    .addHeader("sha1", CheckInTEL?.sha1) // 10a34637ad661d98ba3344717656fcc76209c2f8
+                    .addHeader("sha1", CheckInTEL?.sha1)
                     .addHeader("APIKey", "10a34637ad661d98ba3344717656fcc76209c2f810a34637ad661d98ba3344717656fcc76209c2f8")
                     .build()
                 chain.proceed(newRequest)

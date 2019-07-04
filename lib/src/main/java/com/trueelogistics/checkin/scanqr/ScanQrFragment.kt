@@ -28,12 +28,10 @@ class ScanQrFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_scan_qrcode, container, false)
     }
     private val callback = object : BarcodeCallback {
-        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
-            // do noting in action
+        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {  // do noting in action
         }
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
-                Log.e(" result ==",result.toString())
                 sentQr(it)
             }
         }
@@ -57,13 +55,10 @@ class ScanQrFragment : Fragment() {
         val call = retrofit?.getData("CHECK_IN", result)
         call?.enqueue(object : Callback<RootModel> {
             override fun onFailure(call: Call<RootModel>, t: Throwable) {
-                Log.e(" onFailure !!", " Something wrong")
             }
             override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
                 if (response.code() == 200) {
-                    val root = response.body()
-                    val show = root?.data?.qrcodeUniqueKey
-                    Log.e(" QR code == ", "$show ...")
+                    response.body()
                     SuccessDialogFragment().show(activity?.supportFragmentManager,"show")
                 } else {
                     response.errorBody()

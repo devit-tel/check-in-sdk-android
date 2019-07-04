@@ -14,21 +14,15 @@ import com.google.firebase.messaging.RemoteMessage
 class MainService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.e("== in Received ==", "From: " + remoteMessage.from!!)
 
         if (remoteMessage.data.isNotEmpty()) {
-            Log.e("== RM Size ==", "Message data payload: " + remoteMessage.data)
 //            val data : Map<String,String> = remoteMessage.data
-            showNotification("=== DAta == ",remoteMessage.data.toString())
-
+            showNotification("=== Data == ",remoteMessage.data.toString())
         }
-
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
-            Log.e("====", "Message Notification Body: " + remoteMessage.notification!!.body!!)
             showNotification("Heading Tesssst","this is a text")
         }
-
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -48,9 +42,7 @@ class MainService : FirebaseMessagingService() {
         notificationManager.notify(0, notification)
     }
     override fun onMessageSent(p0: String?) {
-        Log.e("== onMessageSent == ",p0)
     }
     override fun onNewToken(token: String?) {
-       Log.e("token == ",token)
     }
 }

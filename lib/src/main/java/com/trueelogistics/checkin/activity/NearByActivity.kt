@@ -54,7 +54,6 @@ class NearByActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         mMessageListener?.let { mML ->
             this.let {
                 Nearby.getMessagesClient(it).subscribe(mML)
