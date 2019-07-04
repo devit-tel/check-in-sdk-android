@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.activity
+package com.trueelogistics.checkin.nearby
 
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity

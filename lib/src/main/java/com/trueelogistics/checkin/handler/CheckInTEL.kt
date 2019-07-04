@@ -9,7 +9,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
 import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
-import com.trueelogistics.checkin.activity.NearByActivity
+import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import java.security.MessageDigest
