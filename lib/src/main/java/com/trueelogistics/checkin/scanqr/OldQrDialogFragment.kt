@@ -1,35 +1,29 @@
 package com.trueelogistics.checkin.scanqr
 
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import com.trueelogistics.checkin.R
-import kotlinx.android.synthetic.main.fragment_success_checkin.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
-class SuccessDialogFragment : DialogFragment() {
+class OldQrDialogFragment : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_success_checkin, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_old_qr_dialog, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val current = Date()
-        timeCheckIn.text = current.toString().substring(11,16)
-        isCancelable = false
-        confirm.setOnClickListener {
-            activity?.finish() //activity where call this fragment will finish
+        scanAgain.setOnClickListener {
+            dialog.cancel()
         }
     }
 
@@ -39,4 +33,6 @@ class SuccessDialogFragment : DialogFragment() {
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
     }
+
+
 }

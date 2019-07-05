@@ -63,18 +63,29 @@ class ScanQrFragment : Fragment() {
                 override fun onFailure(call: Call<RootModel>, t: Throwable) {
                     //stop dialog and start camera
                     loadingDialog.dismiss()
+
                     isScan = true
                 }
+
                 override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
                     //stop dialog
                     loadingDialog.dismiss()
-                    if (response.code() == 200) {
-                        response.body()
+                    when {
+                        response.code() == 200 -> {
+//                            response.body()
 
-                        SuccessDialogFragment().show(activity?.supportFragmentManager, "show")
-                    } else {
-                        response.errorBody()
-                        isScan = true
+                            SuccessDialogFragment().show(activity?.supportFragmentManager, "show")
+                        }
+                        response.code() == 400 -> {
+                            activity?.let {
+                                OldQrDialogFragment().show(it.supportFragmentManager, "show")
+                                it.recreate()
+                            }
+                        }
+                        else -> {
+                            response.errorBody()
+                            isScan = true
+                        }
                     }
                 }
             })

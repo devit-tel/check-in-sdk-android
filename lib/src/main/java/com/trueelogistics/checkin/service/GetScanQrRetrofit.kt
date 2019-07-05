@@ -20,7 +20,7 @@ class GetScanQrRetrofit {
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("packageName", CheckInTEL?.packageName)
+                    .addHeader("packageName", "com.trueelogistics.staff")
                     .addHeader("userId", "whatever_YOU_recieved_FROM_2STAGE_or_ONDEMAND")
                     .addHeader("sha1", CheckInTEL?.sha1)
                     .addHeader("APIKey", "SATBUDWEXFZH2J3K5N6P7R9SATCVDWEYGZH2K4M5N7Q8R9TBUCVEXFYGZJ")

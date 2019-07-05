@@ -34,7 +34,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.github.ski1132:Libery_Checkin:0.0.2'
+    implementation project(":lib")
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     //noinspection GradleCompatible
