@@ -11,22 +11,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.testretofit.DataService
+import com.trueelogistics.checkin.model.list_hub.InDataModel
+import com.trueelogistics.checkin.model.list_hub.RootModel
+import com.trueelogistics.checkin.service.GetRetrofit
+import com.trueelogistics.checkin.testretofit.HubService
 import com.trueelogistics.checkin.testretofit.MainAdapter
-import com.trueelogistics.checkin.testretofit.PersonModel
-import com.trueelogistics.checkin.testretofit.ResponseModel
 import kotlinx.android.synthetic.main.fragment_stock_dialog.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocationClickListener {
 
-    private var doSomething: ((item: PersonModel) -> Unit)? = null
+
+    private var doSomething: ((item: InDataModel) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,24 +44,20 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
     }
 
     private fun getRrtrofit() {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-        val retrofit = Retrofit.Builder().baseUrl("http://rakgun.com")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        val service = retrofit.create(DataService::class.java)
-        val call = service.getData("69i57j0l5910j0j7f4d5s4fs64g")
-        call.enqueue(object : Callback<ResponseModel> {
-            override fun onFailure(call: Call<ResponseModel>?, t: Throwable?) {
+        GetRetrofit.initial()
+        val retrofit = GetRetrofit.getRetrofit?.build()?.create(HubService::class.java)
+
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<RootModel> {
+            override fun onFailure(call: Call<RootModel>?, t: Throwable?) {
             }
-            override fun onResponse(call: Call<ResponseModel>?, response: Response<ResponseModel>) {
+            override fun onResponse(call: Call<RootModel>?, response: Response<RootModel>) {
                 if (response.code() == 200) {
-                    val logModel: ResponseModel? = response.body()
+                    val logModel: RootModel? = response.body()
                     activity?.also {
                         recycleView?.layoutManager = LinearLayoutManager(it)
                         if (logModel != null) {
-                            recycleView.adapter = MainAdapter(logModel.person, it).apply {
+                            recycleView.adapter = MainAdapter(logModel.data.data, it).apply {
                                 onItemLocationClickListener = this@StockDialogFragment
                             }
                         }
@@ -75,7 +69,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
         })
     }
 
-    override fun onItemLocationClick(item: PersonModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
+    override fun onItemLocationClick(item: InDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
         oldRadioButton?.isChecked = false
         newRadioButton?.isChecked = true
         activity?.let {
@@ -87,7 +81,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
         }
     }
 
-    fun setOnItemLocationClick(doSomething: ((item: PersonModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
+    fun setOnItemLocationClick(doSomething: ((item: InDataModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
         this.doSomething = doSomething  //save class who call this function
     }
 }

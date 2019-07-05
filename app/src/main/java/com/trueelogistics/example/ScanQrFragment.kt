@@ -1,6 +1,5 @@
 package com.trueelogistics.example
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -27,20 +26,26 @@ class ScanQrFragment : Fragment() {
             mainActivity.actionToolbar()
         }
         checkInBtn.setOnClickListener {
-            val intent = Intent(activity, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            putString("CHECK_IN")
         }
         checkBetBtn.setOnClickListener {
-            val intent = Intent(activity, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            putString("CHECK_IN_BETWEEN")
         }
         checkOutBtn.setOnClickListener {
-            val intent = Intent(activity, ScanQrActivity::class.java)
-            this.startActivity(intent)
+            putString("CHECK_OUT")
         }
         genQr.setOnClickListener {
             val intent = Intent(activity, GenQrActivity::class.java)
             this.startActivity(intent)
         }
+    }
+    private fun putString(type : String){
+        val intent = Intent(activity, ScanQrActivity::class.java)
+        intent.putExtras(
+            Bundle().apply {
+                putString("type", type)
+            }
+        )
+        this.startActivity(intent)
     }
 }

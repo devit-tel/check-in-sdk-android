@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -20,11 +21,28 @@ import retrofit2.Response
 
 class ScanQrFragment : Fragment() {
     private var isScan = true
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_scan_qrcode, container, false)
+    }
+
+    companion object {
+        const val TYPE_KEY = "TYPE_KEY"
+
+        fun newInstance(type: String): ScanQrFragment {
+            val fragment = ScanQrFragment()
+
+            val bundle = Bundle().apply {
+                putString(TYPE_KEY, type)
+            }
+            fragment.arguments = bundle
+
+            return fragment
+        }
     }
 
     private val callback = object : BarcodeCallback {
@@ -58,7 +76,8 @@ class ScanQrFragment : Fragment() {
             val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
             GetScanQrRetrofit.initial()
             val retrofit = GetScanQrRetrofit.getRetrofit?.build()?.create(ScanQrService::class.java)
-            val call = retrofit?.getData("CHECK_IN", result)
+            val type = arguments?.getString(TYPE_KEY).toString()
+            val call = retrofit?.getData(type, result)
             call?.enqueue(object : Callback<RootModel> {
                 override fun onFailure(call: Call<RootModel>, t: Throwable) {
                     //stop dialog and start camera
@@ -77,9 +96,16 @@ class ScanQrFragment : Fragment() {
                             SuccessDialogFragment().show(activity?.supportFragmentManager, "show")
                         }
                         response.code() == 400 -> {
+                            onPause()
                             activity?.let {
                                 OldQrDialogFragment().show(it.supportFragmentManager, "show")
                                 it.recreate()
+                            }
+                        }
+                        response.code() == 500 -> {
+                            activity?.let {
+                                Toast.makeText(it,"Server Error",Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                         else -> {

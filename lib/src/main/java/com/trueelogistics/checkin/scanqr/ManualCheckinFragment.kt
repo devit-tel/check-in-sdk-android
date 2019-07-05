@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.testretofit.PersonModel
+import com.trueelogistics.checkin.model.list_hub.InDataModel
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
 
 class ManualCheckinFragment : Fragment() {
@@ -63,8 +63,8 @@ class ManualCheckinFragment : Fragment() {
         }
     }
 
-    private fun setView(item:PersonModel){
-        stockName.text = item.firstName
+    private fun setView(item: InDataModel){
+        stockName.text = item.locationName
         stockName.setTextColor(resources.getColor(R.color.black))
         confirm.setBackgroundColor(resources.getColor(R.color.purple))
         confirm.setTextColor(resources.getColor(R.color.white))

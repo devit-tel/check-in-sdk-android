@@ -24,6 +24,7 @@ class OldQrDialogFragment : DialogFragment() {
 
         scanAgain.setOnClickListener {
             dialog.cancel()
+            onResume()
         }
     }
 

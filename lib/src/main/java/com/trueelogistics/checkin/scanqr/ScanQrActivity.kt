@@ -22,8 +22,10 @@ class ScanQrActivity : AppCompatActivity() {
             .permissions(
                 Manifest.permission.CAMERA
             ).onAccepted {
+                val type = intent.getStringExtra("type")
+
                 supportFragmentManager.beginTransaction().replace(R.id.fragment,
-                    ScanQrFragment()
+                    ScanQrFragment.newInstance(type)
                 ).commit()
             }.onDenied {
                 Toast.makeText(

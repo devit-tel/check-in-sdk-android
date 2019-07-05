@@ -1,7 +1,5 @@
 package com.trueelogistics.checkin.model.list_hub
 
-import com.trueelogistics.checkin.model.history.InDataModel
-
 data class DataModel(
     var data : ArrayList<InDataModel>,
     var total : Int? = null,
