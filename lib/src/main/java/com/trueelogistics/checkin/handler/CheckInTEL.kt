@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
@@ -11,7 +12,13 @@ import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
+import com.trueelogistics.checkin.model.history.RootModel
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
+import com.trueelogistics.checkin.service.GenHistoryService
+import com.trueelogistics.checkin.service.GetRetrofit
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.security.MessageDigest
 
 
@@ -22,6 +29,8 @@ class CheckInTEL {
         var checkInTEL: CheckInTEL? = null
         var packageName: String? = null
         var sha1: String? = null
+        var userId: String? = "guest"
+        var app: String? = null
         fun initial(application: Application) {
             checkInTEL = CheckInTEL()
             checkInTEL?.setPackageName(application)
@@ -32,6 +41,9 @@ class CheckInTEL {
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
     private fun setPackageName(application: Application) {
         packageName = application.applicationContext.packageName
+        app = application.packageManager.getApplicationInfo(
+            application.packageName, PackageManager.GET_META_DATA)
+            .metaData.getString("com.trueelogistics.example")
     }
 
     private fun setSha1(application: Application) {
@@ -64,13 +76,28 @@ class CheckInTEL {
         }
     }
 
-    fun openScanQRCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
+    fun getHistory(){
+        val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenHistoryService::class.java)
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<RootModel> {
+            override fun onFailure(call: Call<RootModel>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
+
+            }
+        })
+    }
+    fun openScanQRCode(activity: Activity, userId: String?, checkInTELCallBack: CheckInTELCallBack) {
+        CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
     }
 
-    fun openGenerateQRCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
+    fun openGenerateQRCode(activity: Activity, userId: String?, checkInTELCallBack: CheckInTELCallBack) {
+        CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, GenQrActivity::class.java)
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity

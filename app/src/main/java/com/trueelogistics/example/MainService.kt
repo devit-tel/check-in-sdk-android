@@ -16,7 +16,7 @@ class MainService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
         if (remoteMessage.data.isNotEmpty()) {
-//            val data : Map<String,String> = remoteMessage.data
+//            val scanData : Map<String,String> = remoteMessage.scanData
             showNotification("=== Data == ",remoteMessage.data.toString())
         }
         // Check if message contains a notification payload.

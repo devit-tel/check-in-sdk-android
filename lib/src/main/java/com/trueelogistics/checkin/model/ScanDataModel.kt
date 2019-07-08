@@ -1,6 +1,6 @@
-package com.trueelogistics.checkin.model.scan_qr
+package com.trueelogistics.checkin.model
 
-data class DataModel (
+data class ScanDataModel (
     var _id : String? = null,
     var deleted : Boolean? = false,
     var type : String? = null,

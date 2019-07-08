@@ -1,6 +1,6 @@
 package com.trueelogistics.checkin.service
 
-import com.trueelogistics.checkin.model.generate_qr.RootModel
+import com.trueelogistics.checkin.model.ScanRootModel
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -11,5 +11,5 @@ interface ScanQrService{
     @FormUrlEncoded
     fun getData(
         @Field("type") type:String,
-        @Field("qrcodeUniqueKey")qrcodeUniqueKey:String) : Call<RootModel>
+        @Field("qrcodeUniqueKey")qrcodeUniqueKey:String) : Call<ScanRootModel>
 }

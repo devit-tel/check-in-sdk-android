@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<group
 			android:checkableBehavior="single">
+		<item android:id="@+id/scan_qr"
+			  android:icon="@drawable/ic_shake"
+			  android:checked="true"
+			  android:title="@string/scanQr"/>
+
 		<item android:id="@+id/shake_fine"
 			  android:icon="@drawable/ic_shake"
 			  android:checked="true"

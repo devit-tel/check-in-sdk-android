@@ -25,7 +25,7 @@ class MainScanQrActivity : AppCompatActivity() {
             openScanQr(this)
         }
         genQr.setOnClickListener {
-            CheckInTEL.checkInTEL?.openGenerateQRCode(this, object : CheckInTELCallBack {
+            CheckInTEL.checkInTEL?.openGenerateQRCode(this,"userId", object : CheckInTELCallBack {
                 override fun onCancel() {
                     Toast.makeText(this@MainScanQrActivity, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }
@@ -40,7 +40,7 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     private fun openScanQr(context: Context) {
-        CheckInTEL.checkInTEL?.openScanQRCode(this, object : CheckInTELCallBack {
+        CheckInTEL.checkInTEL?.openScanQRCode(this,"userId", object : CheckInTELCallBack {
             override fun onCancel() {
                 Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
             }

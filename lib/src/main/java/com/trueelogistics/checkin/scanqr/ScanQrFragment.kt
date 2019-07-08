@@ -11,7 +11,7 @@ import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.model.generate_qr.RootModel
+import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.GetScanQrRetrofit
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
@@ -78,21 +78,20 @@ class ScanQrFragment : Fragment() {
             val retrofit = GetScanQrRetrofit.getRetrofit?.build()?.create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             val call = retrofit?.getData(type, result)
-            call?.enqueue(object : Callback<RootModel> {
-                override fun onFailure(call: Call<RootModel>, t: Throwable) {
+            call?.enqueue(object : Callback<ScanRootModel> {
+                override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                     //stop dialog and start camera
                     loadingDialog.dismiss()
 
                     isScan = true
                 }
 
-                override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
+                override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
                     //stop dialog
                     loadingDialog.dismiss()
                     when {
                         response.code() == 200 -> {
 //                            response.body()
-
                             SuccessDialogFragment().show(activity?.supportFragmentManager, "show")
                         }
                         response.code() == 400 -> {
