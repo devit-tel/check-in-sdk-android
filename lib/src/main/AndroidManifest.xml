@@ -9,32 +9,35 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 	<application
-			android:usesCleartextTraffic="true"
 			android:allowBackup="true"
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme"
+			android:usesCleartextTraffic="true"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon,UnusedAttribute">
+		<activity android:name=".history.HistoryActivity">
+		</activity>
+
 		<meta-data
 				android:name="com.google.android.nearby.messages.API_KEY"
-				android:value="AIzaSyA71Q-6Vd7G5qw0kbneCJKu5IvLztHHWzQ" />
+				android:value="AIzaSyA71Q-6Vd7G5qw0kbneCJKu5IvLztHHWzQ"/>
 		<meta-data
 				android:name="com.trueelogistics.checkin.API_KEY"
-				android:value="7Q8RATBUCWEXFYH2J3K5N6P7Q9SATBVDWEXGZH2J4M5N6Q8R9SBUCVDXFY" />
+				android:value="7Q8RATBUCWEXFYH2J3K5N6P7Q9SATBVDWEXGZH2J4M5N6Q8R9SBUCVDXFY"/>
 
-		<activity android:name="com.trueelogistics.checkin.activity.GenQrActivity">
+		<activity android:name=".activity.GenQrActivity">
 		</activity>
 		<activity
-				android:name="com.trueelogistics.checkin.nearby.NearByActivity"
+				android:name=".nearby.NearByActivity"
 				android:screenOrientation="portrait"/>
 		<activity
-				android:name="com.trueelogistics.checkin.scanqr.ScanQrActivity"
+				android:name=".scanqr.ScanQrActivity"
 				android:screenOrientation="portrait"/>
 		<activity
-				android:name="com.trueelogistics.checkin.activity.ShakeActivity"
+				android:name=".activity.ShakeActivity"
 				android:screenOrientation="portrait"/>
 	</application>
 

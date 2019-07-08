@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.testretofit
+package com.trueelogistics.checkin.service
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -10,7 +10,7 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.list_hub.InDataModel
 import kotlinx.android.synthetic.main.item_retrofit.view.*
 
-class MainAdapter(val items: ArrayList<InDataModel>, private val context: Context) :
+class HubAdapter(private var items: ArrayList<InDataModel>, private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemLocationClickListener : OnItemLocationClickListener? = null
     private var oldRadioButton : RadioButton? = null

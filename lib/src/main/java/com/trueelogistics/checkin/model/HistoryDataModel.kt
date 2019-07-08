@@ -1,7 +1,7 @@
-package com.trueelogistics.checkin.model.history
+package com.trueelogistics.checkin.model
 
-data class DataModel(
-    var data : ArrayList<InDataModel>,
+data class HistoryDataModel(
+    var data : ArrayList<HistoryInDataModel>,
     var total : Int? = null,
     var limit : Int? = null,
     var page : Int? = null,

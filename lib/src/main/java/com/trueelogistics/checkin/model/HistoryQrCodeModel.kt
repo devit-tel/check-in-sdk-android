@@ -1,6 +1,6 @@
-package com.trueelogistics.checkin.model.history
+package com.trueelogistics.checkin.model
 
-data class QrCodeModel(
+data class HistoryQrCodeModel(
     var deleted : Boolean = false,
     var _id : String? = null,
     var qrcodeCreateBy : String? = null,

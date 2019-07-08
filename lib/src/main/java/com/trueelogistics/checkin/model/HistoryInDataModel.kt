@@ -1,10 +1,10 @@
-package com.trueelogistics.checkin.model.history
+package com.trueelogistics.checkin.model
 
-data class InDataModel(
+data class HistoryInDataModel(
     var deleted : Boolean = false,
     var _id : String? = null,
     var type : String? = null,
-    var qrcodeId : QrCodeModel,
+    var qrcodeId : HistoryQrCodeModel,
     var packageName : String? = null,
     var userId : String? = null,
     var updatedAt : String? = null,

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.util.Base64
@@ -12,7 +11,8 @@ import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
-import com.trueelogistics.checkin.model.history.RootModel
+import com.trueelogistics.checkin.history.HistoryActivity
+import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.GetRetrofit
@@ -79,12 +79,12 @@ class CheckInTEL {
     fun getHistory(){
         val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenHistoryService::class.java)
         val call = retrofit?.getData()
-        call?.enqueue(object : Callback<RootModel> {
-            override fun onFailure(call: Call<RootModel>, t: Throwable) {
+        call?.enqueue(object : Callback<HistoryRootModel> {
+            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
 
             }
 
-            override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
+            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
 
             }
         })
@@ -112,6 +112,12 @@ class CheckInTEL {
     fun openShake(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ShakeActivity::class.java)
+        activity.startActivity(intent)
+    }
+
+    fun openHistory(activity: Activity, checkInTELCallBack: CheckInTELCallBack){
+        this.checkInTELCallBack = checkInTELCallBack
+        val intent = Intent(activity, HistoryActivity::class.java)
         activity.startActivity(intent)
     }
 

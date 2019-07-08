@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.testretofit
+package com.trueelogistics.checkin.service
 
 import com.trueelogistics.checkin.model.list_hub.RootModel
 import retrofit2.Call

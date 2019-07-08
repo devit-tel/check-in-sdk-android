@@ -14,14 +14,14 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.list_hub.InDataModel
 import com.trueelogistics.checkin.model.list_hub.RootModel
 import com.trueelogistics.checkin.service.GetRetrofit
-import com.trueelogistics.checkin.testretofit.HubService
-import com.trueelogistics.checkin.testretofit.MainAdapter
+import com.trueelogistics.checkin.service.HubService
+import com.trueelogistics.checkin.service.HubAdapter
 import kotlinx.android.synthetic.main.fragment_stock_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocationClickListener {
+class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocationClickListener {
 
 
     private var doSomething: ((item: InDataModel) -> Unit)? = null
@@ -57,7 +57,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), MainAdapter.OnItemLocat
                     activity?.also {
                         recycleView?.layoutManager = LinearLayoutManager(it)
                         if (logModel != null) {
-                            recycleView.adapter = MainAdapter(logModel.data.data, it).apply {
+                            recycleView.adapter = HubAdapter(logModel.data.data, it).apply {
                                 onItemLocationClickListener = this@StockDialogFragment
                             }
                         }
