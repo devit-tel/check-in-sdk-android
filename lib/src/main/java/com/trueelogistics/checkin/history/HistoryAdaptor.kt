@@ -13,7 +13,7 @@ class HistoryAdaptor : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_retrofit, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_retrofit, viewGroup, false)
         return ViewHolder(view)
     }
 
