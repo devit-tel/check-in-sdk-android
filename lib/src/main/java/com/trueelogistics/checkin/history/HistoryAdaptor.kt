@@ -1,6 +1,6 @@
 package com.trueelogistics.checkin.history
 
-import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +10,10 @@ import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.history_retrofit.view.*
 
 class HistoryAdaptor : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val items: ArrayList<HistoryInDataModel> = arrayListOf()
-
+    val items: ArrayList<HistoryInDataModel> = arrayListOf() // 0 array not null ,save value so mush
+    private var adaptor = TypeHistoryAdapter()
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_retrofit, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.history_retrofit, viewGroup, false)
         return ViewHolder(view)
     }
 
@@ -34,6 +34,11 @@ class HistoryAdaptor : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val mouth = format?.substring(5,7)
             val year = format?.substring(0,4)
             date.text = "$day $mouth $year"
+            view.typeRecycleView.adapter = adaptor
+            view.typeRecycleView?.layoutManager = LinearLayoutManager(view.context)
+            adaptor.items.addAll(items)
+            adaptor.datePresent = items[position].updatedAt?.substring(0,10)
+            adaptor.notifyDataSetChanged()
         }
 
     }

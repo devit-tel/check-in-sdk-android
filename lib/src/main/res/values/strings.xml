@@ -35,4 +35,6 @@
 	<string name="scanAgain">แสกนอีกครั้ง</string>
 	<string name="historyCheckIn">ประวัติการเข้างาน</string>
 	<string name="dateFormate">DD-MMMM-YYYY</string>
+	<string name="checkIn">เข้างาน</string>
+	<string name="stockAsoke">คลังเคเอฟซี สาขาอโศกทาวเวอร์</string>
 </resources>

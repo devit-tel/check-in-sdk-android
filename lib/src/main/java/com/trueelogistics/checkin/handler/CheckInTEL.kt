@@ -5,7 +5,9 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
@@ -20,6 +22,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class CheckInTEL {
@@ -30,11 +36,13 @@ class CheckInTEL {
         var packageName: String? = null
         var sha1: String? = null
         var userId: String? = "guest"
+        var type: String? = null
         var app: String? = null
         fun initial(application: Application) {
             checkInTEL = CheckInTEL()
             checkInTEL?.setPackageName(application)
             checkInTEL?.setSha1(application)
+            checkInTEL?.getHistory()
         }
     }
 
@@ -76,19 +84,36 @@ class CheckInTEL {
         }
     }
 
-    fun getHistory(){
+    private fun getHistory(){
         val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenHistoryService::class.java)
         val call = retrofit?.getData()
+        val types : String? = null
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-
             }
-
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+                if (response.code() == 200) {
+                    val logModel: HistoryRootModel? = response.body()
+                    val datePick = logModel?.data?.data?.last()?.updatedAt?.substring(0,10)
 
+                    val toDay =
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
+                        LocalDateTime.now().toString().substring(0,10)
+                    } else {
+                            val formatter = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+                            formatter.format(Date())
+                    }
+                    type = if (datePick.equals(toDay))
+                        logModel?.data?.data?.last()?.type
+                    else
+                        "CHECK_OUT"
+                } else {
+                    response.errorBody()
+                }
             }
         })
     }
+
     fun openScanQRCode(activity: Activity, userId: String?, checkInTELCallBack: CheckInTELCallBack) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack

@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kotlinpermissions.KotlinPermissions
+import kotlinx.android.synthetic.main.fragment_shake.*
 
 class ShakeFragment : Fragment() {
 
@@ -36,6 +37,11 @@ class ShakeFragment : Fragment() {
     @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = activity as MainActivity
+        toolbar.setOnClickListener {
+            mainActivity.actionToolbar()
+        }
         activity?.let { fragActivity ->
             val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
             ActivityCompat.requestPermissions(fragActivity, permissions, 0)

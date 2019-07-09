@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.model.HistoryQrCodeModel
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.service.GetRetrofit
 import com.trueelogistics.checkin.service.HistoryService
@@ -31,12 +32,11 @@ class HistoryActivity : AppCompatActivity() {
                 if (response.code() == 200) {
                     val logModel: HistoryRootModel? = response.body()
                     dateRecycleView?.layoutManager = LinearLayoutManager(this@HistoryActivity)
+
                     if (logModel != null) {
                             adaptor.items.addAll(logModel.data.data)
                             adaptor.notifyDataSetChanged()
-
                     }
-
 
                 } else {
                     response.errorBody()
