@@ -12,7 +12,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.service.GetScanQrRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
@@ -74,8 +74,7 @@ class ScanQrFragment : Fragment() {
         if (isScan) {
             isScan = false
             val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
-            GetScanQrRetrofit.initial()
-            val retrofit = GetScanQrRetrofit.getRetrofit?.build()?.create(ScanQrService::class.java)
+            val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             val call = retrofit?.getData(type, result)
             call?.enqueue(object : Callback<ScanRootModel> {

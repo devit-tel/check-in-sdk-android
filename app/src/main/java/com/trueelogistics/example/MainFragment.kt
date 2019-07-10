@@ -1,6 +1,5 @@
 package com.trueelogistics.example
 
-
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +16,4 @@ class AbsenceFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_manaul_checkin, container, false)
     }
-
-
 }

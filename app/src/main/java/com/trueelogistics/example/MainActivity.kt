@@ -1,12 +1,13 @@
 package com.trueelogistics.example
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
-import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.history.HistoryActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -15,17 +16,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         //CheckInTEL.getSha1(this)
         nav_view.setNavigationItemSelectedListener(this)
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_main, ScanQrFragment())
             .commit()
     }
 
     override fun onBackPressed() {
-
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
@@ -52,7 +50,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.history -> {
-                Toast.makeText(this, "sideShow", Toast.LENGTH_LONG).show()
+                intent = Intent(this,HistoryActivity::class.java)
+                startActivity(intent)
             }
             R.id.absence -> {
                 Toast.makeText(this, "absence show", Toast.LENGTH_LONG).show()
@@ -69,5 +68,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.openDrawer(GravityCompat.START)
         }
     }
-
 }

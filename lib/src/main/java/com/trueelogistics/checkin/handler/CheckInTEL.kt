@@ -17,7 +17,7 @@ import com.trueelogistics.checkin.history.HistoryActivity
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
-import com.trueelogistics.checkin.service.GetRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,7 +84,7 @@ class CheckInTEL {
     }
 
     fun getHistory(listerner : TypeCallback ) {
-        val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenHistoryService::class.java)
+        val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
         val types: String? = null
         call?.enqueue(object : Callback<HistoryRootModel> {

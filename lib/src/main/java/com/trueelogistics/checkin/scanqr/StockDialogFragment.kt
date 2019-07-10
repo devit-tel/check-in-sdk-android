@@ -13,7 +13,7 @@ import android.widget.RadioButton
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.list_hub.InDataModel
 import com.trueelogistics.checkin.model.list_hub.RootModel
-import com.trueelogistics.checkin.service.GetRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HubService
 import com.trueelogistics.checkin.service.HubAdapter
 import kotlinx.android.synthetic.main.fragment_stock_dialog.*
@@ -36,16 +36,15 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getRrtrofit()
+        getRetrofit()
         choiceStock.setOnClickListener {
             if (choiceStock.background is ColorDrawable)
                 dismiss()
         }
     }
 
-    private fun getRrtrofit() {
-        GetRetrofit.initial()
-        val retrofit = GetRetrofit.getRetrofit?.build()?.create(HubService::class.java)
+    private fun getRetrofit() {
+        val retrofit = RetrofitGenerater().build().create(HubService::class.java)
 
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<RootModel> {

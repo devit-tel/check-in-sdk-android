@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.service.GetRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HistoryService
 import kotlinx.android.synthetic.main.activity_history.*
 import retrofit2.Call
@@ -20,11 +20,10 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_history)
 
         dateRecycleView.adapter = adaptor
-        val retrofit = GetRetrofit.getRetrofit?.build()?.create(HistoryService::class.java)
+        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -34,10 +33,7 @@ class HistoryActivity : AppCompatActivity() {
                     if (logModel != null) {
                             adaptor.items.addAll(logModel.data.data)
                             adaptor.notifyDataSetChanged()
-
                     }
-
-
                 } else {
                     response.errorBody()
                 }

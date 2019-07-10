@@ -5,16 +5,13 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
+import android.support.v4.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-
-@Suppress("DEPRECATION")
 class MainService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-
         if (remoteMessage.data.isNotEmpty()) {
 //            val scanData : Map<String,String> = remoteMessage.scanData
             showNotification("=== Data == ",remoteMessage.data.toString())
@@ -29,7 +26,7 @@ class MainService : FirebaseMessagingService() {
     private fun showNotification(title: String?, body: String?) {
         val intent = Intent()
         val pendingIntent = PendingIntent.getActivity(this@MainService, 0, intent,0)
-        val notification = Notification.Builder(this@MainService)
+        val notification = NotificationCompat.Builder(this@MainService,"1234")
             .setTicker("")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)

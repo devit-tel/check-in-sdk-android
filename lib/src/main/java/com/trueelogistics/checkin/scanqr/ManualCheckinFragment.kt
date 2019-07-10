@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.list_hub.InDataModel
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.service.GetScanQrRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
 import retrofit2.Call
@@ -72,7 +72,7 @@ class ManualCheckinFragment : Fragment() {
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            val retrofit = GetScanQrRetrofit.getRetrofit?.build()?.create(ScanQrService::class.java)
+            val retrofit = RetrofitGenerater().build().create(ScanQrService::class.java)
             val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...", true, false)
             val call = retrofit?.getData(type.toString(), "")
             call?.enqueue(object : Callback<ScanRootModel>{

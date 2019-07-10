@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.generate_qr.RootModel
 import com.trueelogistics.checkin.service.GenQrService
-import com.trueelogistics.checkin.service.GetRetrofit
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import kotlinx.android.synthetic.main.activity_gen_qr.*
 import net.glxn.qrgen.android.QRCode
 import retrofit2.Call
@@ -37,7 +37,7 @@ class GenQrActivity : AppCompatActivity() {
     }
 
     fun getQr() {
-        val retrofit = GetRetrofit.getRetrofit?.build()?.create(GenQrService::class.java)
+        val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
         val call = retrofit?.getData("LeaderNo4", "5d01d704136e06003c23024f")
         call?.enqueue(object : Callback<RootModel> {
             override fun onFailure(call: Call<RootModel>, t: Throwable) {
