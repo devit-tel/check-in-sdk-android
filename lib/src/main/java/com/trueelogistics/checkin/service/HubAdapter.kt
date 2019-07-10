@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.model.list_hub.InDataModel
+import com.trueelogistics.checkin.model.HubInDataModel
 import kotlinx.android.synthetic.main.item_retrofit.view.*
 
-class HubAdapter(private var items: ArrayList<InDataModel>, private val context: Context) :
+class HubAdapter(private var items: ArrayList<HubInDataModel>, private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemLocationClickListener: OnItemLocationClickListener? = null
     private var oldRadioButton: RadioButton? = null
@@ -45,6 +45,6 @@ class HubAdapter(private var items: ArrayList<InDataModel>, private val context:
     }
 
     interface OnItemLocationClickListener {
-        fun onItemLocationClick(item: InDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?)
+        fun onItemLocationClick(item: HubInDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?)
     }
 }

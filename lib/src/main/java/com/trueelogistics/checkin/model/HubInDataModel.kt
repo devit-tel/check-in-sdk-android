@@ -1,7 +1,7 @@
-package com.trueelogistics.checkin.model.list_hub
+package com.trueelogistics.checkin.model
 
-data class InDataModel(
-    var locationPoint : LocationPointModel,
+data class HubInDataModel(
+    var locationPoint : HubLocationPointModel,
     var deleted : Boolean = false,
     var _id : String? = null,
     var locationName : String? = null,

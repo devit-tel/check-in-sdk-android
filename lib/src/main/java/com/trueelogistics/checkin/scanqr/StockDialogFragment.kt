@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.model.list_hub.InDataModel
-import com.trueelogistics.checkin.model.list_hub.RootModel
+import com.trueelogistics.checkin.model.HubInDataModel
+import com.trueelogistics.checkin.model.HubRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HubService
 import com.trueelogistics.checkin.service.HubAdapter
@@ -22,7 +22,7 @@ import retrofit2.Response
 
 class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocationClickListener {
 
-    private var doSomething: ((item: InDataModel) -> Unit)? = null
+    private var doSomething: ((item: HubInDataModel) -> Unit)? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,12 +42,12 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
     private fun getRetrofit() {
         val retrofit = RetrofitGenerater().build().create(HubService::class.java)
         val call = retrofit?.getData()
-        call?.enqueue(object : Callback<RootModel> {
-            override fun onFailure(call: Call<RootModel>?, t: Throwable?) {
+        call?.enqueue(object : Callback<HubRootModel> {
+            override fun onFailure(call: Call<HubRootModel>?, t: Throwable?) {
             }
-            override fun onResponse(call: Call<RootModel>?, response: Response<RootModel>) {
+            override fun onResponse(call: Call<HubRootModel>?, response: Response<HubRootModel>) {
                 if (response.code() == 200) {
-                    val logModel: RootModel? = response.body()
+                    val logModel: HubRootModel? = response.body()
                     activity?.also {
                         recycleView?.layoutManager = LinearLayoutManager(it)
                         if (logModel != null) {
@@ -63,7 +63,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         })
     }
 
-    override fun onItemLocationClick(item: InDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
+    override fun onItemLocationClick(item: HubInDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
         oldRadioButton?.isChecked = false
         newRadioButton?.isChecked = true
         activity?.let {
@@ -75,7 +75,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         }
     }
 
-    fun setOnItemLocationClick(doSomething: ((item: InDataModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
+    fun setOnItemLocationClick(doSomething: ((item: HubInDataModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
         this.doSomething = doSomething  //save class who call this function
     }
 }

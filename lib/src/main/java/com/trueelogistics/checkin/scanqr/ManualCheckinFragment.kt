@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.model.list_hub.InDataModel
+import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
@@ -109,7 +109,7 @@ class ManualCheckinFragment : Fragment() {
         }
     }
 
-    private fun setView(item: InDataModel){
+    private fun setView(item: HubInDataModel){
         stockName.text = item.locationName
         activity?.let {
             stockName.setTextColor(ContextCompat.getColor(it, R.color.black))

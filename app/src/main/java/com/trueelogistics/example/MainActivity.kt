@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
 import com.trueelogistics.checkin.history.HistoryActivity
+import com.trueelogistics.checkin.scanqr.MainScanQrActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -35,9 +36,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.scan_qr -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frag_main, ScanQrFragment())
-                    .commit()
+                intent = Intent(this,MainScanQrActivity::class.java)
+                startActivity(intent)
+//                supportFragmentManager.beginTransaction()
+//                    .replace(R.id.frag_main, ScanQrFragment())
+//                    .commit()
             }
             R.id.shake_fine -> {
                 supportFragmentManager.beginTransaction()
