@@ -22,7 +22,6 @@ import retrofit2.Response
 class ScanQrFragment : Fragment() {
     private var isScan = true
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +31,6 @@ class ScanQrFragment : Fragment() {
 
     companion object {
         const val TYPE_KEY = "TYPE_KEY"
-
         fun newInstance(type: String): ScanQrFragment {
             val fragment = ScanQrFragment()
 
@@ -40,7 +38,6 @@ class ScanQrFragment : Fragment() {
                 putString(TYPE_KEY, type)
             }
             fragment.arguments = bundle
-
             return fragment
         }
     }
@@ -48,7 +45,6 @@ class ScanQrFragment : Fragment() {
     private val callback = object : BarcodeCallback {
         override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {  // do noting in action
         }
-
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
                 sentQr(it)
@@ -81,10 +77,8 @@ class ScanQrFragment : Fragment() {
                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                     //stop dialog and start camera
                     loadingDialog.dismiss()
-
                     isScan = true
                 }
-
                 override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
                     //stop dialog
                     loadingDialog.dismiss()

@@ -19,13 +19,16 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
+        toolBar.setOnClickListener{
+
+        }
         dateRecycleView.adapter = adaptor
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                print("hello")
             }
-
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HistoryRootModel? = response.body()

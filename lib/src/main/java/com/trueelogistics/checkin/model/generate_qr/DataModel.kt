@@ -9,5 +9,4 @@ data class DataModel (
     var updatedAt : String? = null,
     var createdAt : String? = null,
     var __v : String? = null
-
 )

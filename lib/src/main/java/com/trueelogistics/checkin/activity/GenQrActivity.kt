@@ -24,7 +24,6 @@ class GenQrActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 timeCount.text = (millisUntilFinished / 1000).toString()
             }
-
             override fun onFinish() {
                 getQr()
                 this.start()
@@ -42,7 +41,6 @@ class GenQrActivity : AppCompatActivity() {
         call?.enqueue(object : Callback<RootModel> {
             override fun onFailure(call: Call<RootModel>, t: Throwable) {
             }
-
             override fun onResponse(call: Call<RootModel>, response: Response<RootModel>) {
                 if (response.code() == 200) {
                     val root: RootModel? = response.body()

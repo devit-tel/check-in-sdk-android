@@ -4,13 +4,14 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.model.list_hub.InDataModel
 import com.trueelogistics.checkin.model.ScanRootModel
+import com.trueelogistics.checkin.model.list_hub.InDataModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
@@ -35,8 +36,8 @@ class ManualCheckinFragment : Fragment() {
             activity?.onBackPressed()
         }
         checkin_pic.setOnClickListener {
-            if (checkin_pic.drawable.constantState == resources
-                    .getDrawable( R.drawable.ic_checkin_gray).constantState)
+            if (checkin_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState )
             {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_color)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
@@ -45,8 +46,8 @@ class ManualCheckinFragment : Fragment() {
             type = "CHECK_IN"
         }
         between_pic.setOnClickListener {
-            if (between_pic.drawable.constantState == resources
-                    .getDrawable( R.drawable.ic_checkin_gray).constantState)
+            if (between_pic.drawable.constantState ==  ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState )
             {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
                 between_pic.setImageResource(R.drawable.ic_checkin_color)
@@ -55,8 +56,8 @@ class ManualCheckinFragment : Fragment() {
             type = "CHECK_IN_BETWEEN"
         }
         checkout_pic.setOnClickListener {
-            if (checkout_pic.drawable.constantState == resources
-                    .getDrawable( R.drawable.ic_checkin_gray).constantState)
+            if (checkout_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState)
             {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
@@ -72,14 +73,13 @@ class ManualCheckinFragment : Fragment() {
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            val retrofit = RetrofitGenerater().build().create(ScanQrService::class.java)
-            val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...", true, false)
+            val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
+            val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...")
             val call = retrofit?.getData(type.toString(), "")
             call?.enqueue(object : Callback<ScanRootModel>{
                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                     loadingDialog.dismiss()
                 }
-
                 override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
                     loadingDialog.dismiss()
                     when {
@@ -105,7 +105,6 @@ class ManualCheckinFragment : Fragment() {
                         }
                     }
                 }
-
             })
         }
     }

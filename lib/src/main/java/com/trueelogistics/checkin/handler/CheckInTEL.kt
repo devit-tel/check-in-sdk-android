@@ -7,9 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
-import android.support.v7.widget.LinearLayoutManager
+import android.os.Bundle
 import android.util.Base64
-import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
@@ -24,12 +24,9 @@ import retrofit2.Response
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
-
 class CheckInTEL {
-
     companion object {  // another class can call this value  by statis
         const val KEY_REQUEST_CODE_CHECK_IN_TEL = 1750
         var checkInTEL: CheckInTEL? = null
@@ -43,7 +40,6 @@ class CheckInTEL {
             checkInTEL?.setSha1(application)
         }
     }
-
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
     private fun setPackageName(application: Application) {
         packageName = application.applicationContext.packageName
@@ -86,7 +82,6 @@ class CheckInTEL {
     fun getHistory(listerner : TypeCallback ) {
         val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
-        val types: String? = null
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
             }
@@ -104,7 +99,7 @@ class CheckInTEL {
                             formatter.format(Date())
                         }
                     if (datePick.equals(toDay))
-                        listerner.getType(logModel?.data?.data?.last()?.type!!)
+                        listerner.getType(logModel?.data?.data?.last()?.eventType?:"")
                     else
                         listerner.getType("CHECK_OUT")
                 } else {
@@ -114,10 +109,15 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(activity: Activity, userId: String?, checkInTELCallBack: CheckInTELCallBack) {
+    fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn : String?, checkInTELCallBack: CheckInTELCallBack) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
+        intent.putExtras(
+            Bundle().apply {
+                putString("type", typeCheckIn)
+            }
+        )
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
     }
 
@@ -151,7 +151,7 @@ class CheckInTEL {
             when (resultCode) {
                 Activity.RESULT_OK ->
                     if (data != null) {
-                        checkInTELCallBack?.onCheckInSuccess(data.getStringExtra("result"))
+                        checkInTELCallBack?.onCheckInSuccess(data.getStringExtra("result") ?: "")
                     }
                 Activity.RESULT_CANCELED -> checkInTELCallBack?.onCancel()
                 else -> checkInTELCallBack?.onCheckInFailure(" Fail in ActivityResult ")

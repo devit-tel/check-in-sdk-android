@@ -2,38 +2,28 @@
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/purple"
 		android:orientation="vertical"
->
-	<LinearLayout
-			android:layout_width="match_parent"
+		android:paddingTop="40dp"
+		android:gravity="center">
+	<com.mikhaellopez.circularimageview.CircularImageView
+			android:id="@+id/imageUser"
+			android:src="@drawable/ic_launcher_background"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			app:civ_border_width="4dp"
+			android:scaleType="centerCrop"
+			tools:ignore="ContentDescription"/>
+	<TextView
+			android:id="@+id/nameText"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:background="@color/purple"
-			android:orientation="vertical"
-			android:paddingTop="40dp"
-			android:gravity="center">
-
-		<com.mikhaellopez.circularimageview.CircularImageView
-				android:id="@+id/imageUser"
-				android:src="@drawable/ic_launcher_background"
-				android:layout_width="100dp"
-				android:layout_height="100dp"
-				app:civ_border_width="4dp"
-				android:scaleType="centerCrop"
-				tools:ignore="ContentDescription"/>
-
-		<TextView
-				android:id="@+id/nameText"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/name_surname"
-				android:textSize="20sp"
-				android:textColor="@color/white"
-				android:layout_gravity="center"
-				android:padding="10dp"
-		/>
-
-	</LinearLayout>
+			android:text="@string/name_surname"
+			android:textSize="20sp"
+			android:textColor="@color/white"
+			android:layout_gravity="center"
+			android:padding="10dp"/>
 </LinearLayout>

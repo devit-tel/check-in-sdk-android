@@ -1,6 +1,5 @@
 package com.trueelogistics.checkin.shakeit
 
-
 import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationManager
@@ -37,7 +36,7 @@ class ShakeFineFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let{
+        activity?.let {
             FirebaseApp.initializeApp(it)
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
             fusedLocationClient.lastLocation
@@ -45,7 +44,6 @@ class ShakeFineFragment : Fragment() {
                     localLocation = location
 
                 }
-
             locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult ?: return
@@ -55,34 +53,33 @@ class ShakeFineFragment : Fragment() {
                     }
                 }
             }
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
+            ShakeDetector.start()
+            ShakeDetector.create(activity) {
+                startLocationUpdates()
+                val ref = FirebaseDatabase.getInstance().getReference("driverLocation")
+                ref.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        ref.child("latitude").setValue(localLocation.latitude)
+                        ref.child("longitude").setValue(localLocation.longitude)
+                    }
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(it)
-        ShakeDetector.start()
-        ShakeDetector.create(activity) {
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(
+                            activity,
+                            " Fail to set database !!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+                getManagerFirebase(localLocation)
+            }
+            ShakeDetector.destroy()
+            updateValuesFromBundle(savedInstanceState)
             startLocationUpdates()
-            val ref = FirebaseDatabase.getInstance().getReference("driverLocation")
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    ref.child("latitude").setValue(localLocation.latitude)
-                    ref.child("longitude").setValue(localLocation.longitude)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        activity,
-                        " Fail to set database !!!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-            getManagerFirebase(localLocation)
-
         }
-        ShakeDetector.destroy()
-        updateValuesFromBundle(savedInstanceState)
-        startLocationUpdates()
     }
-    }
+
 //    override fun onSaveInstanceState(outState: Bundle?) {
 //        outState?.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, requestingLocationUpdates)
 //        super.onSaveInstanceState(outState)
@@ -113,14 +110,12 @@ class ShakeFineFragment : Fragment() {
 
     private fun updateValuesFromBundle(savedInstanceState: Bundle?) {
         savedInstanceState ?: return
-
         // Update the value of requestingLocationUpdates from the Bundle.
         if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
             requestingLocationUpdates = savedInstanceState.getBoolean(
                 REQUESTING_LOCATION_UPDATES_KEY
             )
         }
-
     }
 
     private fun getManagerFirebase(location: Location) {
@@ -147,7 +142,6 @@ class ShakeFineFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {

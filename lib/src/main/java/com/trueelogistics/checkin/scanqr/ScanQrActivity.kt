@@ -1,15 +1,13 @@
 package com.trueelogistics.checkin.scanqr
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.kotlinpermissions.KotlinPermissions
-import com.trueelogistics.checkin.Interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 
-@SuppressLint("Registered")
 class ScanQrActivity : AppCompatActivity() {
 
     private var checkInTELCallBack: CheckInTELCallBack? = null
@@ -25,7 +23,7 @@ class ScanQrActivity : AppCompatActivity() {
                 val type = intent.getStringExtra("type")
 
                 supportFragmentManager.beginTransaction().replace(R.id.fragment,
-                    ScanQrFragment.newInstance(type)
+                    ScanQrFragment.newInstance(type ?: "")
                 ).commit()
             }.onDenied {
                 Toast.makeText(

@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.Interfaces
+package com.trueelogistics.checkin.interfaces
 
 import java.io.Serializable
 

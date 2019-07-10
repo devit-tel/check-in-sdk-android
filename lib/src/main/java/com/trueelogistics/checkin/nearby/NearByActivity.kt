@@ -1,6 +1,5 @@
 package com.trueelogistics.checkin.nearby
 
-import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -11,7 +10,6 @@ import com.google.android.gms.nearby.messages.MessageListener
 import com.jaredrummler.android.device.DeviceName
 import kotlinx.android.synthetic.main.activity_near_by.*
 
-@SuppressLint("Registered")
 class NearByActivity : AppCompatActivity() {
     private var mMessageListener: MessageListener? = null
     private var mMessage: Message? = null

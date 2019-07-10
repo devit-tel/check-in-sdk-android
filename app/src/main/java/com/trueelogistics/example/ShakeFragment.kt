@@ -1,6 +1,5 @@
 package com.trueelogistics.example
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.location.Location
@@ -22,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kotlinpermissions.KotlinPermissions
+import kotlinx.android.synthetic.main.app_bar_main_menu.*
 
 class ShakeFragment : Fragment() {
 
@@ -33,9 +33,14 @@ class ShakeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_shake, container, false)
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = activity as MainActivity
+        toolbar.setOnClickListener {
+            mainActivity.actionToolbar()
+        }
         activity?.let { fragActivity ->
             val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
             ActivityCompat.requestPermissions(fragActivity, permissions, 0)
@@ -99,44 +104,6 @@ class ShakeFragment : Fragment() {
                 managerLocation.latitude = latDriver.toDouble()
                 managerLocation.longitude = longDriver.toDouble()
                 val distance: Float? = location.distanceTo(managerLocation)
-                activity?.let {
-                    if (distance != null) {
-                        if (distance < 500)
-                            Toast.makeText(
-                                it,
-                                " distance so close == $distance",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        else
-                            Toast.makeText(
-                                it,
-                                " out of range == $distance",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    }
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    activity,
-                    " Fail to get database !!!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }
-
-    fun getDriverFirebase(location: Location) {
-        val managerRef = FirebaseDatabase.getInstance().getReference("driverLocation")
-        managerRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val latDriver = dataSnapshot.child("latitude").value.toString()
-                val longDriver = dataSnapshot.child("longitude").value.toString()
-                val driverLocation = Location(LocationManager.GPS_PROVIDER)
-                driverLocation.latitude = latDriver.toDouble()
-                driverLocation.longitude = longDriver.toDouble()
-                val distance: Float? = location.distanceTo(driverLocation)
                 activity?.let {
                     if (distance != null) {
                         if (distance < 500)

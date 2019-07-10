@@ -32,8 +32,7 @@ class MainService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent).notification
-
+            .setContentIntent(pendingIntent).build()
         notification.flags = Notification.FLAG_AUTO_CANCEL
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notification)

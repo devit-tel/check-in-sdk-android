@@ -1,17 +1,16 @@
 package com.trueelogistics.example
 
-import android.app.ProgressDialog
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trueelogistics.checkin.activity.GenQrActivity
+import android.widget.Toast
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.TypeCallback
-import com.trueelogistics.checkin.scanqr.ScanQrActivity
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
 
 class ScanQrFragment : Fragment() {
@@ -27,24 +26,55 @@ class ScanQrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
-
         toolbar.setOnClickListener {
             mainActivity.actionToolbar()
         }
         checkButton()
+        activity?.let {activity ->
+            checkInBtn.setOnClickListener {
+                openScanQr(activity, "CHECK_IN")
+            }
+            checkBetBtn.setOnClickListener {
+                openScanQr(activity, "CHECK_IN_BETWEEN")
+            }
+            checkOutBtn.setOnClickListener {
+                openScanQr(activity, "CHECK_OUT")
+            }
+            genQr.setOnClickListener {
+                CheckInTEL.checkInTEL?.openGenerateQRCode(activity, "userId", object : CheckInTELCallBack {
+                    override fun onCancel() {
+                        Toast.makeText(activity, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
+                    }
 
-        checkInBtn.setOnClickListener {
-            putString("CHECK_IN")
+                    override fun onCheckInFailure(message: String) {
+                        Toast.makeText(activity, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    override fun onCheckInSuccess(result: String) {
+                        Toast.makeText(activity, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            }
         }
-        checkBetBtn.setOnClickListener {
-            putString("CHECK_IN_BETWEEN")
-        }
-        checkOutBtn.setOnClickListener {
-            putString("CHECK_OUT")
-        }
-        genQr.setOnClickListener {
-            val intent = Intent(activity, GenQrActivity::class.java)
-            this.startActivity(intent)
+    }
+
+    private fun openScanQr(context: Context, type : String) {
+        activity ?.let {
+            CheckInTEL.checkInTEL?.openScanQRCode(it,"userId",type, object : CheckInTELCallBack {
+                override fun onCancel() {
+                    Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onCheckInFailure(message: String) {
+                    Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onCheckInSuccess(result: String) {
+                    Toast.makeText(context, " ScanQr.onCheckSuccess = $result", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
@@ -52,18 +82,8 @@ class ScanQrFragment : Fragment() {
         super.onResume()
         checkButton()
     }
-    private fun putString(type: String) {
-        val intent = Intent(activity, ScanQrActivity::class.java)
-        intent.putExtras(
-            Bundle().apply {
-                putString("type", type)
-            }
-        )
-        this.startActivity(intent)
-    }
 
     private fun checkButton() {
-
         CheckInTEL.checkInTEL?.getHistory(object : TypeCallback {
             override fun getType(type: String) {
                 if (type == "CHECK_IN" || type == "CHECK_IN_BETWEEN") {
@@ -94,9 +114,6 @@ class ScanQrFragment : Fragment() {
                     }
                 }
             }
-
         })
-
-
     }
 }

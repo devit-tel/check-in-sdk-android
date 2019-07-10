@@ -1,6 +1,5 @@
 package com.trueelogistics.example
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -29,7 +28,5 @@ class NearByFragment : Fragment()  {
             val intent = Intent(activity, NearByActivity::class.java)
             this.startActivity(intent)
         }
-
     }
-
 }

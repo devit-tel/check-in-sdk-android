@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.item_retrofit.view.*
 
 class HubAdapter(private var items: ArrayList<InDataModel>, private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var onItemLocationClickListener : OnItemLocationClickListener? = null
-    private var oldRadioButton : RadioButton? = null
+    var onItemLocationClickListener: OnItemLocationClickListener? = null
+    private var oldRadioButton: RadioButton? = null
 
     override fun onBindViewHolder(view: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = view as ViewHolder
@@ -30,25 +30,21 @@ class HubAdapter(private var items: ArrayList<InDataModel>, private val context:
     }
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-
         fun bind(position: Int) {
             val nameText = view.stockBt
             nameText.text = items[position].locationName
-
             view.layoutItem.setOnClickListener {
-                onItemLocationClickListener?.onItemLocationClick( items[position],oldRadioButton,view.stockBt)
+                onItemLocationClickListener?.onItemLocationClick(items[position], oldRadioButton, view.stockBt)
                 oldRadioButton = view.stockBt
             }
-
             view.stockBt.setOnClickListener {
-                onItemLocationClickListener?.onItemLocationClick( items[position],oldRadioButton,view.stockBt)
+                onItemLocationClickListener?.onItemLocationClick(items[position], oldRadioButton, view.stockBt)
                 oldRadioButton = view.stockBt
             }
         }
-
     }
 
-    interface OnItemLocationClickListener{
-        fun onItemLocationClick(item: InDataModel,oldRadioButton : RadioButton?,newRadioButton : RadioButton?)
+    interface OnItemLocationClickListener {
+        fun onItemLocationClick(item: InDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?)
     }
 }

@@ -1,6 +1,5 @@
 package com.trueelogistics.checkin.scanqr
 
-
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
@@ -23,9 +22,7 @@ import retrofit2.Response
 
 class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocationClickListener {
 
-
     private var doSomething: ((item: InDataModel) -> Unit)? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +32,6 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getRetrofit()
         choiceStock.setOnClickListener {
             if (choiceStock.background is ColorDrawable)
@@ -45,7 +41,6 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
 
     private fun getRetrofit() {
         val retrofit = RetrofitGenerater().build().create(HubService::class.java)
-
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<RootModel> {
             override fun onFailure(call: Call<RootModel>?, t: Throwable?) {

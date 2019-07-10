@@ -68,7 +68,7 @@ class ShakeActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, requestingLocationUpdates)
-        super.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState ?: Bundle())
     }
 
     override fun onResume() {
