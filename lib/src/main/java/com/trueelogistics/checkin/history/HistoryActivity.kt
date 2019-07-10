@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HistoryActivity : AppCompatActivity() {
-    private var adaptor = HistoryAdaptor()
+    private var adapter = HistoryAdaptor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,20 +22,20 @@ class HistoryActivity : AppCompatActivity() {
         toolBar.setOnClickListener{
 
         }
-        dateRecycleView.adapter = adaptor
+        dateRecycleView.adapter = adapter
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                print("hello")
+                print("Fail")
             }
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HistoryRootModel? = response.body()
                     dateRecycleView?.layoutManager = LinearLayoutManager(this@HistoryActivity)
                     if (logModel != null) {
-                            adaptor.items.addAll(logModel.data.data)
-                            adaptor.notifyDataSetChanged()
+                            adapter.items.addAll(logModel.data.data)
+                            adapter.notifyDataSetChanged()
                     }
                 } else {
                     response.errorBody()

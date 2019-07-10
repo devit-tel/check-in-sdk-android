@@ -1,23 +1,68 @@
 package com.trueelogistics.checkin.scanqr
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.TypeCallback
+import com.trueelogistics.checkin.model.HistoryRootModel
+import com.trueelogistics.checkin.service.HistoryService
+import com.trueelogistics.checkin.service.RetrofitGenerater
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.LocalDateTime
+import java.util.*
 
 class MainScanQrActivity : AppCompatActivity() {
+    private var adapter = HistoryStaffAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_scan_qr)
 
         checkButton()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LocalDateTime.now()
+        }else{
+
+        }
+        historyRecycle.adapter = adapter
+        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<HistoryRootModel> {
+            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                print("Fail")
+            }
+            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+                when {
+                    response.code() == 200 -> {
+                        val logModel: HistoryRootModel? = response.body()
+                        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
+                        if (logModel != null) {
+                            adapter.items.addAll(logModel.data.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                    response.code() == 400 -> {
+
+                    }
+                    response.code() == 500 -> {
+
+                    }
+                    else -> {
+                        response.errorBody()
+                    }
+                }
+            }
+        })
         checkInBtn.setOnClickListener {
             openScanQr(this, "CHECK_IN")
         }
@@ -80,6 +125,9 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
                 } else if (type == "CHECK_OUT") {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment,
+                        ScanQrFragment.newInstance("CHECK_IN")
+                    ).commit()
                     checkInBtn.isEnabled = true
                     checkBetBtn.isEnabled = false
                     checkOutBtn.isEnabled = false

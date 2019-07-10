@@ -15,7 +15,7 @@
 			android:layout_height="wrap_content"
 			android:textSize="20sp"
 			android:textColor="@color/black"
-			android:text="@string/checkInSuccessText"/>
+			android:text="@string/check_success_text"/>
 	<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="20sp"
-				android:text="@string/checkInTimeText"/>
+				android:text="@string/check_time_text"/>
 		<TextView
 				android:id="@+id/timeCheckIn"
 				android:gravity="center"
@@ -33,7 +33,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="20sp"
-				android:text="@string/exampleTimeText"/>
+				android:text="@string/example_time_text"/>
 		<TextView
 				android:gravity="center"
 				android:layout_marginStart="10dp"
@@ -52,6 +52,6 @@
 				android:layout_height="wrap_content"
 				android:background="@color/purple"
 				android:textColor="@color/white"
-				android:text="@string/confirmText"/>
+				android:text="@string/confirm_text"/>
 	</LinearLayout>
 </LinearLayout>

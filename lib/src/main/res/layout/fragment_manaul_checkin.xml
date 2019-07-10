@@ -14,7 +14,7 @@
 			android:src="@drawable/ic_back"
 			tools:ignore="ContentDescription"/>
 	<TextView
-			android:text="@string/selfCheckInText"
+			android:text="@string/self_check_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="10dp"
@@ -37,9 +37,9 @@
 					   android:layout_height="wrap_content"
 					   android:padding="20dp"
 					   android:src="@drawable/ic_checkin_color"
-					   android:contentDescription="@string/selfCheckInText"/>
+					   tools:ignore="ContentDescription"/>
 			<TextView
-					android:text="@string/checkInText"
+					android:text="@string/checkin_text"
 					android:textSize="18sp"
 					android:textColor="@color/black"
 					android:layout_width="wrap_content"
@@ -60,9 +60,9 @@
 					android:layout_height="wrap_content"
 					android:padding="20dp"
 					android:src="@drawable/ic_checkin_gray"
-					android:contentDescription="@string/selfCheckInText"/>
+					tools:ignore="ContentDescription"/>
 			<TextView
-					android:text="@string/betweenText"
+					android:text="@string/check_between_text"
 					android:textSize="18sp"
 					android:textColor="@color/black"
 					android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
 					android:layout_height="wrap_content"
 					android:padding="20dp"
 					android:src="@drawable/ic_checkin_gray"
-					android:contentDescription="@string/selfCheckInText"/>
+					tools:ignore="ContentDescription"/>
 			<TextView
 					android:text="@string/checkout_text"
 					android:textSize="18sp"
@@ -107,7 +107,7 @@
 				android:id="@+id/stockName"
 				android:layout_weight="1"
 				android:textColor="@color/gray"
-				android:text="@string/chackInHub"
+				android:text="@string/check_hub"
 				android:textSize="25sp"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"/>
@@ -134,7 +134,7 @@
 				android:id="@+id/confirm"
 				android:enabled="false"
 				android:background="@color/gray"
-				android:text="@string/confirmText"
+				android:text="@string/confirm_text"
 				android:textColor="@color/white"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

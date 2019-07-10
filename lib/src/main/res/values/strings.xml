@@ -8,21 +8,18 @@
 	<string name="refresh">Refresh</string>
 	<string name="time">time</string>
 
-	<string name="scanCheckInText">แสกนเพื่อเช็คอิน</string>
-	<string name="problemPressText">หากการแสกนมีปัญหา กรุณากด</string>
-	<string name="selfCheckInText">ลงชื่อด้วยตัวเอง</string>
+	<string name="scan_check_text">แสกนเพื่อเช็คอิน</string>
+	<string name="problem_press_text">หากการแสกนมีปัญหา กรุณากด</string>
+	<string name="self_check_text">ลงชื่อด้วยตัวเอง</string>
 
-	<string name="checkInText">ลงชื่อเข้างาน</string>
-	<string name="checkOutText">ลงชื่อออกงาน</string>
-	<string name="betweenText">ระหว่างวัน</string>
-	<string name="confirmText">ยืนยัน</string>
-	<string name="checkInSuccessText">เข้างานเรียบร้อยแล้ว</string>
-	<string name="checkInTimeText">เวลาลงชื่อเข้างาน</string>
-	<string name="exampleTimeText">9.15</string>
-	<string name="chackInHub">คลังที่เช็คอิน</string>
+	<string name="confirm_text">ยืนยัน</string>
+	<string name="check_success_text">เข้างานเรียบร้อยแล้ว</string>
+	<string name="check_time_text">เวลาลงชื่อเข้างาน</string>
+	<string name="example_time_text">9.15</string>
+	<string name="check_hub">คลังที่เช็คอิน</string>
 
 	<string name="hello_blank_fragment">Hello blank fragment</string>
-	<string name="stockCheckInText">คลังที่ต้องการเช็คอิน</string>
+	<string name="stock_check_in_text">คลังที่ต้องการเช็คอิน</string>
 	<string name="choiceText">เลือก</string>
 	<string name="stockStation">stockStation</string>
 	<string name="checkin_text">ลงชื่อเข้างาน</string>
@@ -35,4 +32,8 @@
 	<string name="scanAgain">แสกนอีกครั้ง</string>
 	<string name="historyCheckIn">ประวัติการเข้างาน</string>
 	<string name="dateFormate">DD-MMMM-YYYY</string>
+	<string name="example_user_name">Usernamme surname</string>
+	<string name="example_date">Day , dd MMM</string>
+	<string name="hub_name_example">HubName</string>
+	<string name="type_check_in_example">type check in</string>
 </resources>
