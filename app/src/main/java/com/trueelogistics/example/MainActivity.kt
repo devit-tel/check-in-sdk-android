@@ -6,7 +6,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.Toast
+import com.trueelogistics.checkin.absence.AbsenceActivity
 import com.trueelogistics.checkin.history.HistoryActivity
 import com.trueelogistics.checkin.scanqr.MainScanQrActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,7 +57,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intent)
             }
             R.id.absence -> {
-                Toast.makeText(this, "absence show", Toast.LENGTH_LONG).show()
+                intent = Intent(this, AbsenceActivity::class.java)
+                startActivity(intent)
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)

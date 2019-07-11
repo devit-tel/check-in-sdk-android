@@ -36,4 +36,5 @@
 	<string name="example_date">Day , dd MMM</string>
 	<string name="hub_name_example">HubName</string>
 	<string name="type_check_in_example">type check in</string>
+	<string name="request_absence">คำขอวันลาา</string>
 </resources>
