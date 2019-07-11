@@ -28,7 +28,15 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             val type = view.typeCheckIn
             val hub = view.hubCheckIn
             val time = view.timeCheckIn
-            type.text = items[position].eventType ?: "old"
+            val eventType = items[position].eventType ?: "old"
+
+            when (eventType) {
+                "CHECK_IN" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
+                "CHECK_IN_BETWEEN" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_between)
+                "CHECK_OUT" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
+                else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            type.text = eventType
             hub.text = items[position].qrcodeId?.locationId
             time.text = items[position].updatedAt?.substring(11,16)
         }

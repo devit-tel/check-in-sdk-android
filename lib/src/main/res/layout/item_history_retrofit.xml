@@ -7,7 +7,8 @@
 		android:layout_marginBottom="20sp"
 		android:orientation="horizontal">
 	<ImageView
-			android:src="@drawable/ic_check_in"
+			android:id="@+id/iconTypeCheckIn"
+			android:src="@drawable/ic_check_between"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			tools:ignore="ContentDescription"/>

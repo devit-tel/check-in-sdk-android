@@ -79,11 +79,12 @@ class CheckInTEL {
         }
     }
 
-    fun getHistory(listerner : TypeCallback ) {
+    fun getLastCheckInHistory(listerner : TypeCallback ) {
         val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -108,6 +109,7 @@ class CheckInTEL {
             }
         })
     }
+
 
     fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn : String?, checkInTELCallBack: CheckInTELCallBack) {
         CheckInTEL.userId = userId

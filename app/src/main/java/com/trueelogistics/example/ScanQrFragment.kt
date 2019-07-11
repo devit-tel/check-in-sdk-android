@@ -84,7 +84,7 @@ class ScanQrFragment : Fragment() {
     }
 
     private fun checkButton() {
-        CheckInTEL.checkInTEL?.getHistory(object : TypeCallback {
+        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
                 if (type == "CHECK_IN" || type == "CHECK_IN_BETWEEN") {
                     checkInBtn.isEnabled = false

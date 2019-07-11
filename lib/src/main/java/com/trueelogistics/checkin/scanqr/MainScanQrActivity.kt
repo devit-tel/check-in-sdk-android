@@ -1,7 +1,6 @@
 package com.trueelogistics.checkin.scanqr
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
 import java.util.*
 
 class MainScanQrActivity : AppCompatActivity() {
@@ -29,40 +27,11 @@ class MainScanQrActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_scan_qr)
 
         checkButton()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime.now()
-        }else{
-
-        }
-        historyRecycle.adapter = adapter
-        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
-        val call = retrofit?.getData()
-        call?.enqueue(object : Callback<HistoryRootModel> {
-            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                print("Fail")
-            }
-            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
-                when {
-                    response.code() == 200 -> {
-                        val logModel: HistoryRootModel? = response.body()
-                        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
-                        if (logModel != null) {
-                            adapter.items.addAll(logModel.data.data)
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    response.code() == 400 -> {
-
-                    }
-                    response.code() == 500 -> {
-
-                    }
-                    else -> {
-                        response.errorBody()
-                    }
-                }
-            }
-        })
+        val day = Date().toString().substring(0,3)
+        val nDay = Date().toString().substring(8,10)
+        val mouth = Date().toString().substring(4,7)
+        date.text = "$day , $nDay $mouth"
+        getHistoryToday()
         checkInBtn.setOnClickListener {
             openScanQr(this, "CHECK_IN")
         }
@@ -92,7 +61,42 @@ class MainScanQrActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        getHistoryToday()
         checkButton()
+    }
+
+    private fun getHistoryToday(){
+        historyRecycle.adapter = adapter
+
+        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<HistoryRootModel> {
+            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                print("Fail")
+            }
+            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+                when {
+                    response.code() == 200 -> {
+                        val logModel: HistoryRootModel? = response.body()
+                        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
+                        if (logModel != null) {
+                            adapter.items.removeAll(logModel.data.data)
+                            adapter.items.addAll(logModel.data.data)
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                    response.code() == 400 -> {
+
+                    }
+                    response.code() == 500 -> {
+
+                    }
+                    else -> {
+                        response.errorBody()
+                    }
+                }
+            }
+        })
     }
 
     private fun openScanQr(context: Context, type: String) {
@@ -110,11 +114,12 @@ class MainScanQrActivity : AppCompatActivity() {
             }
         })
     }
-
+    var checkFirstInDay = true
     private fun checkButton() {
-        CheckInTEL.checkInTEL?.getHistory(object : TypeCallback {
+        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
                 if (type == "CHECK_IN" || type == "CHECK_IN_BETWEEN") {
+                    checkFirstInDay = false
                     checkInBtn.isEnabled = false
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
@@ -125,9 +130,10 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
                 } else if (type == "CHECK_OUT") {
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment,
-                        ScanQrFragment.newInstance("CHECK_IN")
-                    ).commit()
+                    if (checkFirstInDay) {
+                        openScanQr(this@MainScanQrActivity, "CHECK_IN")
+                        checkFirstInDay = false
+                    }
                     checkInBtn.isEnabled = true
                     checkBetBtn.isEnabled = false
                     checkOutBtn.isEnabled = false
@@ -136,6 +142,7 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
 
                 } else {
+                    checkFirstInDay = false
                     checkInBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                     checkBetBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                     checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
