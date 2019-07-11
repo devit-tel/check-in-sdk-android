@@ -37,4 +37,6 @@
 	<string name="hub_name_example">HubName</string>
 	<string name="type_check_in_example">type check in</string>
 	<string name="request_absence">คำขอวันลาา</string>
+	<string name="absence_type">ประเภทการลา</string>
+	<string name="choice_date">วันที่</string>
 </resources>
