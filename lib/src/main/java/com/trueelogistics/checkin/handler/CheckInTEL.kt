@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
@@ -17,6 +18,7 @@ import com.trueelogistics.checkin.history.HistoryActivity
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
+import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import retrofit2.Call
 import retrofit2.Callback
@@ -110,6 +112,28 @@ class CheckInTEL {
         })
     }
 
+    fun getHistory( dataModel: HistoryCallback){
+        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<HistoryRootModel> {
+            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                print("Fail")
+            }
+            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+                when {
+                    response.code() == 200 -> {
+                        val logModel: HistoryRootModel? = response.body()
+                        if (logModel != null) {
+                            dataModel.historyGenerate(logModel.data.data)
+                        }
+                    }
+                    else -> {
+                        response.errorBody()
+                    }
+                }
+            }
+        })
+    }
 
     fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn : String?, checkInTELCallBack: CheckInTELCallBack) {
         CheckInTEL.userId = userId

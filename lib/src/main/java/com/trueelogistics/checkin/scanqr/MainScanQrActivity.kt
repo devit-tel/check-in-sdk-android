@@ -9,7 +9,9 @@ import android.widget.Toast
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.HistoryCallback
 import com.trueelogistics.checkin.handler.TypeCallback
+import com.trueelogistics.checkin.model.HistoryInDataModel
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater
@@ -18,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainScanQrActivity : AppCompatActivity() {
     private var adapter = HistoryStaffAdapter()
@@ -67,34 +70,12 @@ class MainScanQrActivity : AppCompatActivity() {
 
     private fun getHistoryToday(){
         historyRecycle.adapter = adapter
-
-        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
-        val call = retrofit?.getData()
-        call?.enqueue(object : Callback<HistoryRootModel> {
-            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                print("Fail")
-            }
-            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
-                when {
-                    response.code() == 200 -> {
-                        val logModel: HistoryRootModel? = response.body()
-                        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
-                        if (logModel != null) {
-                            adapter.items.removeAll(logModel.data.data)
-                            adapter.items.addAll(logModel.data.data)
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    response.code() == 400 -> {
-
-                    }
-                    response.code() == 500 -> {
-
-                    }
-                    else -> {
-                        response.errorBody()
-                    }
-                }
+        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
+        CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback{
+            override fun historyGenerate(dataModel: ArrayList<HistoryInDataModel>) {
+                adapter.items.removeAll(dataModel)
+                adapter.items.addAll(dataModel)
+                adapter.notifyDataSetChanged()
             }
         })
     }
