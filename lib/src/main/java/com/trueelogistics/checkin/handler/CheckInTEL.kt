@@ -5,18 +5,17 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
-import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.history.HistoryActivity
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
+import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
@@ -26,7 +25,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class CheckInTEL {
@@ -43,6 +41,7 @@ class CheckInTEL {
             checkInTEL?.setSha1(application)
         }
     }
+
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
     private fun setPackageName(application: Application) {
         packageName = application.applicationContext.packageName
@@ -82,28 +81,24 @@ class CheckInTEL {
         }
     }
 
-    fun getLastCheckInHistory(listerner : TypeCallback) {
+    fun getLastCheckInHistory(listerner: TypeCallback) {
         val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                
+
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HistoryRootModel? = response.body()
-                    val datePick = logModel?.data?.data?.last()?.updatedAt?.substring(0, 10)
-
-                    val toDay =
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            LocalDateTime.now().toString().substring(0, 10)
-                        } else {
-                            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                            formatter.format(Date())
-                        }
-                    if (datePick.equals(toDay))
-                        listerner.getType(logModel?.data?.data?.last()?.eventType?:"")
+                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val toDay = formatter.format(Date())
+                    var datePick = logModel?.data?.data?.last()?.updatedAt
+                    val formatDate = formatter.parse(datePick ?: "")
+                    datePick = formatter.format(formatDate ?: "")
+                    if (datePick == toDay)
+                        listerner.getType(logModel?.data?.data?.last()?.eventType ?: "")
                     else
                         listerner.getType("CHECK_OUT")
                 } else {
@@ -113,13 +108,20 @@ class CheckInTEL {
         })
     }
 
-    fun getHistory( dataModel: HistoryCallback){
+    fun Date.getDay(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return sdf.format(this)
+    }
+
+    fun getHistory(dataModel: HistoryCallback) {
+
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 print("Fail")
             }
+
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 when {
                     response.code() == 200 -> {
@@ -136,7 +138,12 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn : String?, checkInTELCallBack: CheckInTELCallBack) {
+    fun openScanQRCode(
+        activity: Activity,
+        userId: String?,
+        typeCheckIn: String?,
+        checkInTELCallBack: CheckInTELCallBack
+    ) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
