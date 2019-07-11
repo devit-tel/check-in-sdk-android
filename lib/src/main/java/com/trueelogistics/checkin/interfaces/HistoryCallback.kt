@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.handler
+package com.trueelogistics.checkin.interfaces
 
 import com.trueelogistics.checkin.model.HistoryInDataModel
 

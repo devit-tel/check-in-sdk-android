@@ -8,13 +8,14 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Base64
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.nearby.NearByActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.history.HistoryActivity
+import com.trueelogistics.checkin.interfaces.HistoryCallback
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.scanqr.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
@@ -81,7 +82,7 @@ class CheckInTEL {
         }
     }
 
-    fun getLastCheckInHistory(listerner : TypeCallback ) {
+    fun getLastCheckInHistory(listerner : TypeCallback) {
         val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {

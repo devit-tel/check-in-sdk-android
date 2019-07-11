@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.handler.TypeCallback
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
 

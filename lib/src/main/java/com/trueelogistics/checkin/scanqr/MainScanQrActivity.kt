@@ -9,16 +9,10 @@ import android.widget.Toast
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.handler.HistoryCallback
-import com.trueelogistics.checkin.handler.TypeCallback
+import com.trueelogistics.checkin.interfaces.HistoryCallback
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
-import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.service.HistoryService
-import com.trueelogistics.checkin.service.RetrofitGenerater
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -71,7 +65,7 @@ class MainScanQrActivity : AppCompatActivity() {
     private fun getHistoryToday(){
         historyRecycle.adapter = adapter
         historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
-        CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback{
+        CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
             override fun historyGenerate(dataModel: ArrayList<HistoryInDataModel>) {
                 adapter.items.removeAll(dataModel)
                 adapter.items.addAll(dataModel)
