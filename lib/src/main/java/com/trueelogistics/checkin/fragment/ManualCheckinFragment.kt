@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
@@ -31,7 +32,7 @@ class ManualCheckinFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var type : String? = "CHECK_IN"
+        var type : String? = CheckinTELType.CheckIn.value
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -43,7 +44,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type = "CHECK_IN"
+            type = CheckinTELType.CheckIn.value
         }
         between_pic.setOnClickListener {
             if (between_pic.drawable.constantState ==  ResourcesCompat
@@ -53,7 +54,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_color)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type = "CHECK_IN_BETWEEN"
+            type = CheckinTELType.CheckBetween.value
         }
         checkout_pic.setOnClickListener {
             if (checkout_pic.drawable.constantState == ResourcesCompat
@@ -63,7 +64,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_color)
             }
-            type = "CHECK_OUT"
+            type = CheckinTELType.CheckOut.value
         }
         checkInHub.setOnClickListener {
             val stockDialogFragment  = StockDialogFragment()

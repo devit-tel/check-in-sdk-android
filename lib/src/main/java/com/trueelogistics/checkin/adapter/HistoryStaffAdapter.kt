@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.item_history_retrofit.view.*
 
@@ -31,9 +32,9 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             val eventType = items[position].eventType ?: "old"
 
             when (eventType) {
-                "CHECK_IN" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
-                "CHECK_IN_BETWEEN" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_between)
-                "CHECK_OUT" -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
+                CheckinTELType.CheckIn.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
+                CheckinTELType.CheckBetween.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_between)
+                CheckinTELType.CheckOut.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
                 else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
             }
             type.text = eventType

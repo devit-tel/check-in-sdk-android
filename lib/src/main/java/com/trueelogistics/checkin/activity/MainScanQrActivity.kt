@@ -13,6 +13,7 @@ import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
+import com.trueelogistics.checkin.enums.CheckinTELType
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,13 +32,13 @@ class MainScanQrActivity : AppCompatActivity() {
         date.text = "$day , $nDay $mouth"
         getHistoryToday()
         checkInBtn.setOnClickListener {
-            openScanQr(this, "CHECK_IN")
+            openScanQr(this, CheckinTELType.CheckIn.value)
         }
         checkBetBtn.setOnClickListener {
-            openScanQr(this, "CHECK_IN_BETWEEN")
+            openScanQr(this, CheckinTELType.CheckBetween.value)
         }
         checkOutBtn.setOnClickListener {
-            openScanQr(this, "CHECK_OUT")
+            openScanQr(this, CheckinTELType.CheckOut.value)
         }
         genQr.setOnClickListener {
             CheckInTEL.checkInTEL?.openGenerateQRCode(this, "userId", object : CheckInTELCallBack {
@@ -94,7 +95,7 @@ class MainScanQrActivity : AppCompatActivity() {
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
-                if (type == "CHECK_IN" || type == "CHECK_IN_BETWEEN") {
+                if (type == CheckinTELType.CheckIn.value || type == CheckinTELType.CheckBetween.value) {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false
                     checkBetBtn.isEnabled = true
@@ -105,9 +106,9 @@ class MainScanQrActivity : AppCompatActivity() {
 
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
-                } else if (type == "CHECK_OUT") {
+                } else if (type == CheckinTELType.CheckOut.value) {
                     if (checkFirstInDay) {
-                        openScanQr(this@MainScanQrActivity, "CHECK_IN")
+                        openScanQr(this@MainScanQrActivity, CheckinTELType.CheckIn.value)
                         checkFirstInDay = false
                     }
                     checkInBtn.isEnabled = true

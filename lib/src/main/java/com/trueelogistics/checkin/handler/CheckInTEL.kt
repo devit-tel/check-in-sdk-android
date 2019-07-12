@@ -17,6 +17,7 @@ import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.activity.ScanQrActivity
+import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater
@@ -100,17 +101,12 @@ class CheckInTEL {
                     if (datePick == toDay)
                         listerner.getType(logModel?.data?.data?.last()?.eventType ?: "")
                     else
-                        listerner.getType("CHECK_OUT")
+                        listerner.getType(CheckinTELType.CheckOut.value)
                 } else {
                     response.errorBody()
                 }
             }
         })
-    }
-
-    fun Date.getDay(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(this)
     }
 
     fun getHistory(dataModel: HistoryCallback) {
@@ -138,12 +134,10 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(
-        activity: Activity,
-        userId: String?,
-        typeCheckIn: String?,
-        checkInTELCallBack: CheckInTELCallBack
-    ) {
+    fun checkin(activity: Activity ,menuType : String , checkInTELAppCallBack: CheckInTELCallBack){
+
+    }
+    fun openScanQRCode( activity: Activity, userId: String?, typeCheckIn: String?, checkInTELCallBack: CheckInTELCallBack ) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)

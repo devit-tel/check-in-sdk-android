@@ -38,9 +38,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.scan_qr -> {
                 intent = Intent(this, MainScanQrActivity::class.java)
                 startActivity(intent)
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.frag_main, ScanQrFragment())
-//                    .commit()
             }
             R.id.shake_fine -> {
                 supportFragmentManager.beginTransaction()

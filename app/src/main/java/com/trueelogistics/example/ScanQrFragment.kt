@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
@@ -32,13 +33,13 @@ class ScanQrFragment : Fragment() {
         checkButton()
         activity?.let {activity ->
             checkInBtn.setOnClickListener {
-                openScanQr(activity, "CHECK_IN")
+                openScanQr(activity, CheckinTELType.CheckIn.value)
             }
             checkBetBtn.setOnClickListener {
-                openScanQr(activity, "CHECK_IN_BETWEEN")
+                openScanQr(activity, CheckinTELType.CheckBetween.value)
             }
             checkOutBtn.setOnClickListener {
-                openScanQr(activity, "CHECK_OUT")
+                openScanQr(activity, CheckinTELType.CheckOut.value)
             }
             genQr.setOnClickListener {
                 CheckInTEL.checkInTEL?.openGenerateQRCode(activity, "userId", object : CheckInTELCallBack {
@@ -86,7 +87,7 @@ class ScanQrFragment : Fragment() {
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
-                if (type == "CHECK_IN" || type == "CHECK_IN_BETWEEN") {
+                if (type == CheckinTELType.CheckIn.value || type == CheckinTELType.CheckBetween.value) {
                     checkInBtn.isEnabled = false
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
@@ -97,7 +98,7 @@ class ScanQrFragment : Fragment() {
                     }
                     checkBetBtn.isEnabled = true
                     checkOutBtn.isEnabled = true
-                } else if (type == "CHECK_OUT") {
+                } else if (type == CheckinTELType.CheckOut.value) {
                     checkInBtn.isEnabled = true
                     checkBetBtn.isEnabled = false
                     checkOutBtn.isEnabled = false

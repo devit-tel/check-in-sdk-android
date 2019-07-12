@@ -10,7 +10,7 @@
 			android:layout_width="match_parent">
 		<ImageView
 				android:id="@+id/toolbar"
-				android:src="@drawable/menu_bar"
+				android:src="@mipmap/menu_bar"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				tools:ignore="ContentDescription"/>
@@ -21,7 +21,7 @@
 			android:gravity="center"
 			android:orientation="vertical">
 		<ImageView
-				android:src="@drawable/pic_glass_zoom"
+				android:src="@mipmap/pic_glass_zoom"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				tools:ignore="ContentDescription"/>
