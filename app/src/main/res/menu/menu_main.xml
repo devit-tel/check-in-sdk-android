@@ -3,25 +3,25 @@
 	<group
 			android:checkableBehavior="single">
 		<item android:id="@+id/scan_qr"
-			  android:icon="@drawable/ic_shake"
+			  android:icon="@mipmap/ic_shake"
 			  android:checked="true"
 			  android:title="@string/scanQr"/>
 
 		<item android:id="@+id/shake_fine"
-			  android:icon="@drawable/ic_shake"
+			  android:icon="@mipmap/ic_shake"
 			  android:checked="true"
 			  android:title="@string/shake_fine"/>
 
 		<item android:id="@+id/nearby_fine"
-			  android:icon="@drawable/ic_nearby"
+			  android:icon="@mipmap/ic_nearby"
 			  android:title="@string/nearby_fine"/>
 
 		<item android:id="@+id/history"
-			  android:icon="@drawable/ic_history"
+			  android:icon="@mipmap/ic_history"
 			  android:title="@string/history_check"/>
 
 		<item android:id="@+id/absence"
-			  android:icon="@drawable/ic_absence"
+			  android:icon="@mipmap/ic_absence"
 			  android:title="@string/request_absence"/>
 	</group>
 </menu>

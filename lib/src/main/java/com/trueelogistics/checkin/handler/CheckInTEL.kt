@@ -8,15 +8,11 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
-import com.trueelogistics.checkin.activity.GenQrActivity
-import com.trueelogistics.checkin.activity.ShakeActivity
-import com.trueelogistics.checkin.activity.HistoryActivity
+import com.trueelogistics.checkin.activity.*
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.activity.NearByActivity
-import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
@@ -134,8 +130,10 @@ class CheckInTEL {
         })
     }
 
-    fun checkin(activity: Activity ,menuType : String , checkInTELAppCallBack: CheckInTELCallBack){
-
+    fun openMainCheckin(activity: Activity , checkInTELAppCallBack: CheckInTELCallBack){
+        this.checkInTELCallBack = checkInTELAppCallBack
+        val intent = Intent(activity, MainScanQrActivity::class.java)
+        activity.startActivity(intent)
     }
     fun openScanQRCode( activity: Activity, userId: String?, typeCheckIn: String?, checkInTELCallBack: CheckInTELCallBack ) {
         CheckInTEL.userId = userId

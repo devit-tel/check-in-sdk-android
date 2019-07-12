@@ -4,18 +4,22 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
 import com.trueelogistics.checkin.enums.CheckinTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.HistoryCallback
+import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
 
 class ScanQrFragment : Fragment() {
-
+    private var adapter = HistoryStaffAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +35,7 @@ class ScanQrFragment : Fragment() {
             mainActivity.actionToolbar()
         }
         checkButton()
+        getHistoryToday()
         activity?.let {activity ->
             checkInBtn.setOnClickListener {
                 openScanQr(activity, CheckinTELType.CheckIn.value)
@@ -61,6 +66,20 @@ class ScanQrFragment : Fragment() {
         }
     }
 
+    private fun getHistoryToday(){
+        historyRecycle.adapter = adapter
+        activity?.let {
+            historyRecycle?.layoutManager = LinearLayoutManager(it)
+            CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
+                override fun historyGenerate(dataModel: ArrayList<HistoryInDataModel>) {
+                    adapter.items.removeAll(dataModel)
+                    adapter.items.addAll(dataModel)
+                    adapter.notifyDataSetChanged()
+                }
+            })
+        }
+    }
+
     private fun openScanQr(context: Context, type : String) {
         activity ?.let {
             CheckInTEL.checkInTEL?.openScanQRCode(it,"userId",type, object : CheckInTELCallBack {
@@ -81,6 +100,7 @@ class ScanQrFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        getHistoryToday()
         checkButton()
     }
 
@@ -88,25 +108,18 @@ class ScanQrFragment : Fragment() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
                 if (type == CheckinTELType.CheckIn.value || type == CheckinTELType.CheckBetween.value) {
-                    checkInBtn.isEnabled = false
-                    checkBetBtn.isEnabled = true
-                    checkOutBtn.isEnabled = true
-                    activity?.let {
-                        checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                        checkBetBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
-                        checkOutBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
-                    }
-                    checkBetBtn.isEnabled = true
-                    checkOutBtn.isEnabled = true
+                    checkInBtn.visibility = View.GONE
+                    checkBetBtn.visibility = View.VISIBLE
+                    checkOutBtn.visibility = View.VISIBLE
+                    pic_checkin.visibility = View.GONE
+                    historyRecycle.visibility = View.VISIBLE
                 } else if (type == CheckinTELType.CheckOut.value) {
-                    checkInBtn.isEnabled = true
-                    checkBetBtn.isEnabled = false
-                    checkOutBtn.isEnabled = false
-                    activity?.let {
-                        checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
-                        checkBetBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                        checkOutBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                    }
+                    checkInBtn.visibility = View.VISIBLE
+                    checkBetBtn.visibility = View.GONE
+                    checkOutBtn.visibility = View.GONE
+                    pic_checkin.visibility = View.VISIBLE
+                    historyRecycle.visibility = View.GONE
+
                 } else {
                     activity?.let {
                         checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
