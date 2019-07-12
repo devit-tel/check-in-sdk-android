@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckinTELType
+import com.trueelogistics.checkin.extensions.formatISO
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.item_history_retrofit.view.*
 
@@ -39,7 +40,7 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
             }
             type.text = eventType
             hub.text = items[position].qrcodeId?.locationId
-            time.text = items[position].updatedAt?.substring(11,16)
+            time.text = items[position].updatedAt?.formatISO("HH:mm")
         }
     }
 

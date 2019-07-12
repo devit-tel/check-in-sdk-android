@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.extensions.format
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.util.*
 
@@ -21,8 +22,7 @@ class SuccessDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val current = Date()
-        timeCheckIn.text = current.toString().substring(11, 16)
+        timeCheckIn.text = Date().format("HH:mm")
         isCancelable = false
         confirm.setOnClickListener {
             activity?.finish() //activity where call this fragment will finish

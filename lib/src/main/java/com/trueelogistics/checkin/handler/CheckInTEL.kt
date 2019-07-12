@@ -14,6 +14,7 @@ import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.enums.CheckinTELType
+import com.trueelogistics.checkin.extensions.*
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater
@@ -89,13 +90,9 @@ class CheckInTEL {
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HistoryRootModel? = response.body()
-                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val toDay = formatter.format(Date())
-                    var datePick = logModel?.data?.data?.last()?.updatedAt
-                    val formatDate = formatter.parse(datePick ?: "")
-                    datePick = formatter.format(formatDate ?: "")
-                    if (datePick == toDay)
-                        listerner.getType(logModel?.data?.data?.last()?.eventType ?: "")
+                    val lastDatePick = logModel?.data?.data?.last()
+                    if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
+                        listerner.getType(lastDatePick.eventType ?: "")
                     else
                         listerner.getType(CheckinTELType.CheckOut.value)
                 } else {
