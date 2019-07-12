@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.scanqr
+package com.trueelogistics.checkin.fragment
 
 import android.app.ProgressDialog
 import android.os.Bundle

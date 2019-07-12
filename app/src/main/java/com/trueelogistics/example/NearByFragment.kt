@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.trueelogistics.checkin.nearby.NearByActivity
+import com.trueelogistics.checkin.activity.NearByActivity
 import kotlinx.android.synthetic.main.fragment_near_by.*
 
 class NearByFragment : Fragment()  {

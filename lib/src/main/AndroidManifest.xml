@@ -18,7 +18,7 @@
 			android:theme="@style/AppTheme"
 			android:usesCleartextTraffic="true"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon,UnusedAttribute">
-		<activity android:name=".history.HistoryActivity">
+		<activity android:name=".activity.HistoryActivity">
 		</activity>
 
 		<meta-data
@@ -28,15 +28,15 @@
 				android:name="com.trueelogistics.checkin.API_KEY"
 				android:value="7Q8RATBUCWEXFYH2J3K5N6P7Q9SATBVDWEXGZH2J4M5N6Q8R9SBUCVDXFY"/>
 		<activity
-				android:name=".scanqr.MainScanQrActivity"
+				android:name=".activity.MainScanQrActivity"
 				android:screenOrientation="portrait"/>
 		<activity android:name=".activity.GenQrActivity">
 		</activity>
 		<activity
-				android:name=".nearby.NearByActivity"
+				android:name=".activity.NearByActivity"
 				android:screenOrientation="portrait"/>
 		<activity
-				android:name=".scanqr.ScanQrActivity"
+				android:name=".activity.ScanQrActivity"
 				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activity.ShakeActivity"

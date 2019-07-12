@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.history
+package com.trueelogistics.checkin.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.history_retrofit.view.*
 
-class HistoryAdaptor : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {

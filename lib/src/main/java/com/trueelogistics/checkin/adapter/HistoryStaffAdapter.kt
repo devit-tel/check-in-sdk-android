@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.scanqr
+package com.trueelogistics.checkin.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

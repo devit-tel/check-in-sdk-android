@@ -10,13 +10,13 @@ import android.os.Bundle
 import android.util.Base64
 import com.trueelogistics.checkin.activity.GenQrActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
-import com.trueelogistics.checkin.history.HistoryActivity
+import com.trueelogistics.checkin.activity.HistoryActivity
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.nearby.NearByActivity
-import com.trueelogistics.checkin.scanqr.ScanQrActivity
+import com.trueelogistics.checkin.activity.NearByActivity
+import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater

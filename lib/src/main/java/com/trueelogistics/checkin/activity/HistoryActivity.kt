@@ -1,9 +1,10 @@
-package com.trueelogistics.checkin.history
+package com.trueelogistics.checkin.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.adapter.HistoryAdapter
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HistoryService
@@ -13,7 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HistoryActivity : AppCompatActivity() {
-    private var adapter = HistoryAdaptor()
+    private var adapter = HistoryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

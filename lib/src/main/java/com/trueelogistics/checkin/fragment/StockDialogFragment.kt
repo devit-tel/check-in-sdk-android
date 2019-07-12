@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.scanqr
+package com.trueelogistics.checkin.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -14,7 +14,7 @@ import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.HubRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HubService
-import com.trueelogistics.checkin.service.HubAdapter
+import com.trueelogistics.checkin.adapter.HubAdapter
 import kotlinx.android.synthetic.main.fragment_stock_dialog.*
 import retrofit2.Call
 import retrofit2.Callback

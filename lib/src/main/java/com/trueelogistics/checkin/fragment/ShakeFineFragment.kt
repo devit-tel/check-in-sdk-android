@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.shakeit
+package com.trueelogistics.checkin.fragment
 
 import android.annotation.SuppressLint
 import android.location.Location

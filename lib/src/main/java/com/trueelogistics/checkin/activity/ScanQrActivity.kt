@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.scanqr
+package com.trueelogistics.checkin.activity
 
 import android.Manifest
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.fragment.ScanQrFragment
 
 class ScanQrActivity : AppCompatActivity() {
 

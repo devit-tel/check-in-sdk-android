@@ -1,5 +1,4 @@
-package com.trueelogistics.checkin.scanqr
-
+package com.trueelogistics.checkin.fragment
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -7,24 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
-import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
+import kotlinx.android.synthetic.main.fragment_success_checkin.*
+import java.util.*
 
-class OldQrDialogFragment : DialogFragment() {
+class SuccessDialogFragment : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_old_qr_dialog, container, false)
+        return inflater.inflate(R.layout.fragment_success_checkin, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        scanAgain.setOnClickListener {
-            dialog.cancel()
-            onResume()
+        val current = Date()
+        timeCheckIn.text = current.toString().substring(11, 16)
+        isCancelable = false
+        confirm.setOnClickListener {
+            activity?.finish() //activity where call this fragment will finish
         }
     }
 

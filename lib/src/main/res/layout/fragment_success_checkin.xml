@@ -3,7 +3,7 @@
 			  xmlns:tools="http://schemas.android.com/tools"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
-			  tools:context=".scanqr.SuccessDialogFragment"
+			  tools:context=".fragment.SuccessDialogFragment"
 			  android:orientation="vertical">
 	<ImageView
 			android:src="@drawable/pic_success_checkin"

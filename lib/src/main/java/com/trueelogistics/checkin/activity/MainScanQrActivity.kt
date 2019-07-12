@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.scanqr
+package com.trueelogistics.checkin.activity
 
 import android.content.Context
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
+import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import java.util.*
 import kotlin.collections.ArrayList

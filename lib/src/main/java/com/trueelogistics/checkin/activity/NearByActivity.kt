@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.nearby
+package com.trueelogistics.checkin.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
