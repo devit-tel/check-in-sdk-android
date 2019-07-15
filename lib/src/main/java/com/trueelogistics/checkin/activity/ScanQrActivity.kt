@@ -10,19 +10,15 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.ScanQrFragment
 
 class ScanQrActivity : AppCompatActivity() {
-
     private var checkInTELCallBack: CheckInTELCallBack? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_qr)
-
         KotlinPermissions.with(this) // where this is an FragmentActivity instance
             .permissions(
                 Manifest.permission.CAMERA
             ).onAccepted {
                 val type = intent.getStringExtra("type")
-
                 supportFragmentManager.beginTransaction().replace(R.id.fragment,
                     ScanQrFragment.newInstance(type ?: "")
                 ).commit()

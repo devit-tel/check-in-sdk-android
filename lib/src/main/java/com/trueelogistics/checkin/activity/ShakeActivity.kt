@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ShakeActivity : AppCompatActivity() {
-
     private lateinit var locationCallback: LocationCallback
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var REQUESTING_LOCATION_UPDATES_KEY = "101"
@@ -26,7 +25,6 @@ class ShakeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shake)
-
         FirebaseApp.initializeApp(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation
@@ -128,7 +126,6 @@ class ShakeActivity : AppCompatActivity() {
                         ).show()
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     this@ShakeActivity,

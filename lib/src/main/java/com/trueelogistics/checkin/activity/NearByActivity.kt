@@ -16,7 +16,6 @@ class NearByActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_by)
-
         btSentNearBy.setOnClickListener {
             this.let {
                 val message = DeviceName.getDeviceName().toByteArray(

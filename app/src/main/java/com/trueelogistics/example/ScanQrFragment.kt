@@ -10,13 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
-import com.trueelogistics.checkin.enums.CheckinTELType
+import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.extensions.format
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class ScanQrFragment : Fragment() {
     private var adapter = HistoryStaffAdapter()
@@ -36,32 +40,19 @@ class ScanQrFragment : Fragment() {
         }
         checkButton()
         getHistoryToday()
+        val day = Date().format("EE")
+        val nDay = Date().format("dd")
+        val mouth = Date().format("MMM")
+        date.text = String.format(this.getString(R.string.date_checkin), day, nDay, mouth)
         activity?.let {activity ->
             checkInBtn.setOnClickListener {
-                openScanQr(activity, CheckinTELType.CheckIn.value)
+                openScanQr(activity, CheckInTELType.CheckIn.value)
             }
             checkBetBtn.setOnClickListener {
-                openScanQr(activity, CheckinTELType.CheckBetween.value)
+                openScanQr(activity, CheckInTELType.CheckBetween.value)
             }
             checkOutBtn.setOnClickListener {
-                openScanQr(activity, CheckinTELType.CheckOut.value)
-            }
-            genQr.setOnClickListener {
-                CheckInTEL.checkInTEL?.openGenerateQRCode(activity, "userId", object : CheckInTELCallBack {
-                    override fun onCancel() {
-                        Toast.makeText(activity, " GenQr.onCancel === ", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onCheckInFailure(message: String) {
-                        Toast.makeText(activity, " GenQr.onCheckFail = $message ", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-
-                    override fun onCheckInSuccess(result: String) {
-                        Toast.makeText(activity, " GenQr.onCheckSuccess = $result", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                })
+                openScanQr(activity, CheckInTELType.CheckOut.value)
             }
         }
     }
@@ -107,18 +98,18 @@ class ScanQrFragment : Fragment() {
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun getType(type: String) {
-                if (type == CheckinTELType.CheckIn.value || type == CheckinTELType.CheckBetween.value) {
+                if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     checkInBtn.visibility = View.GONE
                     checkBetBtn.visibility = View.VISIBLE
                     checkOutBtn.visibility = View.VISIBLE
                     pic_checkin.visibility = View.GONE
-                    historyRecycle.visibility = View.VISIBLE
-                } else if (type == CheckinTELType.CheckOut.value) {
+                    layoutRecycle.visibility = View.VISIBLE
+                } else if (type == CheckInTELType.CheckOut.value) {
                     checkInBtn.visibility = View.VISIBLE
                     checkBetBtn.visibility = View.GONE
                     checkOutBtn.visibility = View.GONE
                     pic_checkin.visibility = View.VISIBLE
-                    historyRecycle.visibility = View.GONE
+                    layoutRecycle.visibility = View.GONE
 
                 } else {
                     activity?.let {

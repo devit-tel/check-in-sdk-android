@@ -23,5 +23,10 @@
 		<item android:id="@+id/absence"
 			  android:icon="@mipmap/ic_absence"
 			  android:title="@string/request_absence"/>
+
+		<item android:id="@+id/logOut"
+
+			  android:icon="@mipmap/ic_absence"
+			  android:title="@string/log_out"/>
 	</group>
 </menu>

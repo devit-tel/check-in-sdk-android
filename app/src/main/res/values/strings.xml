@@ -26,5 +26,6 @@
 	<string name="finePhone">ค้นหาโทรศัพท์</string>
 	<string name="orPressBt">หรือกดปุ่ม</string>
 	<string name="scanQr">แสกน Qr code</string>
-
+	<string name="log_out">ออกจากระบบ</string>
+	<string name="date_checkin">%1$s , %2$s %3$s</string>
 </resources>

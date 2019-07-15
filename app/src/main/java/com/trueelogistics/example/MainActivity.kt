@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
 import com.trueelogistics.checkin.activity.HistoryActivity
-import com.trueelogistics.checkin.activity.MainScanQrActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

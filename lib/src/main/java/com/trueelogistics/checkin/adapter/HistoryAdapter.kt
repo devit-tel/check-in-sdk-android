@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.extensions.formatISO
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.history_retrofit.view.*
 
 class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.history_retrofit, viewGroup, false)
         return ViewHolder(view)
@@ -29,10 +29,10 @@ class HistoryAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(position: Int) {
             val date = view.date
             val format = items[position].updatedAt
-            val day = format?.substring(8,10)
-            val mouth = format?.substring(5,7)
-            val year = format?.substring(0,4)
-            date.text = "$day $mouth $year"
+            val day = format?.formatISO("dd")
+            val mouth = format?.formatISO("MM")
+            val year = format?.formatISO("yyyy")
+            date.text = String.format(view.context.getString(R.string.date_history), day, mouth, year)
         }
     }
 }

@@ -14,7 +14,6 @@ class HubAdapter(private var items: ArrayList<HubInDataModel>, private val conte
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var onItemLocationClickListener: OnItemLocationClickListener? = null
     private var oldRadioButton: RadioButton? = null
-
     override fun onBindViewHolder(view: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = view as ViewHolder
         viewHolder.bind(position)

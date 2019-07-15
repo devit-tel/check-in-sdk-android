@@ -56,16 +56,13 @@ class ShakeFragment : Fragment() {
                             .addOnSuccessListener { location: Location? ->
                                 val latitude = location?.latitude.toString()
                                 val longitude = location?.longitude.toString()
-
                                 FirebaseApp.initializeApp(fragActivity)
-
                                 val ref = FirebaseDatabase.getInstance().getReference("driverLocation")
                                 ref.addValueEventListener(object : ValueEventListener {
                                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                                         ref.child("latitude").setValue(latitude)
                                         ref.child("longitude").setValue(longitude)
                                     }
-
                                     override fun onCancelled(error: DatabaseError) {
                                         Toast.makeText(
                                             activity,
@@ -79,13 +76,9 @@ class ShakeFragment : Fragment() {
                                 }
                             }
                         object : CountDownTimer(5000, 1000) { // 1 second to onTick & 1 minit to onFinish
-
                             override fun onTick(millisUntilFinished: Long) {
-
                             }
-
                             override fun onFinish() {
-
                             }
                         }.start()
                     }

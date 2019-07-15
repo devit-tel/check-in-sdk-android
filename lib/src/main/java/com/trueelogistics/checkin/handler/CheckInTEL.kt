@@ -13,7 +13,7 @@ import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.HistoryCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.enums.CheckinTELType
+import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.*
 import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
@@ -22,7 +22,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CheckInTEL {
@@ -68,7 +67,7 @@ class CheckInTEL {
             val packageManagers =
                 application.run {
                     packageManager.getPackageInfo(
-                        packageName, PackageManager.GET_SIGNATURES
+                        packageName, PackageManager.GET_RESOLVED_FILTER
                     )
                 }
             for (signature in packageManagers.signatures) {
@@ -79,7 +78,7 @@ class CheckInTEL {
         }
     }
 
-    fun getLastCheckInHistory(listerner: TypeCallback) {
+    fun getLastCheckInHistory(listener: TypeCallback) {
         val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
@@ -92,9 +91,9 @@ class CheckInTEL {
                     val logModel: HistoryRootModel? = response.body()
                     val lastDatePick = logModel?.data?.data?.last()
                     if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
-                        listerner.getType(lastDatePick.eventType ?: "")
+                        listener.getType(lastDatePick.eventType ?: "")
                     else
-                        listerner.getType(CheckinTELType.CheckOut.value)
+                        listener.getType(CheckInTELType.CheckOut.value)
                 } else {
                     response.errorBody()
                 }
@@ -108,7 +107,6 @@ class CheckInTEL {
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                print("Fail")
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -127,11 +125,6 @@ class CheckInTEL {
         })
     }
 
-    fun openMainCheckin(activity: Activity , checkInTELAppCallBack: CheckInTELCallBack){
-        this.checkInTELCallBack = checkInTELAppCallBack
-        val intent = Intent(activity, MainScanQrActivity::class.java)
-        activity.startActivity(intent)
-    }
     fun openScanQRCode( activity: Activity, userId: String?, typeCheckIn: String?, checkInTELCallBack: CheckInTELCallBack ) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack

@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.enums.CheckinTELType
+import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
@@ -20,7 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ManualCheckinFragment : Fragment() {
+class ManualCheckInFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +32,7 @@ class ManualCheckinFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var type : String? = CheckinTELType.CheckIn.value
+        var type : String? = CheckInTELType.CheckIn.value
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -44,7 +44,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type = CheckinTELType.CheckIn.value
+            type = CheckInTELType.CheckIn.value
         }
         between_pic.setOnClickListener {
             if (between_pic.drawable.constantState ==  ResourcesCompat
@@ -54,7 +54,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_color)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type = CheckinTELType.CheckBetween.value
+            type = CheckInTELType.CheckBetween.value
         }
         checkout_pic.setOnClickListener {
             if (checkout_pic.drawable.constantState == ResourcesCompat
@@ -64,7 +64,7 @@ class ManualCheckinFragment : Fragment() {
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_color)
             }
-            type = CheckinTELType.CheckOut.value
+            type = CheckInTELType.CheckOut.value
         }
         checkInHub.setOnClickListener {
             val stockDialogFragment  = StockDialogFragment()

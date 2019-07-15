@@ -14,11 +14,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GenQrActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gen_qr)
-
         getQr()
         val countTime = object : CountDownTimer(30000, 500) { // 1 second to onTick & 1 minit to onFinish
             override fun onTick(millisUntilFinished: Long) {
