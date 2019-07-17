@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface HistoryService{
-    @GET("/check-in/v1/history")
+    @GET("/check-in/v1/history/")
     fun getData() : Call<HistoryRootModel>
 }

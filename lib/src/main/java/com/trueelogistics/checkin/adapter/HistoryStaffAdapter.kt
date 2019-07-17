@@ -10,9 +10,9 @@ import com.trueelogistics.checkin.extensions.formatISO
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.item_history_retrofit.view.*
 
-class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
-    override fun onCreateViewHolder(viewGroup: ViewGroup, position : Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_history_retrofit, viewGroup, false)
         return ViewHolder(view)
     }
@@ -21,10 +21,11 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         return items.size
     }
 
-    override fun onBindViewHolder( view : RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(view: RecyclerView.ViewHolder, position: Int) {
         val viewHolder = view as ViewHolder
         viewHolder.bind(position)
     }
+
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
             val type = view.typeCheckIn

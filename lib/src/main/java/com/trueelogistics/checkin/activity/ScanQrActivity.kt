@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.kotlinpermissions.KotlinPermissions
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.ScanQrFragment
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 
 class ScanQrActivity : AppCompatActivity() {
     private var checkInTELCallBack: CheckInTELCallBack? = null
@@ -16,10 +16,12 @@ class ScanQrActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scan_qr)
         KotlinPermissions.with(this) // where this is an FragmentActivity instance
             .permissions(
-                Manifest.permission.CAMERA
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
                 val type = intent.getStringExtra("type")
-                supportFragmentManager.beginTransaction().replace(R.id.fragment,
+                supportFragmentManager.beginTransaction().replace(
+                    R.id.fragment,
                     ScanQrFragment.newInstance(type ?: "")
                 ).commit()
             }.onDenied {

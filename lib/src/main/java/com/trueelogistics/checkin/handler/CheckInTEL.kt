@@ -15,7 +15,6 @@ import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.*
-import com.trueelogistics.checkin.service.GenHistoryService
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import retrofit2.Call
@@ -45,7 +44,7 @@ class CheckInTEL {
         app = application.packageManager.getApplicationInfo(
             application.packageName, PackageManager.GET_META_DATA
         )
-            .metaData.getString("com.trueelogistics.example")
+            .metaData.getString("com.trueelogistics.APIKey")
     }
 
     private fun setSha1(application: Application) {
@@ -79,7 +78,7 @@ class CheckInTEL {
     }
 
     fun getLastCheckInHistory(listener: TypeCallback) {
-        val retrofit = RetrofitGenerater().build().create(GenHistoryService::class.java)
+        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
@@ -125,7 +124,12 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode( activity: Activity, userId: String?, typeCheckIn: String?, checkInTELCallBack: CheckInTELCallBack ) {
+    fun openScanQRCode(
+        activity: Activity,
+        userId: String?,
+        typeCheckIn: String?,
+        checkInTELCallBack: CheckInTELCallBack
+    ) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)

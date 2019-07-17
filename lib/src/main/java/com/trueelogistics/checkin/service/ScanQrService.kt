@@ -11,5 +11,8 @@ interface ScanQrService{
     @FormUrlEncoded
     fun getData(
         @Field("type") type:String,
-        @Field("qrcodeUniqueKey")qrcodeUniqueKey:String) : Call<ScanRootModel>
+        @Field("qrcodeUniqueKey")qrcodeUniqueKey:String,
+        @Field("latitude")latitude:String ,
+        @Field("longitude")longitude:String
+    ): Call<ScanRootModel>
 }

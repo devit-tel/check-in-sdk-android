@@ -15,7 +15,7 @@
 	<string name="confirm_text">ยืนยัน</string>
 	<string name="check_success_text">เข้างานเรียบร้อยแล้ว</string>
 	<string name="check_time_text">เวลาลงชื่อเข้างาน</string>
-	<string name="example_time_text">9.15</string>
+	<string name="example_time_text">HH.mm</string>
 	<string name="check_hub">คลังที่เช็คอิน</string>
 
 	<string name="hello_blank_fragment">Hello blank fragment</string>
@@ -38,4 +38,5 @@
 	<string name="type_check_in_example">type check in</string>
 	<string name="date_history">%1$s %2$s %3$s</string>
 	<string name="date_checkin">%1$s , %2$s %3$s</string>
+	<string name="not_mock_text">กรุณาตั้งค่าการระบุตำแหน่งให้ถูกต้อง</string>
 </resources>

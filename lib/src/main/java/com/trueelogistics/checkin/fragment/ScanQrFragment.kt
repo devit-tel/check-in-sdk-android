@@ -1,12 +1,18 @@
 package com.trueelogistics.checkin.fragment
 
+import android.Manifest
 import android.app.ProgressDialog
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -47,7 +53,7 @@ class ScanQrFragment : Fragment() {
         }
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
-                sentQr(it)
+                checkLocation(it)
             }
         }
     }
@@ -65,48 +71,67 @@ class ScanQrFragment : Fragment() {
         }
     }
 
-    private fun sentQr(result: String) {
+    private fun checkLocation(result: String) {
         //start dialog and stop camera
         if (isScan) {
             isScan = false
             val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
             val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
-            val call = retrofit?.getData(type, result)
-            call?.enqueue(object : Callback<ScanRootModel> {
-                override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
-                    //stop dialog and start camera
-                    loadingDialog.dismiss()
-                    isScan = true
-                }
-                override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
-                    //stop dialog
-                    loadingDialog.dismiss()
-                    when {
-                        response.code() == 200 -> {
+            var fusedLocationClient: FusedLocationProviderClient
+            var latitude: Double
+            var longitude: Double
+            activity?.let {activity ->
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+                if (ContextCompat.checkSelfPermission(
+                        activity, Manifest.permission.ACCESS_COARSE_LOCATION )
+                    == PackageManager.PERMISSION_GRANTED ) {
+                    fusedLocationClient.lastLocation
+                        ?.addOnSuccessListener { location: Location? ->
+                            if(location?.isFromMockProvider == false) {
+                                latitude = location.latitude
+                                longitude = location.longitude
+                                val call = retrofit?.getData(type, result, latitude.toString(),longitude.toString())
+                                call?.enqueue(object : Callback<ScanRootModel> {
+                                    override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
+                                        //stop dialog and start camera
+                                        loadingDialog.dismiss()
+                                        isScan = true
+                                    }
+                                    override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
+                                        //stop dialog
+                                        loadingDialog.dismiss()
+                                        when {
+                                            response.code() == 200 -> {
 //                            response.body()
-                            SuccessDialogFragment().show(activity?.supportFragmentManager, "show")
-                        }
-                        response.code() == 400 -> {
-                            onPause()
-                            activity?.let {
-                                OldQrDialogFragment().show(it.supportFragmentManager, "show")
-                                it.recreate()
+                                                SuccessDialogFragment().show(activity.supportFragmentManager, "show")
+                                            }
+                                            response.code() == 400 -> {
+                                                onPause()
+                                                    OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+                                                activity.recreate()
+                                            }
+                                            response.code() == 500 -> {
+                                                    Toast.makeText(activity,"Server Error",Toast.LENGTH_SHORT)
+                                                        .show()
+                                            }
+                                            else -> {
+                                                response.errorBody()
+                                                isScan = true
+                                            }
+                                        }
+                                    }
+                                })
+                            }
+                            else{
+                                loadingDialog.dismiss()
+                                MockDialogFragment().show(activity.supportFragmentManager, "show")
+                                activity.recreate()
                             }
                         }
-                        response.code() == 500 -> {
-                            activity?.let {
-                                Toast.makeText(it,"Server Error",Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
-                        else -> {
-                            response.errorBody()
-                            isScan = true
-                        }
-                    }
                 }
-            })
+            }
+
         }
     }
 
