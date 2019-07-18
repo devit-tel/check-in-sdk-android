@@ -20,7 +20,6 @@
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning,MissingApplicationIcon,UnusedAttribute">
 		<activity android:name=".activity.HistoryActivity">
 		</activity>
-
 		<meta-data
 				android:name="com.google.android.nearby.messages.API_KEY"
 				android:value="AIzaSyA71Q-6Vd7G5qw0kbneCJKu5IvLztHHWzQ"/>

@@ -108,10 +108,13 @@ class CheckInTEL {
                      val root: GenQrRootModel? = response.body()
                      if (root?.status == "OK") {
                         listener.qrGenerate(root.data.qrcodeUniqueKey.toString())
+                        val timeLatest = root.data.updatedAt.toString()
+                         listener.timeLatest(timeLatest.formatISO("HH:mm"))
                      }
                  } else {
                      response.errorBody()
                      listener.qrGenerate("Fail to Generate QrCode")
+                     listener.timeLatest("00:00")
                  }
              }
          })
