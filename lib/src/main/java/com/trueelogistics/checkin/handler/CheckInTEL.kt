@@ -9,13 +9,15 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import com.trueelogistics.checkin.activity.*
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
-import com.trueelogistics.checkin.interfaces.HistoryCallback
-import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.*
+import com.trueelogistics.checkin.interfaces.*
+import com.trueelogistics.checkin.model.GenQrRootModel
+import com.trueelogistics.checkin.model.HubRootModel
+import com.trueelogistics.checkin.service.GenQrService
 import com.trueelogistics.checkin.service.HistoryService
+import com.trueelogistics.checkin.service.HubService
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +46,7 @@ class CheckInTEL {
         app = application.packageManager.getApplicationInfo(
             application.packageName, PackageManager.GET_META_DATA
         )
-            .metaData.getString("com.trueelogistics.APIKey")
+            .metaData.getString("com.trueelogistics.API_KEY")
     }
 
     private fun setSha1(application: Application) {
@@ -77,6 +79,44 @@ class CheckInTEL {
         }
     }
 
+    fun hubGenerater(listener : HubCallback){
+        val retrofit = RetrofitGenerater().build().create(HubService::class.java)
+        val call = retrofit?.getData()
+        call?.enqueue(object : Callback<HubRootModel> {
+            override fun onFailure(call: Call<HubRootModel>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<HubRootModel>, response: Response<HubRootModel>) {
+                if (response.code() == 200) {
+                    val logModel: HubRootModel? = response.body()
+                        listener.generateHub(logModel?.data?.data ?: arrayListOf())
+                } else {
+                    response.errorBody()
+                }
+            }
+        })
+    }
+
+     fun  qrGenerate(qrCodeCreateBy : String,locationId : String , listener: GenerateQrCallback){
+         val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
+         val call = retrofit?.getData(qrCodeCreateBy, locationId) // "LeaderNo4","5d01d704136e06003c23024f"
+         call?.enqueue(object : Callback<GenQrRootModel> {
+             override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
+             }
+             override fun onResponse(call: Call<GenQrRootModel>, response: Response<GenQrRootModel>) {
+                 if (response.code() == 200) {
+                     val root: GenQrRootModel? = response.body()
+                     if (root?.status == "OK") {
+                        listener.qrGenerate(root.data.qrcodeUniqueKey.toString())
+                     }
+                 } else {
+                     response.errorBody()
+                     listener.qrGenerate("Fail to Generate QrCode")
+                 }
+             }
+         })
+    }
     fun getLastCheckInHistory(listener: TypeCallback) {
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
@@ -124,12 +164,8 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(
-        activity: Activity,
-        userId: String?,
-        typeCheckIn: String?,
-        checkInTELCallBack: CheckInTELCallBack
-    ) {
+    fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn: String?,
+                       checkInTELCallBack: CheckInTELCallBack ) {
         CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)

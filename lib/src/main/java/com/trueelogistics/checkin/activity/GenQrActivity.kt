@@ -4,14 +4,10 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.app.AppCompatActivity
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.model.GenQrRootModel
-import com.trueelogistics.checkin.service.GenQrService
-import com.trueelogistics.checkin.service.RetrofitGenerater
+import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import kotlinx.android.synthetic.main.activity_gen_qr.*
 import net.glxn.qrgen.android.QRCode
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class GenQrActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,23 +30,12 @@ class GenQrActivity : AppCompatActivity() {
     }
 
     fun getQr() {
-        val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
-        val call = retrofit?.getData("LeaderNo4", "5d01d704136e06003c23024f")
-        call?.enqueue(object : Callback<GenQrRootModel> {
-            override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
-            }
-            override fun onResponse(call: Call<GenQrRootModel>, response: Response<GenQrRootModel>) {
-                if (response.code() == 200) {
-                    val root: GenQrRootModel? = response.body()
-                    if (root?.status == "OK") {
-                        val qrText = root.data.qrcodeUniqueKey.toString()
-                        val result = QRCode.from(qrText).withSize(1000, 1000).bitmap()
-                        qrCode.setImageBitmap(result)
-                    }
-                } else {
-                    response.errorBody()
-                }
+        CheckInTEL.checkInTEL?.qrGenerate("LeaderNo4","5d01d704136e06003c23024f", object : GenerateQrCallback {
+            override fun qrGenerate(qrCodeText: String) {
+                val result = QRCode.from(qrCodeText).withSize(1000, 1000).bitmap()
+                qrCode.setImageBitmap(result)
             }
         })
+
     }
 }

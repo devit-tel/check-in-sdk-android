@@ -24,9 +24,6 @@
 		<meta-data
 				android:name="com.google.android.nearby.messages.API_KEY"
 				android:value="AIzaSyA71Q-6Vd7G5qw0kbneCJKu5IvLztHHWzQ"/>
-		<meta-data
-				android:name="com.trueelogistics.checkin.API_KEY"
-				android:value="7Q8RATBUCWEXFYH2J3K5N6P7Q9SATBVDWEXGZH2J4M5N6Q8R9SBUCVDXFY"/>
 		<activity
 				android:name=".activity.MainScanQrActivity"
 				android:screenOrientation="portrait"/>

@@ -42,7 +42,7 @@
                 android:name="com.google.android.nearby.messages.AIzaSyBXLec3JoQY_SBJUOLSbDk4XAkSezbc02s"
                 android:value="AIzaSyBXLec3JoQY_SBJUOLSbDk4XAkSezbc02s" />
         <meta-data
-            android:name="com.trueelogistics.example"
+            android:name="com.trueelogistics.API_KEY"
             android:value="SATBUDWEXFZH2J3K5N6P7R9SATCVDWEYGZH2K4M5N7Q8R9TBUCVEXFYGZJ"/>
         <activity android:name="com.trueelogistics.example.MainActivity">
             <intent-filter>

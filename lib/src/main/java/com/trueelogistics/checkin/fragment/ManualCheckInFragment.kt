@@ -116,7 +116,6 @@ class ManualCheckInFragment : Fragment() {
                                         response.code() == 400 -> {
                                             onPause()
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
-                                            activity.recreate()
                                         }
                                         response.code() == 500 -> {
                                             Toast.makeText(activity,"Server Error",Toast.LENGTH_SHORT)
