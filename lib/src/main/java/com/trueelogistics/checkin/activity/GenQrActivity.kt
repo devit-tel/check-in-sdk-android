@@ -31,6 +31,10 @@ class GenQrActivity : AppCompatActivity() {
 
     fun getQr() {
         CheckInTEL.checkInTEL?.qrGenerate("LeaderNo4","5d01d704136e06003c23024f", object : GenerateQrCallback {
+            override fun timeLatest(time: String) {
+
+            }
+
             override fun qrGenerate(qrCodeText: String) {
                 val result = QRCode.from(qrCodeText).withSize(1000, 1000).bitmap()
                 qrCode.setImageBitmap(result)
