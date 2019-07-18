@@ -1,9 +1,16 @@
 package com.trueelogistics.checkin.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.fragment.MockDialogFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import kotlinx.android.synthetic.main.activity_gen_qr.*
@@ -18,6 +25,7 @@ class GenQrActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 timeCount.text = (millisUntilFinished / 1000).toString()
             }
+
             override fun onFinish() {
                 getQr()
                 this.start()
@@ -30,16 +38,33 @@ class GenQrActivity : AppCompatActivity() {
     }
 
     fun getQr() {
-        CheckInTEL.checkInTEL?.qrGenerate("LeaderNo4","5d01d704136e06003c23024f", object : GenerateQrCallback {
-            override fun timeLatest(time: String) {
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation
+                ?.addOnSuccessListener { location: Location? ->
+                    if (location?.isFromMockProvider == false) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        CheckInTEL.checkInTEL?.qrGenerate("LeaderNo4", "5d01d704136e06003c23024f",
+                            latitude.toString(), longitude.toString(), object : GenerateQrCallback {
+                                override fun timeLatest(time: String) {
+                                }
 
-            }
+                                override fun qrGenerate(qrCodeText: String) {
+                                    val result = QRCode.from(qrCodeText).withSize(1000, 1000).bitmap()
+                                    qrCode.setImageBitmap(result)
+                                }
+                            })
+                    } else {
+                        MockDialogFragment().show(this.supportFragmentManager, "show")
+                    }
+                }
+        }
 
-            override fun qrGenerate(qrCodeText: String) {
-                val result = QRCode.from(qrCodeText).withSize(1000, 1000).bitmap()
-                qrCode.setImageBitmap(result)
-            }
-        })
 
     }
 }

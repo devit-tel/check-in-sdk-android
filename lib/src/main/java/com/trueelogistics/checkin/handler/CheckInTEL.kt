@@ -97,9 +97,9 @@ class CheckInTEL {
         })
     }
 
-     fun  qrGenerate(qrCodeCreateBy : String,locationId : String , listener: GenerateQrCallback){
+     fun  qrGenerate(qrCodeCreateBy : String,locationId : String ,latitude : String,longitude : String , listener: GenerateQrCallback){
          val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
-         val call = retrofit?.getData(qrCodeCreateBy, locationId) // "LeaderNo4","5d01d704136e06003c23024f"
+         val call = retrofit?.getData(qrCodeCreateBy, locationId,latitude,longitude) // "LeaderNo4","5d01d704136e06003c23024f"
          call?.enqueue(object : Callback<GenQrRootModel> {
              override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
              }

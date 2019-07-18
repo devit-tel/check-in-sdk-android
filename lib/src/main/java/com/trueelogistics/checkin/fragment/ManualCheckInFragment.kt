@@ -12,12 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
-import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.model.HubInDataModel
+import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
@@ -37,14 +36,14 @@ class ManualCheckInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var type : String? = CheckInTELType.CheckIn.value
+        var type: String? = CheckInTELType.CheckIn.value
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
         checkin_pic.setOnClickListener {
             if (checkin_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState )
-            {
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_color)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
@@ -52,9 +51,9 @@ class ManualCheckInFragment : Fragment() {
             type = CheckInTELType.CheckIn.value
         }
         between_pic.setOnClickListener {
-            if (between_pic.drawable.constantState ==  ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState )
-            {
+            if (between_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
                 between_pic.setImageResource(R.drawable.ic_checkin_color)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
@@ -63,8 +62,8 @@ class ManualCheckInFragment : Fragment() {
         }
         checkout_pic.setOnClickListener {
             if (checkout_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray,null)?.constantState)
-            {
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_color)
@@ -72,45 +71,44 @@ class ManualCheckInFragment : Fragment() {
             type = CheckInTELType.CheckOut.value
         }
         checkInHub.setOnClickListener {
-            val stockDialogFragment  = StockDialogFragment()
+            val stockDialogFragment = StockDialogFragment()
             stockDialogFragment.setOnItemLocationClick {
                 setView(it)
             }
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            checkLocation(type?:CheckInTELType.CheckIn.value)
+            checkLocation(type ?: CheckInTELType.CheckIn.value)
         }
     }
 
-    private fun checkLocation(type : String){
+    private fun checkLocation(type: String) {
         val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
         val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...")
-        var fusedLocationClient: FusedLocationProviderClient
-        var latitude: Double
-        var longitude: Double
         activity?.let { activity ->
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(
-                    activity, Manifest.permission.ACCESS_COARSE_LOCATION )
-                == PackageManager.PERMISSION_GRANTED ) {
+                    activity, Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+                == PackageManager.PERMISSION_GRANTED
+            ) {
                 fusedLocationClient.lastLocation
                     ?.addOnSuccessListener { location: Location? ->
-                        if(location?.isFromMockProvider == false) {
-                            latitude = location.latitude
-                            longitude = location.longitude
-                            val call = retrofit?.getData(type, "", latitude.toString(),longitude.toString())
+                        if (location?.isFromMockProvider == false) {
+                            val latitude = location.latitude
+                            val longitude = location.longitude
+                            val call = retrofit?.getData(type, "", latitude.toString(), longitude.toString())
                             call?.enqueue(object : Callback<ScanRootModel> {
                                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                     //stop dialog and start camera
                                     loadingDialog.dismiss()
                                 }
+
                                 override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
                                     //stop dialog
                                     loadingDialog.dismiss()
                                     when {
                                         response.code() == 200 -> {
-//                            response.body()
                                             SuccessDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 400 -> {
@@ -118,7 +116,7 @@ class ManualCheckInFragment : Fragment() {
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 500 -> {
-                                            Toast.makeText(activity,"Server Error",Toast.LENGTH_SHORT)
+                                            Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT)
                                                 .show()
                                         }
                                         else -> {
@@ -127,8 +125,7 @@ class ManualCheckInFragment : Fragment() {
                                     }
                                 }
                             })
-                        }
-                        else{
+                        } else {
                             loadingDialog.dismiss()
                             MockDialogFragment().show(activity.supportFragmentManager, "show")
                         }
@@ -137,12 +134,12 @@ class ManualCheckInFragment : Fragment() {
         }
     }
 
-    private fun setView(item: HubInDataModel){
+    private fun setView(item: HubInDataModel) {
         stockName.text = item.locationName
         activity?.let {
             stockName.setTextColor(ContextCompat.getColor(it, R.color.black))
-            confirm.setBackgroundColor(ContextCompat.getColor(it,R.color.purple))
-            confirm.setTextColor(ContextCompat.getColor(it,R.color.white))
+            confirm.setBackgroundColor(ContextCompat.getColor(it, R.color.purple))
+            confirm.setTextColor(ContextCompat.getColor(it, R.color.white))
         }
         confirm.isEnabled = true
     }

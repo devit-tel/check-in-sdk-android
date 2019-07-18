@@ -9,5 +9,8 @@ interface GenQrService{
     @FormUrlEncoded
     fun getData(
         @Field("qrcodeCreateBy") qrcodeCreateBy:String,
-        @Field("locationId")locationId:String) : Call<GenQrRootModel>
+        @Field("locationId")locationId:String,
+        @Field("latitude")latitude:String,
+        @Field("longitude")longitude:String
+    ) : Call<GenQrRootModel>
 }
