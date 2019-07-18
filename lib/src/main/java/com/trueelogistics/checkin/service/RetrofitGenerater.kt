@@ -15,7 +15,7 @@ class RetrofitGenerater {
                 val newRequest = chain.request().newBuilder()
                 if(isRequestHeader == true) {
                     newRequest.addHeader("Content-Type", "application/json")
-                        .addHeader("packageName", CheckInTEL.packageName ?: "")
+                        .addHeader("packageName", "com.trueelogistics.staff")
                         .addHeader("userId", CheckInTEL.userId ?: "")
                         .addHeader("sha1", CheckInTEL.sha1 ?: "")
                         .addHeader("APIKey", CheckInTEL.app ?: "")

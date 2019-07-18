@@ -86,7 +86,6 @@ class CheckInTEL {
             override fun onFailure(call: Call<HubRootModel>, t: Throwable) {
 
             }
-
             override fun onResponse(call: Call<HubRootModel>, response: Response<HubRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HubRootModel? = response.body()
