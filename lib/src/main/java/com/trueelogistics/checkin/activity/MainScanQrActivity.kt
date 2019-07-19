@@ -51,10 +51,13 @@ class MainScanQrActivity : AppCompatActivity() {
         historyRecycle.adapter = adapter
         historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
         CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
-            override fun historyGenerate(dataModel: ArrayList<HistoryInDataModel>) {
-                adapter.items.removeAll(dataModel)
-                adapter.items.addAll(dataModel)
+            override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
+                    adapter.items.removeAll(dataModel ?: arrayListOf())
+                    adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
+            }
+
+            override fun onFailure(message: String?) {
             }
         })
     }
@@ -75,7 +78,7 @@ class MainScanQrActivity : AppCompatActivity() {
     var checkFirstInDay = true
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun getType(type: String) {
+            override fun onResponse(type: String?) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false
@@ -99,10 +102,17 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                 } else {
                     checkFirstInDay = false
+                    checkInBtn.isEnabled = false
+                    checkBetBtn.isEnabled = false
+                    checkOutBtn.isEnabled = false
                     checkInBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                     checkBetBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                     checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
                 }
+            }
+
+            override fun onFailure(message: String?) {
+
             }
         })
     }

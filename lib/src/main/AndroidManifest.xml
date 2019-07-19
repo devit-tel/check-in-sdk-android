@@ -26,8 +26,6 @@
 		<activity
 				android:name=".activity.MainScanQrActivity"
 				android:screenOrientation="portrait"/>
-		<activity android:name=".activity.GenQrActivity">
-		</activity>
 		<activity
 				android:name=".activity.NearByActivity"
 				android:screenOrientation="portrait"/>

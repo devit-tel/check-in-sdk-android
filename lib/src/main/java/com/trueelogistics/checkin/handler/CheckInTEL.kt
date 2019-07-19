@@ -89,7 +89,7 @@ class CheckInTEL {
             override fun onResponse(call: Call<HubRootModel>, response: Response<HubRootModel>) {
                 if (response.code() == 200) {
                     val logModel: HubRootModel? = response.body()
-                        listener.generateHub(logModel?.data?.data ?: arrayListOf())
+                        listener.onResponse(logModel?.data?.data ?: arrayListOf())
                 } else {
                     response.errorBody()
                 }
@@ -102,29 +102,27 @@ class CheckInTEL {
          val call = retrofit?.getData(qrCodeCreateBy, locationId,latitude,longitude) // "LeaderNo4","5d01d704136e06003c23024f"
          call?.enqueue(object : Callback<GenQrRootModel> {
              override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
+                 listener.onFailure(t.message)
              }
              override fun onResponse(call: Call<GenQrRootModel>, response: Response<GenQrRootModel>) {
                  if (response.code() == 200) {
                      val root: GenQrRootModel? = response.body()
                      if (root?.status == "OK") {
-                        listener.qrGenerate(root.data.qrcodeUniqueKey.toString())
                         val timeLatest = root.data.updatedAt.toString()
-                         listener.timeLatest(timeLatest.formatISO("HH:mm"))
+                         listener.onResponse(root.data.qrcodeUniqueKey.toString(),timeLatest.formatISO("HH:mm"))
                      }
                  } else {
                      response.errorBody()
-                     listener.qrGenerate("Fail to Generate QrCode")
-                     listener.timeLatest("00:00")
                  }
              }
          })
     }
-    fun getLastCheckInHistory(listener: TypeCallback) {
+    fun getLastCheckInHistory(typeCallback : TypeCallback) {
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-
+                typeCallback.onFailure(t.message)
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -132,9 +130,9 @@ class CheckInTEL {
                     val logModel: HistoryRootModel? = response.body()
                     val lastDatePick = logModel?.data?.data?.last()
                     if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
-                        listener.getType(lastDatePick.eventType ?: "")
+                        typeCallback.onResponse(lastDatePick.eventType ?: "")
                     else
-                        listener.getType(CheckInTELType.CheckOut.value)
+                        typeCallback.onResponse(CheckInTELType.CheckOut.value)
                 } else {
                     response.errorBody()
                 }
@@ -142,12 +140,13 @@ class CheckInTEL {
         })
     }
 
-    fun getHistory(dataModel: HistoryCallback) {
+    fun getHistory(historyCallback : HistoryCallback) {
 
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                historyCallback.onFailure(t.message)
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -155,7 +154,7 @@ class CheckInTEL {
                     response.code() == 200 -> {
                         val logModel: HistoryRootModel? = response.body()
                         if (logModel != null) {
-                            dataModel.historyGenerate(logModel.data.data)
+                            historyCallback.onResponse(logModel.data.data)
                         }
                     }
                     else -> {
@@ -176,13 +175,6 @@ class CheckInTEL {
                 putString("type", typeCheckIn)
             }
         )
-        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
-    }
-
-    fun openGenerateQRCode(activity: Activity, userId: String?, checkInTELCallBack: CheckInTELCallBack) {
-        CheckInTEL.userId = userId
-        this.checkInTELCallBack = checkInTELCallBack
-        val intent = Intent(activity, GenQrActivity::class.java)
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
     }
 

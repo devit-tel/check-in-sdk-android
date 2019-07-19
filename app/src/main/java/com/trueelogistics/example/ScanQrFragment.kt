@@ -62,10 +62,17 @@ class ScanQrFragment : Fragment() {
         activity?.let {
             historyRecycle?.layoutManager = LinearLayoutManager(it)
             CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
-                override fun historyGenerate(dataModel: ArrayList<HistoryInDataModel>) {
-                    adapter.items.removeAll(dataModel)
-                    adapter.items.addAll(dataModel)
+                override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
+
+                    dataModel?.let { data ->
+                        adapter.items.removeAll(data)
+                        adapter.items.addAll(data)
+                    }
                     adapter.notifyDataSetChanged()
+                }
+
+                override fun onFailure(message: String?) {
+
                 }
             })
         }
@@ -97,7 +104,7 @@ class ScanQrFragment : Fragment() {
 
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun getType(type: String) {
+            override fun onResponse(type: String?) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     checkInBtn.visibility = View.GONE
                     checkBetBtn.visibility = View.VISIBLE
@@ -118,6 +125,9 @@ class ScanQrFragment : Fragment() {
                         checkOutBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
                     }
                 }
+            }
+
+            override fun onFailure(message: String?) {
             }
         })
     }

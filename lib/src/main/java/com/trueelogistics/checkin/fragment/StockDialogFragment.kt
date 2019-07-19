@@ -37,13 +37,17 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
 
     private fun getRetrofit() {
         CheckInTEL.checkInTEL?.hubGenerater(object : HubCallback {
-            override fun generateHub(dataModel: ArrayList<HubInDataModel>) {
+            override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 activity?.also {
                     recycleView?.layoutManager = LinearLayoutManager(it)
-                    recycleView.adapter = HubAdapter(dataModel, it).apply {
+                    recycleView.adapter = HubAdapter(dataModel ?: arrayListOf(), it).apply {
                         onItemLocationClickListener = this@StockDialogFragment
                     }
                 }
+            }
+
+            override fun onFailure(message: String?) {
+
             }
         })
     }
