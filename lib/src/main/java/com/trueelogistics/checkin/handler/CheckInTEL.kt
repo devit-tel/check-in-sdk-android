@@ -9,12 +9,10 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import com.trueelogistics.checkin.activity.*
-import com.trueelogistics.checkin.model.HistoryRootModel
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.*
 import com.trueelogistics.checkin.interfaces.*
-import com.trueelogistics.checkin.model.GenQrRootModel
-import com.trueelogistics.checkin.model.HubRootModel
+import com.trueelogistics.checkin.model.*
 import com.trueelogistics.checkin.service.GenQrService
 import com.trueelogistics.checkin.service.HistoryService
 import com.trueelogistics.checkin.service.HubService
@@ -79,7 +77,7 @@ class CheckInTEL {
         }
     }
 
-    fun hubGenerater(listener : HubCallback){
+    fun hubGenerater(listener : ArrayListGenericCallback<HubInDataModel> ){
         val retrofit = RetrofitGenerater().build().create(HubService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HubRootModel> {
@@ -140,13 +138,13 @@ class CheckInTEL {
         })
     }
 
-    fun getHistory(historyCallback : HistoryCallback) {
+    fun getHistory(arrayListGenericCallback : ArrayListGenericCallback<HistoryInDataModel>) {
 
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                historyCallback.onFailure(t.message)
+                arrayListGenericCallback.onFailure(t.message)
             }
 
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
@@ -154,7 +152,7 @@ class CheckInTEL {
                     response.code() == 200 -> {
                         val logModel: HistoryRootModel? = response.body()
                         if (logModel != null) {
-                            historyCallback.onResponse(logModel.data.data)
+                            arrayListGenericCallback.onResponse(logModel.data.data)
                         }
                     }
                     else -> {

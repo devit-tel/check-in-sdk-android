@@ -12,7 +12,7 @@ import android.widget.RadioButton
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.HubAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.interfaces.HubCallback
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.model.HubInDataModel
 import kotlinx.android.synthetic.main.fragment_stock_dialog.*
 
@@ -36,7 +36,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
     }
 
     private fun getRetrofit() {
-        CheckInTEL.checkInTEL?.hubGenerater(object : HubCallback {
+        CheckInTEL.checkInTEL?.hubGenerater(object : ArrayListGenericCallback<HubInDataModel> {
             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 activity?.also {
                     recycleView?.layoutManager = LinearLayoutManager(it)

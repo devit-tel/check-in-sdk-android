@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.interfaces.HistoryCallback
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
@@ -50,7 +50,7 @@ class MainScanQrActivity : AppCompatActivity() {
     private fun getHistoryToday(){
         historyRecycle.adapter = adapter
         historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
-        CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
+        CheckInTEL.checkInTEL?.getHistory(object : ArrayListGenericCallback<HistoryInDataModel> {
             override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
                     adapter.items.removeAll(dataModel ?: arrayListOf())
                     adapter.items.addAll(dataModel ?: arrayListOf())

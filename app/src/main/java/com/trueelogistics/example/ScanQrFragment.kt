@@ -15,7 +15,7 @@ import com.trueelogistics.checkin.extensions.format
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
-import com.trueelogistics.checkin.interfaces.HistoryCallback
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.fragment_scan_qr.*
 import java.util.*
@@ -61,7 +61,7 @@ class ScanQrFragment : Fragment() {
         historyRecycle.adapter = adapter
         activity?.let {
             historyRecycle?.layoutManager = LinearLayoutManager(it)
-            CheckInTEL.checkInTEL?.getHistory(object : HistoryCallback {
+            CheckInTEL.checkInTEL?.getHistory(object : ArrayListGenericCallback<HistoryInDataModel> {
                 override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
 
                     dataModel?.let { data ->
