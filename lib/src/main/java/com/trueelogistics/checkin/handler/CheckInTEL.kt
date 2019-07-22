@@ -53,10 +53,10 @@ class CheckInTEL {
             val packageManager =
                 application.run {
                     packageManager.getPackageInfo(
-                        packageName, PackageManager.GET_SIGNING_CERTIFICATES
+                        packageName, PackageManager.GET_SIGNATURES
                     )
                 }
-            val signatures = packageManager.signingInfo.apkContentsSigners
+            val signatures = packageManager.signatures
             val md = MessageDigest.getInstance("SHA-1")
             for (signature in signatures) {
                 md.update(signature.toByteArray())
