@@ -101,7 +101,7 @@ class ScanQrFragment : Fragment() {
         getHistoryToday()
         checkButton()
     }
-
+    var checkFirstInDay = true
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?) {
@@ -112,6 +112,12 @@ class ScanQrFragment : Fragment() {
                     pic_checkin.visibility = View.GONE
                     layoutRecycle.visibility = View.VISIBLE
                 } else if (type == CheckInTELType.CheckOut.value) {
+                    if (checkFirstInDay) {
+                        activity?.let {
+                            openScanQr(it, CheckInTELType.CheckIn.value)
+                        }
+                        checkFirstInDay = false
+                    }
                     checkInBtn.visibility = View.VISIBLE
                     checkBetBtn.visibility = View.GONE
                     checkOutBtn.visibility = View.GONE
@@ -119,6 +125,10 @@ class ScanQrFragment : Fragment() {
                     layoutRecycle.visibility = View.GONE
 
                 } else {
+                    checkFirstInDay = false
+                    checkInBtn.isEnabled = false
+                    checkBetBtn.isEnabled = false
+                    checkOutBtn.isEnabled = false
                     activity?.let {
                         checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
                         checkBetBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))

@@ -14,7 +14,7 @@
 	<string name="generate_qr">Genarate Qr</string>
 	<string name="check_in">ลงชื่อเข้างาน</string>
 	<string name="check_between">ลงชื่อระหว่างวัน</string>
-	<string name="check_out">ลงชือออกงาน</string>
+	<string name="check_out">ลงชื่อออกงาน</string>
 	<string name="name_surname">name surname</string>
 	<string name="shake_fine">เขย่าเพื่อค้นหาคลัง</string>
 	<string name="nearby_fine">ค้นหาคลังรอบตัว</string>
