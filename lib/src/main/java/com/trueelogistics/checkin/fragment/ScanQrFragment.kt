@@ -103,7 +103,6 @@ class ScanQrFragment : Fragment() {
                                         loadingDialog.dismiss()
                                         when {
                                             response.code() == 200 -> {
-//                            response.body()
                                                 SuccessDialogFragment().show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {

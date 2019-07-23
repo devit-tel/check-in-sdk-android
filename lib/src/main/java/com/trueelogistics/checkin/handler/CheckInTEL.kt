@@ -176,7 +176,7 @@ class CheckInTEL {
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
     }
 
-    fun openMainScanQrCode(activity: Activity , checkInTELCallBack: CheckInTELCallBack){
+    fun openMainScanQrCode(activity: Activity ,userId: String? , checkInTELCallBack: CheckInTELCallBack){
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, MainScanQrActivity::class.java)
         activity.startActivity(intent)
