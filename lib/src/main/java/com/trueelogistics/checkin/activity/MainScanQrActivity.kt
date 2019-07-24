@@ -6,8 +6,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
@@ -65,11 +63,13 @@ class MainScanQrActivity : AppCompatActivity() {
                 adapter.items.removeAll(dataModel ?: arrayListOf())
                 adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
+                historyRecycle.scrollToPosition((dataModel?.size)?.minus(1)?:0)
             }
 
             override fun onFailure(message: String?) {
             }
         })
+
     }
 
     private fun openScanQr(context: Context, type: String) {

@@ -69,6 +69,7 @@ class ScanQrFragment : Fragment() {
                         adapter.items.addAll(data)
                     }
                     adapter.notifyDataSetChanged()
+                    historyRecycle.scrollToPosition((dataModel?.size)?.minus(1)?:0)
                 }
 
                 override fun onFailure(message: String?) {
