@@ -107,7 +107,7 @@ class CheckInTEL {
                      val root: GenQrRootModel? = response.body()
                      if (root?.status == "OK") {
                         val timeLatest = root.data.updatedAt.toString()
-                         listener.onResponse(root.data.qrcodeUniqueKey.toString(),timeLatest.formatISO("HH:mm"))
+                         listener.onResponse(root.data.locationId.locationName,root.data.qrcodeUniqueKey.toString(),timeLatest.formatISO("HH:mm"))
                      }
                  } else {
                      response.errorBody()
@@ -176,7 +176,7 @@ class CheckInTEL {
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
     }
 
-    fun openMainScanQrCode(activity: Activity ,userId: String? , checkInTELCallBack: CheckInTELCallBack){
+    fun openMainScanQrCode(activity: Activity , checkInTELCallBack: CheckInTELCallBack){
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, MainScanQrActivity::class.java)
         activity.startActivity(intent)
