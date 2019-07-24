@@ -25,10 +25,11 @@ import kotlin.collections.ArrayList
 class MainScanQrActivity : AppCompatActivity() {
     private var adapter = HistoryStaffAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_scan_qr)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main_scan_qr)
+
         checkButton()
         getHistoryToday()
         val day = Date().format("EE")

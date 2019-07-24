@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
 import com.trueelogistics.checkin.activity.HistoryActivity
+import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -35,9 +37,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.scan_qr -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frag_main, ScanQrFragment())
-                    .commit()
+//                supportFragmentManager.beginTransaction()
+//                    .replace(R.id.frag_main, ScanQrFragment())
+//                    .commit()
+                CheckInTEL.checkInTEL?.openMainScanQrCode(this,"",object : CheckInTELCallBack{
+                    override fun onCheckInSuccess(result: String) {
+
+                    }
+
+                    override fun onCheckInFailure(message: String) {
+
+                    }
+
+                    override fun onCancel() {
+                        
+                    }
+
+                })
             }
             R.id.shake_fine -> {
                 supportFragmentManager.beginTransaction()
