@@ -42,15 +42,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                    .commit()
                 CheckInTEL.checkInTEL?.openMainScanQrCode(this ,object : CheckInTELCallBack{
                     override fun onCheckInSuccess(result: String) {
-
                     }
 
                     override fun onCheckInFailure(message: String) {
-
                     }
 
                     override fun onCancel() {
-                        
                     }
 
                 })
