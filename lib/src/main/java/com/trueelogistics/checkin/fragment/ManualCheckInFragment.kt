@@ -25,7 +25,17 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ManualCheckInFragment : Fragment() {
-
+    companion object{
+        var TYPE_KEY = ""
+        fun newInstance(type : String) : ManualCheckInFragment{
+            val fragment = ManualCheckInFragment()
+            val bundle = Bundle().apply {
+                putString(TYPE_KEY,type)
+            }
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,53 +46,26 @@ class ManualCheckInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var type: String? = CheckInTELType.CheckIn.value
+        val type = arguments?.getString(TYPE_KEY).toString()
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }
-        checkin_pic.setOnClickListener {
-            if (checkin_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_color)
-                between_pic.setImageResource(R.drawable.ic_checkin_gray)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
-            }
-            type = CheckInTELType.CheckIn.value
-        }
-        between_pic.setOnClickListener {
-            if (between_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
-                between_pic.setImageResource(R.drawable.ic_checkin_color)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
-            }
-            type = CheckInTELType.CheckBetween.value
-        }
-        checkout_pic.setOnClickListener {
-            if (checkout_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
-                between_pic.setImageResource(R.drawable.ic_checkin_gray)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_color)
-            }
-            type = CheckInTELType.CheckOut.value
-        }
+        fixTypeView(type)
+        var hubId = ""
         checkInHub.setOnClickListener {
             val stockDialogFragment = StockDialogFragment()
             stockDialogFragment.setOnItemLocationClick {
                 setView(it)
+                hubId = it._id.toString()
             }
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            checkLocation(type ?: CheckInTELType.CheckIn.value)
+            checkLocation(type ?: CheckInTELType.CheckIn.value ,hubId)
         }
     }
 
-    private fun checkLocation(type: String) {
+    private fun checkLocation(type: String , hub_id : String) {
         val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
         val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...")
         activity?.let { activity ->
@@ -109,7 +92,7 @@ class ManualCheckInFragment : Fragment() {
                                     loadingDialog.dismiss()
                                     when {
                                         response.code() == 200 -> {
-                                            SuccessDialogFragment().show(activity.supportFragmentManager, "show")
+                                            SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 400 -> {
                                             onPause()
@@ -142,5 +125,60 @@ class ManualCheckInFragment : Fragment() {
             confirm.setTextColor(ContextCompat.getColor(it, R.color.white))
         }
         confirm.isEnabled = true
+    }
+
+    private fun setTypeView() : String{
+        var type = CheckInTELType.CheckIn.value
+        checkin_pic.setOnClickListener {
+            if (checkin_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_color)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            type = CheckInTELType.CheckIn.value
+        }
+        between_pic.setOnClickListener {
+            if (between_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_color)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            type = CheckInTELType.CheckBetween.value
+        }
+        checkout_pic.setOnClickListener {
+            if (checkout_pic.drawable.constantState == ResourcesCompat
+                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
+            ) {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_color)
+            }
+            type = CheckInTELType.CheckOut.value
+        }
+
+        return type
+    }
+    private fun fixTypeView(type: String){
+        when(type){
+            CheckInTELType.CheckIn.value -> {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_color)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            CheckInTELType.CheckBetween.value -> {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_color)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            CheckInTELType.CheckOut.value -> {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_color)
+            }
+        }
     }
 }

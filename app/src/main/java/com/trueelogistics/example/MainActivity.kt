@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //                supportFragmentManager.beginTransaction()
 //                    .replace(R.id.frag_main, ScanQrFragment())
 //                    .commit()
-                CheckInTEL.checkInTEL?.openMainScanQrCode(this,"",object : CheckInTELCallBack{
+                CheckInTEL.checkInTEL?.openMainScanQrCode(this ,object : CheckInTELCallBack{
                     override fun onCheckInSuccess(result: String) {
 
                     }

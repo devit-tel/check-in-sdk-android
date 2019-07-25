@@ -27,7 +27,7 @@ import retrofit2.Response
 
 class ScanQrFragment : Fragment() {
     private var isScan = true
-
+    private var loadingDialog : ProgressDialog ?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +53,7 @@ class ScanQrFragment : Fragment() {
         }
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
+                loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
                 checkLocation(it)
             }
         }
@@ -66,7 +67,7 @@ class ScanQrFragment : Fragment() {
         self_checkin.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.replace(
                 R.id.fragment,
-                ManualCheckInFragment()
+                ManualCheckInFragment.newInstance(arguments?.getString(TYPE_KEY).toString())
             )?.addToBackStack(ManualCheckInFragment::class.java.name)?.commit()
         }
     }
@@ -75,7 +76,6 @@ class ScanQrFragment : Fragment() {
         //start dialog and stop camera
         if (isScan) {
             isScan = false
-            val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
             val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             var fusedLocationClient: FusedLocationProviderClient
@@ -95,15 +95,15 @@ class ScanQrFragment : Fragment() {
                                 call?.enqueue(object : Callback<ScanRootModel> {
                                     override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                         //stop dialog and start camera
-                                        loadingDialog.dismiss()
+                                        loadingDialog?.dismiss()
                                         isScan = true
                                     }
                                     override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
                                         //stop dialog
-                                        loadingDialog.dismiss()
+                                        loadingDialog?.dismiss()
                                         when {
                                             response.code() == 200 -> {
-                                                SuccessDialogFragment().show(activity.supportFragmentManager, "show")
+                                                SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
                                                 onPause()
@@ -123,7 +123,7 @@ class ScanQrFragment : Fragment() {
                                 })
                             }
                             else{
-                                loadingDialog.dismiss()
+                                loadingDialog?.dismiss()
                                 MockDialogFragment().show(activity.supportFragmentManager, "show")
                                 activity.recreate()
                             }

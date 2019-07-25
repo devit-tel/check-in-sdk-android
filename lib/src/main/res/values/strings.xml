@@ -13,8 +13,8 @@
 	<string name="self_check_text">ลงชื่อด้วยตัวเอง</string>
 
 	<string name="confirm_text">ยืนยัน</string>
-	<string name="check_success_text">เข้างานเรียบร้อยแล้ว</string>
-	<string name="check_time_text">เวลาลงชื่อเข้างาน</string>
+	<string name="check_success_text">เรียบร้อยแล้ว</string>
+	<string name="time_text">เวลา</string>
 	<string name="example_time_text">HH.mm</string>
 	<string name="check_hub">คลังที่เช็คอิน</string>
 

@@ -11,6 +11,18 @@ import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.util.*
 
 class SuccessDialogFragment : DialogFragment() {
+    companion object{
+        var TYPE_STATUS = "@string/checkin_text"
+        fun newInstance(type : String) : SuccessDialogFragment{
+            val fragment = SuccessDialogFragment()
+
+            val bundle = Bundle().apply{
+                putString(TYPE_STATUS,type)
+            }
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,7 +33,8 @@ class SuccessDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        status_checkin1.text = translateType(arguments?.getString(TYPE_STATUS).toString())
+        status_checkin2.text = translateType(arguments?.getString(TYPE_STATUS).toString())
         timeCheckIn.text = Date().format("HH:mm")
         isCancelable = false
         confirm.setOnClickListener {
@@ -34,5 +47,15 @@ class SuccessDialogFragment : DialogFragment() {
         val width = ViewGroup.LayoutParams.WRAP_CONTENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
+    }
+
+    private fun translateType(type: String) : String{
+        var typeTH = ""
+        when(type){
+            "CHECK_IN" -> typeTH = getString(R.string.checkin_text)
+            "CHECK_IN_BETWEEN" -> typeTH = getString(R.string.check_between_text)
+            "CHECK_OUT" -> typeTH = getString(R.string.checkout_text)
+        }
+        return typeTH
     }
 }
