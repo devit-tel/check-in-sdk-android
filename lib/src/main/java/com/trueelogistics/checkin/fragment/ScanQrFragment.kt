@@ -27,7 +27,6 @@ import retrofit2.Response
 
 class ScanQrFragment : Fragment() {
     private var isScan = true
-    private var loadingDialog : ProgressDialog ?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +52,6 @@ class ScanQrFragment : Fragment() {
         }
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
-                loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
                 checkLocation(it)
             }
         }
@@ -76,6 +74,7 @@ class ScanQrFragment : Fragment() {
         //start dialog and stop camera
         if (isScan) {
             isScan = false
+            val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
             val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             var fusedLocationClient: FusedLocationProviderClient
