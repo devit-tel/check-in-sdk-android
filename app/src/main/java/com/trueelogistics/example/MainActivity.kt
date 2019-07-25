@@ -37,20 +37,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.scan_qr -> {
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.frag_main, ScanQrFragment())
-//                    .commit()
-                CheckInTEL.checkInTEL?.openMainScanQrCode(this ,object : CheckInTELCallBack{
-                    override fun onCheckInSuccess(result: String) {
-                    }
-
-                    override fun onCheckInFailure(message: String) {
-                    }
-
-                    override fun onCancel() {
-                    }
-
-                })
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frag_main, ScanQrFragment())
+                    .commit()
             }
             R.id.shake_fine -> {
                 supportFragmentManager.beginTransaction()
