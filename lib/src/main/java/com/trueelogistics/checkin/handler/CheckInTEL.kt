@@ -193,12 +193,6 @@ class CheckInTEL {
         activity.startActivity(intent)
     }
 
-    fun openHistory(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
-        this.checkInTELCallBack = checkInTELCallBack
-        val intent = Intent(activity, HistoryActivity::class.java)
-        activity.startActivity(intent)
-    }
-
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_REQUEST_CODE_CHECK_IN_TEL) {
             when (resultCode) {
