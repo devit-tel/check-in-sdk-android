@@ -1,5 +1,6 @@
 package com.trueelogistics.checkin.service
 
+import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,7 +28,11 @@ class RetrofitGenerater {
                 chain.proceed(newRequest.build())
             }
             .build()
-        return Retrofit.Builder().baseUrl("http://api.staging.sendit.asia")
+        val baseUrl = if (CheckInTEL.environmentType == EnvironmentType.Production.value)
+            "http://api.sendit.asia"
+        else
+            "http://api.staging.sendit.asia"
+        return Retrofit.Builder().baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create()).build()
     }

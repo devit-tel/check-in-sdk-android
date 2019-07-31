@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Base64
 import com.trueelogistics.checkin.activity.*
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.*
 import com.trueelogistics.checkin.interfaces.*
 import com.trueelogistics.checkin.model.*
@@ -26,19 +27,27 @@ import java.util.*
 class CheckInTEL {
     companion object {  // another class can call this value  by statis
         const val KEY_REQUEST_CODE_CHECK_IN_TEL = 1750
+        var environmentType :String ?= null
         var checkInTEL: CheckInTEL? = null
         var packageName: String? = null
         var sha1: String? = null
         var userId: String? = "guest"
         var app: String? = null
-        fun initial(application: Application) {
+        fun initial(application: Application , env : EnvironmentType) {
             checkInTEL = CheckInTEL()
             checkInTEL?.setPackageName(application)
             checkInTEL?.setSha1(application)
+            checkInTEL?.setEnv(env)
         }
     }
 
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
+    private fun setEnv(env : EnvironmentType){
+        environmentType = if (env == EnvironmentType.Production)
+                        EnvironmentType.Production.value
+                    else
+                        EnvironmentType.Staging.value
+    }
     private fun setPackageName(application: Application) {
         packageName = application.applicationContext.packageName
         app = application.packageManager.getApplicationInfo(
@@ -146,7 +155,6 @@ class CheckInTEL {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 arrayListGenericCallback.onFailure(t.message)
             }
-
             override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
                 when {
                     response.code() == 200 -> {
