@@ -90,7 +90,7 @@ class ScanQrFragment : Fragment() {
                             if(location?.isFromMockProvider == false) {
                                 latitude = location.latitude
                                 longitude = location.longitude
-                                val call = retrofit?.getData(type, result, latitude.toString(),longitude.toString())
+                                val call = retrofit?.getData(type, result,null , latitude.toString(),longitude.toString())
                                 call?.enqueue(object : Callback<ScanRootModel> {
                                     override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                         //stop dialog and start camera

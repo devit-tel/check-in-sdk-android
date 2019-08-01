@@ -31,7 +31,7 @@ class CheckInTEL {
         var checkInTEL: CheckInTEL? = null
         var packageName: String? = null
         var sha1: String? = null
-        var userId: String? = "guest"
+        var userId: String? = null
         var app: String? = null
         fun initial(application: Application , env : EnvironmentType) {
             checkInTEL = CheckInTEL()
@@ -171,9 +171,8 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(activity: Activity, userId: String?, typeCheckIn: String?,
+    fun openScanQRCode(activity: Activity, typeCheckIn: String?,
                        checkInTELCallBack: CheckInTELCallBack ) {
-        CheckInTEL.userId = userId
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         intent.putExtras(

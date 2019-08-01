@@ -61,7 +61,7 @@ class ManualCheckInFragment : Fragment() {
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            checkLocation(type ?: CheckInTELType.CheckIn.value ,hubId)
+            checkLocation(type,hubId)
         }
     }
 
@@ -80,7 +80,8 @@ class ManualCheckInFragment : Fragment() {
                         if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
-                            val call = retrofit?.getData(type, "", latitude.toString(), longitude.toString())
+                            val call = retrofit?.getData(type, "",hub_id
+                                , latitude.toString(), longitude.toString())
                             call?.enqueue(object : Callback<ScanRootModel> {
                                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                     //stop dialog and start camera

@@ -1,9 +1,11 @@
 package com.trueelogistics.checkin.model
 
 data class HistoryQrCodeModel(
-    var deleted : Boolean = false,
+    var deleted : Boolean ?= null,
     var _id : String? = null,
     var qrcodeCreateBy : String? = null,
+    var latitude : Double ?= null ,
+    var longitude : Double ?= null ,
     var locationId : String? = null,
     var qrcodeUniqueKey : String? = null,
     var updatedAt : String? = null,

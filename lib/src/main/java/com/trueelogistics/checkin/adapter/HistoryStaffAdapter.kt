@@ -39,7 +39,7 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
             }
             type.text = eventType
-            hub.text = items[position].qrcodeId?.locationId
+            hub.text = items[position].locationName
             time.text = items[position].updatedAt?.formatISO("HH:mm")
         }
     }

@@ -81,7 +81,7 @@ class ScanQrFragment : Fragment() {
 
     private fun openScanQr(context: Context, type : String) {
         activity ?.let {
-            CheckInTEL.checkInTEL?.openScanQRCode(it,"userId",type, object : CheckInTELCallBack {
+            CheckInTEL.checkInTEL?.openScanQRCode(it,type, object : CheckInTELCallBack {
                 override fun onCancel() {
                     Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }
@@ -140,6 +140,15 @@ class ScanQrFragment : Fragment() {
             }
 
             override fun onFailure(message: String?) {
+                Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                checkInBtn.isEnabled = false
+                checkBetBtn.isEnabled = false
+                checkOutBtn.isEnabled = false
+                activity?.let {
+                    checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
+                    checkBetBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
+                    checkOutBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
+                }
             }
         })
     }
