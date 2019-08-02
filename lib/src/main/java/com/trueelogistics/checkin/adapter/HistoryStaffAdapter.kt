@@ -38,7 +38,20 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 CheckInTELType.CheckOut.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
                 else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type.text = eventType
+            type.text = when(eventType){
+                CheckInTELType.CheckIn.value -> {
+                    "ลงชื่อเข้างาน"
+                }
+                CheckInTELType.CheckBetween.value -> {
+                    "ลงชื่อระหว่างวัน"
+                }
+                CheckInTELType.CheckOut.value -> {
+                    "ลงชื่อออกงาน"
+                }
+                else -> {
+                     "?????"
+                }
+            }
             hub.text = items[position].locationName
             time.text = items[position].updatedAt?.formatISO("HH:mm")
         }
