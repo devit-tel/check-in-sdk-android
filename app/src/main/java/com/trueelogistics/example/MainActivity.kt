@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        CheckInTEL.userId = "3100900169978"
         //CheckInTEL.getSha1(this)
         nav_view.setNavigationItemSelectedListener(this)
         supportFragmentManager.beginTransaction()

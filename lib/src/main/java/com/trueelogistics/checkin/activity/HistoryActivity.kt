@@ -3,9 +3,12 @@ package com.trueelogistics.checkin.activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.HistoryAdapter
+import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HistoryRootModel
+import com.trueelogistics.checkin.model.SearchCitizenModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.HistoryService
 import kotlinx.android.synthetic.main.activity_history.*
@@ -22,7 +25,7 @@ class HistoryActivity : AppCompatActivity() {
         }
         dateRecycleView.adapter = adapter
         val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
-        val call = retrofit?.getData()
+        val call = retrofit?.getData( Gson().toJson( SearchCitizenModel(CheckInTEL.userId.toString()) ) )
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
             }

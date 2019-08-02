@@ -7,5 +7,5 @@ data class LocationIdModel (
     var locationName : String? = null,
     var updatedAt : String? = null,
     var createdAt : String? = null,
-    var __v : String? = null
+    var __v : Int ? = null
 )

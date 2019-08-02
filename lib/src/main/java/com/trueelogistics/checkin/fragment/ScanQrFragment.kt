@@ -70,6 +70,8 @@ class ScanQrFragment : Fragment() {
         }
     }
 
+
+
     private fun checkLocation(result: String) {
         //start dialog and stop camera
         if (isScan) {

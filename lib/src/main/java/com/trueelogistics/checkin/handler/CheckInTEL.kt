@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
+import com.google.gson.Gson
 import com.trueelogistics.checkin.activity.*
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.enums.EnvironmentType
@@ -119,14 +120,15 @@ class CheckInTEL {
                          listener.onResponse(root.data.locationId.locationName,root.data.qrcodeUniqueKey.toString(),timeLatest.formatISO("HH:mm"))
                      }
                  } else {
+                     listener.onFailure(response.message())
                      response.errorBody()
                  }
              }
          })
     }
     fun getLastCheckInHistory(typeCallback : TypeCallback) {
-        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
-        val call = retrofit?.getData()
+        val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
+        val call = retrofit?.getData( Gson().toJson( SearchCitizenModel(userId.toString()) ) )
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 typeCallback.onFailure(t.message)
@@ -141,6 +143,7 @@ class CheckInTEL {
                     else
                         typeCallback.onResponse(CheckInTELType.CheckOut.value)
                 } else {
+                    typeCallback.onFailure(response.message())
                     response.errorBody()
                 }
             }
@@ -149,8 +152,8 @@ class CheckInTEL {
 
     fun getHistory(arrayListGenericCallback : ArrayListGenericCallback<HistoryInDataModel>) {
 
-        val retrofit = RetrofitGenerater().build().create(HistoryService::class.java)
-        val call = retrofit?.getData()
+        val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
+        val call = retrofit?.getData( Gson().toJson( SearchCitizenModel(userId.toString()) ) )
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 arrayListGenericCallback.onFailure(t.message)

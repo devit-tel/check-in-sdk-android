@@ -2,8 +2,8 @@ package com.trueelogistics.checkin.model
 
 data class UserIdModel(
     var address : ArrayList<String> ,
-    var isActive : Boolean ,
-    var deleted : Boolean ,
+    var isActive : Boolean ?= null ,
+    var deleted : Boolean ?= null ,
     var _id : String ?= null ,
     var citizenId : String ?= null ,
     var updatedAt : String ?= null ,
