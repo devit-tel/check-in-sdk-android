@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.trueelogistics.checkin.activity.HistoryActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
