@@ -20,10 +20,9 @@ class RetrofitGenerater {
                         .addHeader("userId", CheckInTEL.userId ?: "")
                         .addHeader("sha1", CheckInTEL.sha1 ?: "")
                         .addHeader("APIKey", CheckInTEL.app ?: "")
-                        .addHeader("Authorization", "")
                 }
                 else{
-                    newRequest.addHeader("Authorization", "")
+                    newRequest.addHeader("userId", CheckInTEL.userId ?: "")
                 }
                 chain.proceed(newRequest.build())
             }

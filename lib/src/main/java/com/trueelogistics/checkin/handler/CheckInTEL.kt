@@ -15,10 +15,7 @@ import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.*
 import com.trueelogistics.checkin.interfaces.*
 import com.trueelogistics.checkin.model.*
-import com.trueelogistics.checkin.service.GenQrService
-import com.trueelogistics.checkin.service.HistoryService
-import com.trueelogistics.checkin.service.HubService
-import com.trueelogistics.checkin.service.RetrofitGenerater
+import com.trueelogistics.checkin.service.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -127,8 +124,8 @@ class CheckInTEL {
          })
     }
     fun getLastCheckInHistory(typeCallback : TypeCallback) {
-        val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
-        val call = retrofit?.getData( Gson().toJson( SearchCitizenModel(userId.toString()) ) )
+        val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
+        val call = retrofit?.getData(  )
         call?.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 typeCallback.onFailure(t.message)
@@ -151,6 +148,30 @@ class CheckInTEL {
     }
 
     fun getHistory(arrayListGenericCallback : ArrayListGenericCallback<HistoryInDataModel>) {
+
+        val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
+        val call = retrofit?.getData(  )
+        call?.enqueue(object : Callback<HistoryRootModel> {
+            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
+                arrayListGenericCallback.onFailure(t.message)
+            }
+            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+                when {
+                    response.code() == 200 -> {
+                        val logModel: HistoryRootModel? = response.body()
+                        if (logModel != null) {
+                            arrayListGenericCallback.onResponse(logModel.data.data)
+                        }
+                    }
+                    else -> {
+                        response.errorBody()
+                    }
+                }
+            }
+        })
+    }
+
+    fun getAllHistory(arrayListGenericCallback : ArrayListGenericCallback<HistoryInDataModel>) {
 
         val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
         val call = retrofit?.getData( Gson().toJson( SearchCitizenModel(userId.toString()) ) )

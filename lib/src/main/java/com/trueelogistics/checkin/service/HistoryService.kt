@@ -6,8 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface HistoryService{
-    @GET("/check-in/v1/history") //?search={“citizenId”: “3100900169978"}
+    @GET("/check-in/v1/history")
     fun getData(
-        @Query("search")search  : String
+        @Query("search")search  : String ?= null
     ) : Call<HistoryRootModel>
 }
