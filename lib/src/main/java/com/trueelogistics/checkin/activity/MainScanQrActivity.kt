@@ -60,7 +60,7 @@ class MainScanQrActivity : AppCompatActivity() {
                 adapter.items.removeAll(dataModel ?: arrayListOf())
                 adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
-                historyRecycle.scrollToPosition((dataModel?.size)?.minus(1)?:0)
+                historyRecycle.scrollToPosition((dataModel?.size)?.minus(1) ?: 0)
             }
 
             override fun onFailure(message: String?) {
@@ -118,7 +118,13 @@ class MainScanQrActivity : AppCompatActivity() {
             }
 
             override fun onFailure(message: String?) {
-
+                Toast.makeText(this@MainScanQrActivity, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                checkInBtn.isEnabled = false
+                checkBetBtn.isEnabled = false
+                checkOutBtn.isEnabled = false
+                checkInBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
+                checkBetBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
+                checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
             }
         })
     }

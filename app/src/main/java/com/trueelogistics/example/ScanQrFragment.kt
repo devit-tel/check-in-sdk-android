@@ -141,14 +141,11 @@ class ScanQrFragment : Fragment() {
 
             override fun onFailure(message: String?) {
                 Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
-                checkInBtn.isEnabled = false
-                checkBetBtn.isEnabled = false
-                checkOutBtn.isEnabled = false
-                activity?.let {
-                    checkInBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                    checkBetBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                    checkOutBtn.setBackgroundColor(ContextCompat.getColor(it, R.color.gray))
-                }
+                checkInBtn.visibility = View.GONE
+                checkBetBtn.visibility = View.GONE
+                checkOutBtn.visibility = View.GONE
+                pic_checkin.visibility = View.VISIBLE
+                layoutRecycle.visibility = View.GONE
             }
         })
     }
