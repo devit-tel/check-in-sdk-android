@@ -156,12 +156,18 @@ class CheckInTEL {
             override fun onResponse(call: Call<HistoryTodayModel>, response: Response<HistoryTodayModel>) {
                 if (response.code() == 200) {
                     val logModel: HistoryTodayModel? = response.body()
-                    val lastDatePick = logModel?.data?.last()
-                    if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
-                        typeCallback.onResponse(lastDatePick.eventType ?: "")
-                    else
+                    if (logModel?.data?.size ?: 0 > 0) {
+                        val lastDatePick = logModel?.data?.last()
+                        if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
+                            typeCallback.onResponse(lastDatePick.eventType ?: "")
+                        else
+                            typeCallback.onResponse(CheckInTELType.CheckOut.value)
+                    }
+                    else{
                         typeCallback.onResponse(CheckInTELType.CheckOut.value)
-                } else {
+                    }
+                }
+                else {
                     typeCallback.onFailure(response.message())
                     response.errorBody()
                 }
@@ -170,14 +176,12 @@ class CheckInTEL {
     }
 
     fun getHistory(arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>) {
-
         val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HistoryTodayModel> {
             override fun onFailure(call: Call<HistoryTodayModel>, t: Throwable) {
                 arrayListGenericCallback.onFailure(t.message)
             }
-
             override fun onResponse(call: Call<HistoryTodayModel>, response: Response<HistoryTodayModel>) {
                 when {
                     response.code() == 200 -> {
