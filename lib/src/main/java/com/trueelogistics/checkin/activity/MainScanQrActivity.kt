@@ -70,7 +70,7 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     private fun openScanQr(context: Context, type: String) {
-        CheckInTEL.checkInTEL?.openScanQRCode(this, type, object : CheckInTELCallBack {
+        CheckInTEL.checkInTEL?.openScanQRCode(this, type ,true, object : CheckInTELCallBack {
             override fun onCancel() {
                 Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
             }

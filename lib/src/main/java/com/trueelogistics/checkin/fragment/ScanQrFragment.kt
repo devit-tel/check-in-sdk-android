@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -20,7 +19,6 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
-import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -28,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 
 class ScanQrFragment : Fragment() {
@@ -42,11 +39,12 @@ class ScanQrFragment : Fragment() {
 
     companion object {
         const val TYPE_KEY = "TYPE_KEY"
-        fun newInstance(type: String): ScanQrFragment {
+        const val CHECK_DISABLE = "CHECK_DISABLE"
+        fun newInstance(type: String, checkDisble: Boolean): ScanQrFragment {
             val fragment = ScanQrFragment()
-
             val bundle = Bundle().apply {
-                putString(TYPE_KEY, type)
+                putString("TYPE_KEY", type)
+                putBoolean("CHECK_DISABLE", checkDisble)
             }
             fragment.arguments = bundle
             return fragment
@@ -56,6 +54,7 @@ class ScanQrFragment : Fragment() {
     private val callback = object : BarcodeCallback {
         override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {  // do noting in action
         }
+
         override fun barcodeResult(result: BarcodeResult) {
             result.text.also {
                 checkLocation(it)
@@ -65,12 +64,13 @@ class ScanQrFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setDisableBackPage()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.let {
                 //it.window?.statusBarColor = ContextCompat.getColor(it, R.color.white)
             }
         }
-        type_check_in.text = when(arguments?.getString(TYPE_KEY).toString()){
+        type_check_in.text = when (arguments?.getString(TYPE_KEY).toString()) {
             CheckInTELType.CheckIn.value -> {
                 "ลงชื่อเข้างาน"
             }
@@ -97,8 +97,9 @@ class ScanQrFragment : Fragment() {
         }
     }
 
-    fun setDisableBackPage( boolean: Boolean){
-        if(boolean)
+    fun setDisableBackPage() {
+        val check = arguments?.getBoolean(CHECK_DISABLE)
+        if (check == true)
             back_page.visibility = View.GONE
     }
 
@@ -112,38 +113,46 @@ class ScanQrFragment : Fragment() {
             var fusedLocationClient: FusedLocationProviderClient
             var latitude: Double
             var longitude: Double
-            activity?.let {activity ->
+            activity?.let { activity ->
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
                 if (ContextCompat.checkSelfPermission(
-                        activity, Manifest.permission.ACCESS_COARSE_LOCATION )
-                    == PackageManager.PERMISSION_GRANTED ) {
+                        activity, Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                    == PackageManager.PERMISSION_GRANTED
+                ) {
                     fusedLocationClient.lastLocation
                         ?.addOnSuccessListener { location: Location? ->
-                            if(location?.isFromMockProvider == false) {
+                            if (location?.isFromMockProvider == false) {
                                 latitude = location.latitude
                                 longitude = location.longitude
-                                val call = retrofit?.getData(type, result,null , latitude.toString(),longitude.toString())
+                                val call =
+                                    retrofit?.getData(type, result, null, latitude.toString(), longitude.toString())
                                 call?.enqueue(object : Callback<ScanRootModel> {
                                     override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                         //stop dialog and start camera
                                         loadingDialog?.dismiss()
                                         isScan = true
                                     }
-                                    override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
+
+                                    override fun onResponse(
+                                        call: Call<ScanRootModel>,
+                                        response: Response<ScanRootModel>
+                                    ) {
                                         //stop dialog
                                         loadingDialog?.dismiss()
                                         when {
                                             response.code() == 200 -> {
-                                                SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
+                                                SuccessDialogFragment.newInstance(type)
+                                                    .show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
                                                 onPause()
-                                                    OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+                                                OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                                 activity.recreate()
                                             }
                                             response.code() == 500 -> {
-                                                    Toast.makeText(activity,"Server Error",Toast.LENGTH_SHORT)
-                                                        .show()
+                                                Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT)
+                                                    .show()
                                             }
                                             else -> {
                                                 response.errorBody()
@@ -152,8 +161,7 @@ class ScanQrFragment : Fragment() {
                                         }
                                     }
                                 })
-                            }
-                            else{
+                            } else {
                                 loadingDialog?.dismiss()
                                 MockDialogFragment().show(activity.supportFragmentManager, "show")
                                 activity.recreate()
@@ -172,5 +180,9 @@ class ScanQrFragment : Fragment() {
     override fun onPause() {
         scanner_fragment?.pause()
         super.onPause()
+    }
+
+    fun onBackPressed(): Boolean {
+        return true
     }
 }

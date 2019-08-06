@@ -20,9 +20,10 @@ class ScanQrActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
                 val type = intent.getStringExtra("type")
+                val disable = intent.getBooleanExtra("disable", false)
                 supportFragmentManager.beginTransaction().replace(
                     R.id.fragment,
-                    ScanQrFragment.newInstance(type ?: "")
+                    ScanQrFragment.newInstance(type ?: "", disable)
                 ).commit()
             }.onDenied {
                 Toast.makeText(
@@ -33,5 +34,13 @@ class ScanQrActivity : AppCompatActivity() {
                 finish()
             }
             .ask()
+    }
+
+    override fun onBackPressed() {
+        val f = this.supportFragmentManager.fragments[0].javaClass
+        val disable = intent.getBooleanExtra("disable", false)
+        if (f != ScanQrFragment::class.java || !disable) {
+            super.onBackPressed()
+        }
     }
 }

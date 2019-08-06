@@ -81,7 +81,7 @@ class ScanQrFragment : Fragment() {
 
     private fun openScanQr(context: Context, type : String) {
         activity ?.let {
-            CheckInTEL.checkInTEL?.openScanQRCode(it,type, object : CheckInTELCallBack {
+            CheckInTEL.checkInTEL?.openScanQRCode(it,type,true, object : CheckInTELCallBack {
                 override fun onCancel() {
                     Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }

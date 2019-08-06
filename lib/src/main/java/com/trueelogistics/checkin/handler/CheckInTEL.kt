@@ -17,6 +17,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.format
 import com.trueelogistics.checkin.extensions.formatISO
+import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
@@ -224,7 +225,7 @@ class CheckInTEL {
     }
 
     fun openScanQRCode(
-        activity: Activity, typeCheckIn: String?,
+        activity: Activity, typeCheckIn: String?, onDisableBack : Boolean ,
         checkInTELCallBack: CheckInTELCallBack
     ) {
         this.checkInTELCallBack = checkInTELCallBack
@@ -232,6 +233,7 @@ class CheckInTEL {
         intent.putExtras(
             Bundle().apply {
                 putString("type", typeCheckIn)
+                putBoolean("disable", onDisableBack)
             }
         )
         activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
