@@ -4,11 +4,35 @@
 		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent" android:layout_height="match_parent"
 		tools:context=".activity.ScanQrActivity">
+
 	<com.journeyapps.barcodescanner.CompoundBarcodeView
 			android:id="@+id/scanner_fragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_gravity="bottom"/>
+	<android.support.design.widget.CollapsingToolbarLayout
+			android:background="@color/white"
+
+			android:layout_height="?android:attr/actionBarSize"
+			android:layout_width="match_parent">
+		<ImageView
+				android:id="@+id/back_page"
+				android:src="@drawable/ic_back"
+				android:paddingStart="20dp"
+				android:paddingEnd="20dp"
+				android:layout_height="match_parent"
+				android:layout_width="wrap_content"
+				tools:ignore="ContentDescription"/>
+		<TextView
+				android:id="@+id/type_check_in"
+				android:layout_gravity="center_horizontal"
+				android:gravity="center"
+				android:text="@string/type_check_in_example"
+				android:textSize="30sp"
+				android:textColor="@color/black"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"/>
+	</android.support.design.widget.CollapsingToolbarLayout>
 	<TextView
 			android:text="@string/scan_check_text"
 			android:layout_width="wrap_content"

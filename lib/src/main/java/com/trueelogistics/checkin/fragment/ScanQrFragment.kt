@@ -4,12 +4,14 @@ import android.Manifest
 import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -17,6 +19,8 @@ import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -24,6 +28,8 @@ import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+
 
 class ScanQrFragment : Fragment() {
     private var isScan = true
@@ -59,9 +65,30 @@ class ScanQrFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity?.let {
+                //it.window?.statusBarColor = ContextCompat.getColor(it, R.color.white)
+            }
+        }
+        type_check_in.text = when(arguments?.getString(TYPE_KEY).toString()){
+            CheckInTELType.CheckIn.value -> {
+                "ลงชื่อเข้างาน"
+            }
+            CheckInTELType.CheckBetween.value -> {
+                "ลงชื่อระหว่างวัน"
+            }
+            CheckInTELType.CheckOut.value -> {
+                "ลงชื่อออกงาน"
+            }
+            else -> {
+                "?????"
+            }
+        }
         scanner_fragment?.setStatusText("")
         scanner_fragment?.decodeContinuous(callback)
+        back_page.setOnClickListener {
+            activity?.onBackPressed()
+        }
         self_checkin.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.replace(
                 R.id.fragment,
@@ -70,7 +97,10 @@ class ScanQrFragment : Fragment() {
         }
     }
 
-
+    fun setDisableBackPage( boolean: Boolean){
+        if(boolean)
+            back_page.visibility = View.GONE
+    }
 
     private fun checkLocation(result: String) {
         //start dialog and stop camera
@@ -131,7 +161,6 @@ class ScanQrFragment : Fragment() {
                         }
                 }
             }
-
         }
     }
 

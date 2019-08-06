@@ -31,6 +31,7 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val type = view.typeCheckIn
             val hub = view.hubCheckIn
             val time = view.timeCheckIn
+            val typeScan = view.type_scan
             val eventType = items[position].eventType ?: "old"
             when (eventType) {
                 CheckInTELType.CheckIn.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
@@ -54,6 +55,20 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             hub.text = items[position].locationName
             time.text = items[position].updatedAt?.formatISO("HH:mm")
+            typeScan.text = when(items[position].checkinType ){
+                "NORMAL" -> {
+                    "Camera"
+                }
+                "MANUAL" -> {
+                    "Manual"
+                }
+                "AUTO" -> {
+                    "Auto Logout"
+                }
+                else -> {
+                    ""
+                }
+            }
         }
     }
 }
