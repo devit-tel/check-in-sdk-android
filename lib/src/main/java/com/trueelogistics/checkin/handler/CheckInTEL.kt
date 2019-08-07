@@ -98,7 +98,7 @@ class CheckInTEL {
         val call = retrofit?.getData()
         call?.enqueue(object : Callback<HubRootModel> {
             override fun onFailure(call: Call<HubRootModel>, t: Throwable) {
-
+                listener.onFailure(t.toString())
             }
 
             override fun onResponse(call: Call<HubRootModel>, response: Response<HubRootModel>) {
@@ -107,6 +107,7 @@ class CheckInTEL {
                     listener.onResponse(logModel?.data?.data ?: arrayListOf())
                 } else {
                     response.errorBody()
+                        listener.onFailure(response.errorBody().toString())
                 }
             }
         })
