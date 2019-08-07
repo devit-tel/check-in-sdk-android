@@ -25,9 +25,9 @@
 	<string name="checkin_text">ลงชื่อเข้างาน</string>
 	<string name="checkout_text">ลงชื่อออกงาน</string>
 	<string name="check_between_text">ลงชื่อระหว่างวัน</string>
-	<string name="generate_qrcode">generate QRcode</string>
+	<string name="generate_qrcode">generate QR Code</string>
 	<string name="littleMinute">น.</string>
-	<string name="qrUsed">Qr code นี้ถูกใช้ไปแล้ว</string>
+	<string name="qrUsed">QR code นี้ถูกใช้ไปแล้ว</string>
 	<string name="canNotCheckIn">ไม่สามารถ Check in ได้</string>
 	<string name="scanAgain">แสกนอีกครั้ง</string>
 	<string name="historyCheckIn">ประวัติการเข้างาน</string>

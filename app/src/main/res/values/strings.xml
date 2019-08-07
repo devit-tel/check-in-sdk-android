@@ -11,7 +11,6 @@
 	<string name="on_device_found">On Device found</string>
 	<string name="shake_your_phone">Shake your Phone !!</string>
 	<string name="try_again">Try again</string>
-	<string name="generate_qr">Genarate Qr</string>
 	<string name="check_in">ลงชื่อเข้างาน</string>
 	<string name="check_between">ลงชื่อระหว่างวัน</string>
 	<string name="check_out">ลงชื่อออกงาน</string>
@@ -20,12 +19,12 @@
 	<string name="nearby_fine">ค้นหาคลังรอบตัว</string>
 	<string name="history_check">ประวัติการเช็คอิน</string>
 	<string name="request_absence">คำขอวันลา</string>
-	<string name="generate_qrcode">Generate QrCode</string>
+	<string name="generate_qrcode">Generate QRCode</string>
 	<string name="shakePhoneText">เขย่าโทรศัพท์ของคุณ</string>
 	<string name="nearByFine">ค้นหาโทรศัพท์รอบๆตัวคุณด้วย NearBy</string>
 	<string name="finePhone">ค้นหาโทรศัพท์</string>
 	<string name="orPressBt">หรือกดปุ่ม</string>
-	<string name="scanQr">แสกน Qr code</string>
+	<string name="scanQr">แสกน QR Code</string>
 	<string name="log_out">ออกจากระบบ</string>
 	<string name="date_checkin">%1$s , %2$s %3$s</string>
 </resources>
