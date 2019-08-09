@@ -189,7 +189,13 @@ class CheckInTEL {
                     response.code() == 200 -> {
                         val logModel: HistoryTodayModel? = response.body()
                         if (logModel != null) {
-                            arrayListGenericCallback.onResponse(logModel.data)
+                            val arrayLog = arrayListOf<HistoryInDataModel>()
+                            logModel.data.forEach {
+                                if (it.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")){
+                                    arrayLog.add(it)
+                                }
+                            }
+                            arrayListGenericCallback.onResponse(arrayLog)
                         }
                     }
                     else -> {

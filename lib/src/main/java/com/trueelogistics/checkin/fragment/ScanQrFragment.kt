@@ -97,7 +97,7 @@ class ScanQrFragment : Fragment() {
         }
     }
 
-    fun setDisableBackPage() {
+    private fun setDisableBackPage() {
         val check = arguments?.getBoolean(CHECK_DISABLE)
         if (check == true)
             back_page.visibility = View.GONE
@@ -180,9 +180,5 @@ class ScanQrFragment : Fragment() {
     override fun onPause() {
         scanner_fragment?.pause()
         super.onPause()
-    }
-
-    fun onBackPressed(): Boolean {
-        return true
     }
 }
