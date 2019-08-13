@@ -72,16 +72,16 @@ class ScanQrFragment : Fragment() {
         }
         type_check_in.text = when (arguments?.getString(TYPE_KEY).toString()) {
             CheckInTELType.CheckIn.value -> {
-                "ลงชื่อเข้างาน"
+                getString(R.string.checkin_text)
             }
             CheckInTELType.CheckBetween.value -> {
-                "ลงชื่อระหว่างวัน"
+                getString(R.string.check_between_text)
             }
             CheckInTELType.CheckOut.value -> {
-                "ลงชื่อออกงาน"
+                getString(R.string.checkout_text)
             }
             else -> {
-                "?????"
+                getString(R.string.question_operator)
             }
         }
         scanner_fragment?.setStatusText("")
