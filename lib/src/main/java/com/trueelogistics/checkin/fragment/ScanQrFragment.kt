@@ -1,7 +1,9 @@
 package com.trueelogistics.checkin.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
@@ -19,6 +21,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -132,6 +135,15 @@ class ScanQrFragment : Fragment() {
                                         //stop dialog and start camera
                                         loadingDialog?.dismiss()
                                         isScan = true
+                                        val intent = Intent(activity, CheckInTEL::class.java)
+                                        intent.putExtras(
+                                            Bundle().apply {
+                                                putString("error", t.message)
+                                            }
+                                        )
+                                        CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                            Activity.CONTEXT_INCLUDE_CODE,intent)
+                                        activity.finish()
                                     }
 
                                     override fun onResponse(
@@ -140,8 +152,16 @@ class ScanQrFragment : Fragment() {
                                     ) {
                                         //stop dialog
                                         loadingDialog?.dismiss()
+                                        val intent = Intent(activity, CheckInTEL::class.java)
                                         when {
                                             response.code() == 200 -> {
+                                                intent.putExtras(
+                                                    Bundle().apply {
+                                                        putString("result","success")
+                                                    }
+                                                )
+                                                CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                                    Activity.RESULT_OK,intent)
                                                 SuccessDialogFragment.newInstance(type)
                                                     .show(activity.supportFragmentManager, "show")
                                             }
@@ -150,15 +170,14 @@ class ScanQrFragment : Fragment() {
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                                 activity.recreate()
                                             }
-                                            response.code() == 500 -> {
-                                                Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT)
-                                                    .show()
-                                            }
                                             else -> {
+                                                CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                                    Activity.RESULT_CANCELED,intent)
                                                 response.errorBody()
                                                 isScan = true
                                             }
                                         }
+
                                     }
                                 })
                             } else {

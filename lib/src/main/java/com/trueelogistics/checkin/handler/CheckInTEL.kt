@@ -268,11 +268,11 @@ class CheckInTEL {
         if (requestCode == KEY_REQUEST_CODE_CHECK_IN_TEL) {
             when (resultCode) {
                 Activity.RESULT_OK ->
-                    if (data != null) {
-                        checkInTELCallBack?.onCheckInSuccess(data.getStringExtra("result") ?: "")
-                    }
-                Activity.RESULT_CANCELED -> checkInTELCallBack?.onCancel()
-                else -> checkInTELCallBack?.onCheckInFailure(" Fail in ActivityResult ")
+                    checkInTELCallBack?.onCheckInSuccess(data?.getStringExtra("result") ?: "")
+                Activity.RESULT_CANCELED ->
+                    checkInTELCallBack?.onCancel()
+                else ->
+                    checkInTELCallBack?.onCheckInFailure(data?.getStringExtra("error") ?: "")
             }
         }
     }
