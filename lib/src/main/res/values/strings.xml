@@ -16,7 +16,7 @@
 	<string name="check_success_text">เรียบร้อยแล้ว</string>
 	<string name="time_text">เวลา</string>
 	<string name="example_time_text">HH.mm</string>
-	<string name="check_hub">คลังที่เช็คอิน</string>
+	<string name="check_hub">กรุณาเลือกคลัง</string>
 
 	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="stock_check_in_text">คลังที่ต้องการเช็คอิน</string>
