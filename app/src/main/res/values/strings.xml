@@ -27,4 +27,7 @@
 	<string name="scanQr">แสกน QR Code</string>
 	<string name="log_out">ออกจากระบบ</string>
 	<string name="date_checkin">%1$s , %2$s %3$s</string>
+	<string name="full_checkin_text"> ลงชื่อเข้างาน</string>
+	<string name="full_checkout_text"> ลงชื่อออกงาน</string>
+	<string name="full_check_between_text"> ลงชื่อระหว่างวัน</string>
 </resources>

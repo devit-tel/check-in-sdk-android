@@ -18,6 +18,7 @@
 			android:textColor="@color/black"
 			android:text="@string/canNotCheckIn"/>
 	<TextView
+			android:id="@+id/fail_text"
 			android:gravity="center"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

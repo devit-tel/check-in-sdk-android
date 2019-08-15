@@ -44,7 +44,7 @@ class ScanQrFragment : Fragment() {
         val nDay = Date().format("dd")
         val mouth = Date().format("MMM")
         date.text = String.format(this.getString(R.string.date_checkin), day, nDay, mouth)
-        activity?.let {activity ->
+        activity?.let { activity ->
             checkInBtn.setOnClickListener {
                 openScanQr(activity, CheckInTELType.CheckIn.value)
             }

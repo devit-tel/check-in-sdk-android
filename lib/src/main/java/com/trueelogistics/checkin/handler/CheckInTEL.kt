@@ -17,7 +17,6 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.format
 import com.trueelogistics.checkin.extensions.formatISO
-import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
@@ -107,19 +106,15 @@ class CheckInTEL {
                     listener.onResponse(logModel?.data?.data ?: arrayListOf())
                 } else {
                     response.errorBody()
-                        listener.onFailure(response.errorBody().toString())
+                    listener.onFailure(response.errorBody().toString())
                 }
             }
         })
     }
 
     fun qrGenerate(
-        qrCodeCreateBy: String,
-        locationId: String,
-        latitude: String,
-        longitude: String,
-        listener: GenerateQrCallback
-    ) {
+        qrCodeCreateBy: String, locationId: String, latitude: String,
+        longitude: String, listener: GenerateQrCallback ) {
         val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
         val call =
             retrofit?.getData(qrCodeCreateBy, locationId, latitude, longitude) // "LeaderNo4","5d01d704136e06003c23024f"
@@ -164,12 +159,10 @@ class CheckInTEL {
                             typeCallback.onResponse(lastDatePick.eventType ?: "")
                         else
                             typeCallback.onResponse(CheckInTELType.CheckOut.value)
-                    }
-                    else{
+                    } else {
                         typeCallback.onResponse(CheckInTELType.CheckOut.value)
                     }
-                }
-                else {
+                } else {
                     typeCallback.onFailure(response.message())
                     response.errorBody()
                 }
@@ -184,6 +177,7 @@ class CheckInTEL {
             override fun onFailure(call: Call<HistoryTodayModel>, t: Throwable) {
                 arrayListGenericCallback.onFailure(t.message)
             }
+
             override fun onResponse(call: Call<HistoryTodayModel>, response: Response<HistoryTodayModel>) {
                 when {
                     response.code() == 200 -> {
@@ -191,7 +185,7 @@ class CheckInTEL {
                         if (logModel != null) {
                             val arrayLog = arrayListOf<HistoryInDataModel>()
                             logModel.data.forEach {
-                                if (it.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")){
+                                if (it.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")) {
                                     arrayLog.add(it)
                                 }
                             }
@@ -232,7 +226,7 @@ class CheckInTEL {
     }
 
     fun openScanQRCode(
-        activity: Activity, typeCheckIn: String?, onDisableBack : Boolean ,
+        activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
         checkInTELCallBack: CheckInTELCallBack
     ) {
         this.checkInTELCallBack = checkInTELCallBack

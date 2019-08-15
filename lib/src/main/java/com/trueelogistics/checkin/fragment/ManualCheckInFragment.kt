@@ -1,13 +1,14 @@
 package com.trueelogistics.checkin.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +16,13 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
+import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,9 +86,20 @@ class ManualCheckInFragment : Fragment() {
                             val call = retrofit?.getData(type, "",hub_id
                                 , latitude.toString(), longitude.toString())
                             call?.enqueue(object : Callback<ScanRootModel> {
+                                val intent = Intent(activity, CheckInTEL::class.java)
                                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                     //stop dialog and start camera
                                     loadingDialog.dismiss()
+
+                                    intent.putExtras(
+                                        Bundle().apply {
+                                            putString("error", t.message)
+                                        }
+                                    )
+                                    CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                        0,intent)
+                                    activity.finish()
+
                                 }
 
                                 override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
@@ -93,10 +107,19 @@ class ManualCheckInFragment : Fragment() {
                                     loadingDialog.dismiss()
                                     when {
                                         response.code() == 200 -> {
+                                            intent.putExtras(
+                                                Bundle().apply {
+                                                    putString("result","success")
+                                                }
+                                            )
+                                            CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                                Activity.RESULT_OK,intent)
                                             SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 400 -> {
                                             onPause()
+                                            OldQrDialogFragment().fail_text.text =
+                                                getString(R.string.wrong_type_or_locationId)
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 500 -> {
@@ -105,6 +128,8 @@ class ManualCheckInFragment : Fragment() {
                                         }
                                         else -> {
                                             response.errorBody()
+                                            CheckInTEL.checkInTEL?.onActivityResult(1750,
+                                                Activity.RESULT_CANCELED,intent)
                                         }
                                     }
                                 }
@@ -128,41 +153,6 @@ class ManualCheckInFragment : Fragment() {
         confirm.isEnabled = true
     }
 
-    private fun setTypeView() : String{
-        var type = CheckInTELType.CheckIn.value
-        checkin_pic.setOnClickListener {
-            if (checkin_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_color)
-                between_pic.setImageResource(R.drawable.ic_checkin_gray)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
-            }
-            type = CheckInTELType.CheckIn.value
-        }
-        between_pic.setOnClickListener {
-            if (between_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
-                between_pic.setImageResource(R.drawable.ic_checkin_color)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
-            }
-            type = CheckInTELType.CheckBetween.value
-        }
-        checkout_pic.setOnClickListener {
-            if (checkout_pic.drawable.constantState == ResourcesCompat
-                    .getDrawable(resources, R.drawable.ic_checkin_gray, null)?.constantState
-            ) {
-                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
-                between_pic.setImageResource(R.drawable.ic_checkin_gray)
-                checkout_pic.setImageResource(R.drawable.ic_checkin_color)
-            }
-            type = CheckInTELType.CheckOut.value
-        }
-
-        return type
-    }
     private fun fixTypeView(type: String){
         when(type){
             CheckInTELType.CheckIn.value -> {

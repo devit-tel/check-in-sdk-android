@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.zxing.ResultPoint
@@ -25,6 +24,7 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
+import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,18 +73,18 @@ class ScanQrFragment : Fragment() {
                 //it.window?.statusBarColor = ContextCompat.getColor(it, R.color.white)
             }
         }
-        type_check_in.text = when (arguments?.getString(TYPE_KEY).toString()) {
+        type_check_in.text = when ( arguments?.getString(TYPE_KEY).toString() ) {
             CheckInTELType.CheckIn.value -> {
-                getString(R.string.checkin_text)
+                getString(R.string.full_checkin_text)
             }
             CheckInTELType.CheckBetween.value -> {
-                getString(R.string.check_between_text)
+                getString(R.string.full_check_between_text)
             }
             CheckInTELType.CheckOut.value -> {
-                getString(R.string.checkout_text)
+                getString(R.string.full_checkout_text)
             }
             else -> {
-                getString(R.string.question_operator)
+                arguments?.getString(TYPE_KEY).toString()
             }
         }
         scanner_fragment?.setStatusText("")
@@ -131,18 +131,21 @@ class ScanQrFragment : Fragment() {
                                 val call =
                                     retrofit?.getData(type, result, null, latitude.toString(), longitude.toString())
                                 call?.enqueue(object : Callback<ScanRootModel> {
+                                    val intent = Intent(activity, CheckInTEL::class.java)
                                     override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                         //stop dialog and start camera
                                         loadingDialog?.dismiss()
                                         isScan = true
-                                        val intent = Intent(activity, CheckInTEL::class.java)
+
                                         intent.putExtras(
                                             Bundle().apply {
                                                 putString("error", t.message)
                                             }
                                         )
-                                        CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                            Activity.CONTEXT_INCLUDE_CODE,intent)
+                                        CheckInTEL.checkInTEL?.onActivityResult(
+                                            1750,
+                                            0, intent
+                                        )
                                         activity.finish()
                                     }
 
@@ -152,27 +155,32 @@ class ScanQrFragment : Fragment() {
                                     ) {
                                         //stop dialog
                                         loadingDialog?.dismiss()
-                                        val intent = Intent(activity, CheckInTEL::class.java)
+
                                         when {
                                             response.code() == 200 -> {
                                                 intent.putExtras(
                                                     Bundle().apply {
-                                                        putString("result","success")
+                                                        putString("result", "success")
                                                     }
                                                 )
-                                                CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                                    Activity.RESULT_OK,intent)
+                                                CheckInTEL.checkInTEL?.onActivityResult(
+                                                    1750,
+                                                    Activity.RESULT_OK, intent
+                                                )
                                                 SuccessDialogFragment.newInstance(type)
                                                     .show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
                                                 onPause()
+                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                                 activity.recreate()
                                             }
                                             else -> {
-                                                CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                                    Activity.RESULT_CANCELED,intent)
+                                                CheckInTEL.checkInTEL?.onActivityResult(
+                                                    1750,
+                                                    Activity.RESULT_CANCELED, intent
+                                                )
                                                 response.errorBody()
                                                 isScan = true
                                             }

@@ -33,4 +33,5 @@ class OldQrDialogFragment : DialogFragment() {
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog.window?.setLayout(width, height)
     }
+
 }

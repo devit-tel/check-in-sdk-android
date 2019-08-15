@@ -39,34 +39,34 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 CheckInTELType.CheckOut.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
                 else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
             }
-            type.text = when(eventType){
+            type.text = when (eventType) {
                 CheckInTELType.CheckIn.value -> {
-                    "ลงชื่อเข้างาน"
+                    view.context.getString(R.string.full_checkin_text)
                 }
                 CheckInTELType.CheckBetween.value -> {
-                    "ลงชื่อระหว่างวัน"
+                    view.context.getString(R.string.full_check_between_text)
                 }
                 CheckInTELType.CheckOut.value -> {
-                    "ลงชื่อออกงาน"
+                    view.context.getString(R.string.full_checkout_text)
                 }
                 else -> {
-                     "?????"
+                    eventType
                 }
             }
             hub.text = items[position].locationName
             time.text = items[position].updatedAt?.formatISO("HH:mm")
-            typeScan.text = when(items[position].checkinType ){
+            typeScan.text = when (items[position].checkinType) {
                 "NORMAL" -> {
-                    "Camera"
+                    view.context.getString(R.string.camera_text)
                 }
                 "MANUAL" -> {
-                    "Manual"
+                    view.context.getString(R.string.manual_text)
                 }
                 "AUTO" -> {
-                    "Auto Logout"
+                    view.context.getString(R.string.auto_text)
                 }
                 else -> {
-                    ""
+                    items[position].checkinType.toString()
                 }
             }
         }

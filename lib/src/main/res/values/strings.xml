@@ -25,6 +25,9 @@
 	<string name="checkin_text">เข้างาน</string>
 	<string name="checkout_text">ออกงาน</string>
 	<string name="check_between_text">ระหว่างวัน</string>
+	<string name="full_checkin_text"> ลงชื่อเข้างาน</string>
+	<string name="full_checkout_text"> ลงชื่อออกงาน</string>
+	<string name="full_check_between_text"> ลงชื่อระหว่างวัน</string>
 	<string name="generate_qrcode">generate QR Code</string>
 	<string name="littleMinute">น.</string>
 	<string name="qrUsed">QR code นี้ถูกใช้ไปแล้ว</string>
@@ -41,4 +44,8 @@
 	<string name="not_mock_text">กรุณาตั้งค่าการระบุตำแหน่งให้ถูกต้อง</string>
 	<string name="semi_colon">:</string>
 	<string name="question_operator">.?????</string>
+	<string name="wrong_type_or_locationId"> ประเภทการเช็คอิน หรือคลังไม่ตรงกับระบบ </string>
+	<string name="camera_text"> Camera </string>
+	<string name="manual_text"> Manual </string>
+	<string name="auto_text"> Auto Checkout </string>
 </resources>
