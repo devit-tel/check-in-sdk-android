@@ -15,10 +15,6 @@
 			  android:icon="@mipmap/ic_nearby"
 			  android:title="@string/nearby_fine"/>
 
-		<item android:id="@+id/history"
-			  android:icon="@mipmap/ic_history"
-			  android:title="@string/history_check"/>
-
 		<item android:id="@+id/absence"
 			  android:icon="@mipmap/ic_absence"
 			  android:title="@string/request_absence"/>

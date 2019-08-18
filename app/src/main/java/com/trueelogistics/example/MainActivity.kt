@@ -1,13 +1,11 @@
 package com.trueelogistics.example
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
-import com.trueelogistics.checkin.activity.HistoryActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -49,10 +47,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frag_main, NearByFragment())
                     .commit()
-            }
-            R.id.history -> {
-                intent = Intent(this, HistoryActivity::class.java)
-                startActivity(intent)
             }
             R.id.absence -> {
                 Toast.makeText(this, "absence show", Toast.LENGTH_LONG).show()

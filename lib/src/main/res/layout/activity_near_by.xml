@@ -2,21 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
-			  android:paddingTop="50dp"
 			  android:orientation="vertical">
-	<Button
-			android:id="@+id/btSentNearBy"
-			android:layout_gravity="center|top"
-			android:padding="10dp"
-			android:layout_margin="20sp"
-			android:textSize="20sp"
-			android:text="@string/sent_nearby"
-			android:layout_width="wrap_content"
+	<FrameLayout
+			android:id="@+id/frag_nearby"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+	<ImageView
+			android:id="@+id/loading_hub_nearby"
+			android:layout_gravity="center"
+			android:src="@drawable/pic_fail_checkin"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
-	<TextView
-			android:layout_gravity="center|top"
-			android:textSize="25sp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/on_device_found"/>
+	</FrameLayout>
+
+
 </LinearLayout>

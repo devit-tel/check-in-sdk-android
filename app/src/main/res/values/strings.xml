@@ -12,7 +12,7 @@
 	<string name="shake_your_phone">Shake your Phone !!</string>
 	<string name="try_again">Try again</string>
 	<string name="check_in">ลงชื่อเข้างาน</string>
-	<string name="check_between">ลงชื่อระหว่างวัน</string>
+	<string name="check_between"> ลงชื่อระหว่างวัน </string>
 	<string name="check_out">ลงชื่อออกงาน</string>
 	<string name="name_surname">name surname</string>
 	<string name="shake_fine">เขย่าเพื่อค้นหาคลัง</string>
@@ -27,7 +27,4 @@
 	<string name="scanQr">แสกน QR Code</string>
 	<string name="log_out">ออกจากระบบ</string>
 	<string name="date_checkin">%1$s , %2$s %3$s</string>
-	<string name="full_checkin_text"> ลงชื่อเข้างาน</string>
-	<string name="full_checkout_text"> ลงชื่อออกงาน</string>
-	<string name="full_check_between_text"> ลงชื่อระหว่างวัน</string>
 </resources>
