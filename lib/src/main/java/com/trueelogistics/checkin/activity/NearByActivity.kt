@@ -1,5 +1,6 @@
 package com.trueelogistics.checkin.activity
 
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -13,10 +14,15 @@ import kotlinx.android.synthetic.main.activity_near_by.*
 
 class NearByActivity : AppCompatActivity() {
     private var mMessageListener: MessageListener? = null
+    private var nearbyAnimation : AnimationDrawable ?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_by)
 
+        back_page.setOnClickListener {
+            onBackPressed()
+        }
+        nearByAnimation()
         mMessageListener = object : MessageListener() {
             override fun onFound(message: Message?) {
                 val content = message?.content?.toString(
@@ -38,6 +44,12 @@ class NearByActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun nearByAnimation(){
+        loading_hub_nearby.setBackgroundResource(R.drawable.nearby_finding)
+        nearbyAnimation = loading_hub_nearby.background as AnimationDrawable
+        nearbyAnimation?.start()
     }
 
     override fun onStart() {
