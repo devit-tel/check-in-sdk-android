@@ -6,7 +6,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
@@ -24,15 +23,12 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
-import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class ScanQrFragment : Fragment() {
-    private var isScan = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +37,7 @@ class ScanQrFragment : Fragment() {
     }
 
     companion object {
+        var isScan = true
         const val TYPE_KEY = "TYPE_KEY"
         const val CHECK_DISABLE = "CHECK_DISABLE"
         fun newInstance(type: String, checkDisble: Boolean): ScanQrFragment {
@@ -68,11 +65,6 @@ class ScanQrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setDisableBackPage()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.let {
-                //it.window?.statusBarColor = ContextCompat.getColor(it, R.color.white)
-            }
-        }
         type_check_in.text = when ( arguments?.getString(TYPE_KEY).toString() ) {
             CheckInTELType.CheckIn.value -> {
                 getString(R.string.full_checkin_text)
@@ -171,10 +163,12 @@ class ScanQrFragment : Fragment() {
                                                     .show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
-                                                onPause()
-                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
+                                                CheckInTEL.checkInTEL?.onActivityResult(
+                                                    1750,
+                                                    Activity.RESULT_CANCELED, intent
+                                                )
+//                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
-                                                activity.recreate()
                                             }
                                             else -> {
                                                 CheckInTEL.checkInTEL?.onActivityResult(

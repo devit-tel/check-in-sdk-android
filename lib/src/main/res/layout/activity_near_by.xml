@@ -27,6 +27,7 @@
 				android:layout_height="wrap_content"
 				tools:ignore="ContentDescription"/>
 		<TextView
+				android:id="@+id/finding_text"
 				android:text="@string/finding"
 				android:textSize="30sp"
 				android:textColor="@color/black"

@@ -29,6 +29,7 @@ class NearByActivity : AppCompatActivity() {
                     Charsets.UTF_8
                 )
                 loading_hub_nearby.visibility = View.GONE
+                finding_text.visibility = View.GONE
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frag_nearby, NearByHubFragment.newInstance(content?:""))
                     .commit()
