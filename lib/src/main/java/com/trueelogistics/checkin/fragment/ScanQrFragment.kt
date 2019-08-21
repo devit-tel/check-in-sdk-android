@@ -150,6 +150,7 @@ class ScanQrFragment : Fragment() {
 
                                         when {
                                             response.code() == 200 -> {
+                                                onPause()
                                                 intent.putExtras(
                                                     Bundle().apply {
                                                         putString("result", "success")

@@ -33,11 +33,14 @@ class SuccessDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onPause()
         status_checkin1.text = translateType(arguments?.getString(TYPE_STATUS).toString())
         status_checkin2.text = translateType(arguments?.getString(TYPE_STATUS).toString())
         timeCheckIn.text = Date().format("HH:mm")
         isCancelable = false
         confirm.setOnClickListener {
+            onResume()
+            ScanQrFragment.isScan = true
             activity?.finish() //activity where call this fragment will finish
         }
     }
