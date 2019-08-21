@@ -39,7 +39,7 @@ class ScanQrActivity : AppCompatActivity() {
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
                     1750,
-                    0, intent
+                    Activity.BIND_NOT_FOREGROUND, intent
                 )
                 finish()
             }

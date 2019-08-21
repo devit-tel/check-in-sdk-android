@@ -142,7 +142,7 @@ class ScanQrFragment : Fragment() {
                                         )
                                         CheckInTEL.checkInTEL?.onActivityResult(
                                             1750,
-                                            0, intent
+                                            Activity.BIND_NOT_FOREGROUND, intent
                                         )
                                         activity.finish()
                                     }
@@ -177,7 +177,7 @@ class ScanQrFragment : Fragment() {
                                                 )
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
-                                                    0, intent
+                                                    Activity.BIND_NOT_FOREGROUND, intent
                                                 )
 //                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
@@ -190,7 +190,7 @@ class ScanQrFragment : Fragment() {
                                                 )
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
-                                                    0, intent
+                                                    Activity.BIND_NOT_FOREGROUND, intent
                                                 )
                                                 cancelFirstCheckIn = true
                                                 back_page.visibility = View.VISIBLE
@@ -211,7 +211,7 @@ class ScanQrFragment : Fragment() {
                                 )
                                 CheckInTEL.checkInTEL?.onActivityResult(
                                     1750,
-                                    0, intent
+                                    Activity.BIND_NOT_FOREGROUND, intent
                                 )
                                 activity.recreate()
                             }
@@ -226,7 +226,7 @@ class ScanQrFragment : Fragment() {
                     )
                     CheckInTEL.checkInTEL?.onActivityResult(
                         1750,
-                        0, intent
+                        Activity.BIND_NOT_FOREGROUND, intent
                     )
                 }
             }
