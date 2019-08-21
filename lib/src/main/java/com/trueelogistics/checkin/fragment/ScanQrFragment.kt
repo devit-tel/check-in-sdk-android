@@ -181,8 +181,6 @@ class ScanQrFragment : Fragment() {
                                                 )
 //                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
-                                                cancelFirstCheckIn = true
-                                                back_page.visibility = View.VISIBLE
                                             }
                                             else -> {
                                                 intent.putExtras(
@@ -194,7 +192,8 @@ class ScanQrFragment : Fragment() {
                                                     1750,
                                                     0, intent
                                                 )
-                                                response.errorBody()
+                                                cancelFirstCheckIn = true
+                                                back_page.visibility = View.VISIBLE
                                                 isScan = true
                                             }
                                         }
