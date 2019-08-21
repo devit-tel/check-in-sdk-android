@@ -38,6 +38,7 @@ class ScanQrFragment : Fragment() {
 
     companion object {
         var isScan = true
+        var cancelFirstCheckIn = false
         const val TYPE_KEY = "TYPE_KEY"
         const val CHECK_DISABLE = "CHECK_DISABLE"
         fun newInstance(type: String, checkDisble: Boolean): ScanQrFragment {
@@ -82,6 +83,11 @@ class ScanQrFragment : Fragment() {
         scanner_fragment?.setStatusText("")
         scanner_fragment?.decodeContinuous(callback)
         back_page.setOnClickListener {
+            val intent = Intent(activity, CheckInTEL::class.java)
+            CheckInTEL.checkInTEL?.onActivityResult(
+                1750,
+                Activity.RESULT_CANCELED, intent
+            )
             activity?.onBackPressed()
         }
         self_checkin.setOnClickListener {
@@ -164,17 +170,29 @@ class ScanQrFragment : Fragment() {
                                                     .show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
+                                                intent.putExtras(
+                                                    Bundle().apply {
+                                                        putString("error", "This QRCode Used")
+                                                    }
+                                                )
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
-                                                    Activity.RESULT_CANCELED, intent
+                                                    0, intent
                                                 )
 //                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
                                                 OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+                                                cancelFirstCheckIn = true
+                                                back_page.visibility = View.VISIBLE
                                             }
                                             else -> {
+                                                intent.putExtras(
+                                                    Bundle().apply {
+                                                        putString("error", "response.code() = "+response.code())
+                                                    }
+                                                )
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
-                                                    Activity.RESULT_CANCELED, intent
+                                                    0, intent
                                                 )
                                                 response.errorBody()
                                                 isScan = true
@@ -186,9 +204,31 @@ class ScanQrFragment : Fragment() {
                             } else {
                                 loadingDialog?.dismiss()
                                 MockDialogFragment().show(activity.supportFragmentManager, "show")
+                                val intent = Intent(activity, CheckInTEL::class.java)
+                                intent.putExtras(
+                                    Bundle().apply {
+                                        putString("error", "GPS is Mock !!")
+                                    }
+                                )
+                                CheckInTEL.checkInTEL?.onActivityResult(
+                                    1750,
+                                    0, intent
+                                )
                                 activity.recreate()
                             }
                         }
+                }
+                else{
+                    val intent = Intent(activity, CheckInTEL::class.java)
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString("error", "Permission GPS Denied!!")
+                        }
+                    )
+                    CheckInTEL.checkInTEL?.onActivityResult(
+                        1750,
+                        0, intent
+                    )
                 }
             }
         }

@@ -1,16 +1,17 @@
 package com.trueelogistics.checkin.activity
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.ScanQrFragment
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.handler.CheckInTEL
 
 class ScanQrActivity : AppCompatActivity() {
-    private var checkInTELCallBack: CheckInTELCallBack? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_qr)
@@ -30,7 +31,16 @@ class ScanQrActivity : AppCompatActivity() {
                     this, "Permission Denied",
                     Toast.LENGTH_LONG
                 ).show()
-                checkInTELCallBack?.onCheckInFailure("Permission Denied") // set
+                val intent = Intent(this, CheckInTEL::class.java)
+                intent.putExtras(
+                    Bundle().apply {
+                        putString("error", "Permission Denied!!")
+                    }
+                )
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    0, intent
+                )
                 finish()
             }
             .ask()
@@ -40,6 +50,14 @@ class ScanQrActivity : AppCompatActivity() {
         val f = this.supportFragmentManager.fragments[0].javaClass
         val disable = intent.getBooleanExtra("disable", false)
         if (f != ScanQrFragment::class.java || !disable) {
+            super.onBackPressed()
+        }
+        else if (ScanQrFragment.cancelFirstCheckIn){
+            val intent = Intent(this, CheckInTEL::class.java)
+            CheckInTEL.checkInTEL?.onActivityResult(
+                1750,
+                Activity.RESULT_CANCELED, intent
+            )
             super.onBackPressed()
         }
     }

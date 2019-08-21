@@ -6,7 +6,9 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
+import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -17,6 +19,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         CheckInTEL.userId = "1129700071976"
         nav_view.setNavigationItemSelectedListener(this)
+
+        CheckInTEL.checkInTEL?.openScanQRCode(this,CheckInTELType.CheckIn.value,true, object : CheckInTELCallBack{
+            override fun onCheckInSuccess(result: String) {
+                Toast.makeText(
+                    this@MainActivity, result,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            override fun onCheckInFailure(message: String) {
+                Toast.makeText(
+                    this@MainActivity, message ,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            override fun onCancel() {
+                Toast.makeText(
+                    this@MainActivity, "on cancel",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_main, ScanQrFragment())
             .commit()
@@ -49,7 +74,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .commit()
             }
             R.id.absence -> {
-                Toast.makeText(this, "absence show", Toast.LENGTH_LONG).show()
+                CheckInTEL.checkInTEL?.openMainScanQrCode(this,object : CheckInTELCallBack{
+                    override fun onCheckInSuccess(result: String) {
+                        Toast.makeText(
+                            this@MainActivity, result,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    override fun onCheckInFailure(message: String) {
+                        Toast.makeText(
+                            this@MainActivity, message ,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    override fun onCancel() {
+                        Toast.makeText(
+                            this@MainActivity, "on cancel",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                })
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)
