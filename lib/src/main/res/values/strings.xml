@@ -44,7 +44,7 @@
 	<string name="not_mock_text">กรุณาตั้งค่าการระบุตำแหน่งให้ถูกต้อง</string>
 	<string name="semi_colon">:</string>
 	<string name="question_operator">.?????</string>
-	<string name="wrong_type_or_locationId">ประเภทการเช็คอิน หรือคลังไม่ตรงกับระบบ</string>
+	<string name="wrong_locationId">คลังที่คุณเลือกไม่ตรงกับระบบ</string>
 	<string name="camera_text">Camera</string>
 	<string name="manual_text">Manual</string>
 	<string name="auto_text">Auto Checkout</string>

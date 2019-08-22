@@ -50,6 +50,12 @@ class ScanQrFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+
+    }
+
+    fun showBackPressed(){
+        cancelFirstCheckIn = true
+        this.back_page.visibility = View.VISIBLE
     }
 
     private val callback = object : BarcodeCallback {
@@ -192,8 +198,7 @@ class ScanQrFragment : Fragment() {
                                                     1750,
                                                     Activity.BIND_NOT_FOREGROUND, intent
                                                 )
-                                                cancelFirstCheckIn = true
-                                                back_page.visibility = View.VISIBLE
+                                                showBackPressed()
                                                 isScan = true
                                             }
                                         }

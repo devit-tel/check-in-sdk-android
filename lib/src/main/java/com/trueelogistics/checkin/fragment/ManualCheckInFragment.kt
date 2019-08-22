@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
@@ -22,6 +21,7 @@ import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
+import kotlinx.android.synthetic.main.fragment_manaul_checkin.back_page
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -83,7 +83,7 @@ class ManualCheckInFragment : Fragment() {
                         if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
-                            val call = retrofit?.getData(type, "",hub_id
+                            val call = retrofit?.getData("", "",hub_id
                                 , latitude.toString(), longitude.toString())
                             call?.enqueue(object : Callback<ScanRootModel> {
                                 val intent = Intent(activity, CheckInTEL::class.java)
@@ -118,18 +118,28 @@ class ManualCheckInFragment : Fragment() {
                                         }
                                         response.code() == 400 -> {
                                             onPause()
-                                            OldQrDialogFragment().fail_text.text =
-                                                getString(R.string.wrong_type_or_locationId)
+                                            intent.putExtras(
+                                                Bundle().apply {
+                                                    putString("error",getString(R.string.wrong_locationId))
+                                                }
+                                            )
+                                            CheckInTEL.checkInTEL?.onActivityResult(
+                                                1750,
+                                                Activity.BIND_NOT_FOREGROUND, intent
+                                            )
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
-                                        response.code() == 500 -> {
-                                            Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT)
-                                                .show()
-                                        }
                                         else -> {
-                                            response.errorBody()
-                                            CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                                Activity.RESULT_CANCELED,intent)
+                                            ScanQrFragment().showBackPressed()
+                                            intent.putExtras(
+                                                Bundle().apply {
+                                                    putString("error","${response.code()} : ${response.message()}")
+                                                }
+                                            )
+                                            CheckInTEL.checkInTEL?.onActivityResult(
+                                                1750,
+                                                Activity.BIND_NOT_FOREGROUND, intent
+                                            )
                                         }
                                     }
                                 }
@@ -137,8 +147,30 @@ class ManualCheckInFragment : Fragment() {
                         } else {
                             loadingDialog.dismiss()
                             MockDialogFragment().show(activity.supportFragmentManager, "show")
+                            val intent = Intent(activity, CheckInTEL::class.java)
+                            intent.putExtras(
+                                Bundle().apply {
+                                    putString("error", "GPS is Mock !!")
+                                }
+                            )
+                            CheckInTEL.checkInTEL?.onActivityResult(
+                                1750,
+                                Activity.BIND_NOT_FOREGROUND, intent
+                            )
                         }
                     }
+            }
+            else{
+                val intent = Intent(activity, CheckInTEL::class.java)
+                intent.putExtras(
+                    Bundle().apply {
+                        putString("error", "Permission GPS Denied!!")
+                    }
+                )
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.BIND_NOT_FOREGROUND, intent
+                )
             }
         }
     }
