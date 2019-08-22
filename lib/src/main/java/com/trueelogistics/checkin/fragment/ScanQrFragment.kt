@@ -150,7 +150,6 @@ class ScanQrFragment : Fragment() {
                                             1750,
                                             Activity.BIND_NOT_FOREGROUND, intent
                                         )
-                                        activity.finish()
                                     }
 
                                     override fun onResponse(

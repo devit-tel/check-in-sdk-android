@@ -58,7 +58,7 @@ class ScanQrActivity : AppCompatActivity() {
                 1750,
                 Activity.RESULT_CANCELED, intent
             )
-            super.onBackPressed()
+            finish()
         }
     }
 }

@@ -21,24 +21,23 @@ import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
-import kotlinx.android.synthetic.main.fragment_manaul_checkin.back_page
-import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ManualCheckInFragment : Fragment() {
-    companion object{
+    companion object {
         var TYPE_KEY = ""
-        fun newInstance(type : String) : ManualCheckInFragment{
+        fun newInstance(type: String): ManualCheckInFragment {
             val fragment = ManualCheckInFragment()
             val bundle = Bundle().apply {
-                putString(TYPE_KEY,type)
+                putString(TYPE_KEY, type)
             }
             fragment.arguments = bundle
             return fragment
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,11 +63,11 @@ class ManualCheckInFragment : Fragment() {
             stockDialogFragment.show(activity?.supportFragmentManager, "show")
         }
         confirm.setOnClickListener {
-            checkLocation(type,hubId)
+            checkLocation(type, hubId)
         }
     }
 
-    private fun checkLocation(type: String , hub_id : String) {
+    private fun checkLocation(type: String, hub_id: String) {
         val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
         val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...")
         activity?.let { activity ->
@@ -83,8 +82,10 @@ class ManualCheckInFragment : Fragment() {
                         if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
-                            val call = retrofit?.getData("", "",hub_id
-                                , latitude.toString(), longitude.toString())
+                            val call = retrofit?.getData(
+                                type, "", hub_id
+                                , latitude.toString(), longitude.toString()
+                            )
                             call?.enqueue(object : Callback<ScanRootModel> {
                                 val intent = Intent(activity, CheckInTEL::class.java)
                                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
@@ -96,9 +97,11 @@ class ManualCheckInFragment : Fragment() {
                                             putString("error", t.message)
                                         }
                                     )
-                                    CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                        0,intent)
-                                    activity.finish()
+                                    CheckInTEL.checkInTEL?.onActivityResult(
+                                        1750,
+                                        Activity.BIND_NOT_FOREGROUND, intent
+                                    )
+                                    ScanQrFragment.cancelFirstCheckIn = true
 
                                 }
 
@@ -109,18 +112,21 @@ class ManualCheckInFragment : Fragment() {
                                         response.code() == 200 -> {
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("result","success")
+                                                    putString("result", "success")
                                                 }
                                             )
-                                            CheckInTEL.checkInTEL?.onActivityResult(1750,
-                                                Activity.RESULT_OK,intent)
-                                            SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
+                                            CheckInTEL.checkInTEL?.onActivityResult(
+                                                1750,
+                                                Activity.RESULT_OK, intent
+                                            )
+                                            SuccessDialogFragment.newInstance(type)
+                                                .show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 400 -> {
                                             onPause()
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("error",getString(R.string.wrong_locationId))
+                                                    putString("error", getString(R.string.wrong_locationId))
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -130,10 +136,10 @@ class ManualCheckInFragment : Fragment() {
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
                                         else -> {
-                                            ScanQrFragment().showBackPressed()
+                                            ScanQrFragment.cancelFirstCheckIn = true
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("error","${response.code()} : ${response.message()}")
+                                                    putString("error", "${response.code()} : ${response.message()}")
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -159,8 +165,7 @@ class ManualCheckInFragment : Fragment() {
                             )
                         }
                     }
-            }
-            else{
+            } else {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
@@ -185,8 +190,8 @@ class ManualCheckInFragment : Fragment() {
         confirm.isEnabled = true
     }
 
-    private fun fixTypeView(type: String){
-        when(type){
+    private fun fixTypeView(type: String) {
+        when (type) {
             CheckInTELType.CheckIn.value -> {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_color)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
