@@ -1,24 +1,22 @@
 package com.trueelogistics.checkin.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
-import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
-import com.trueelogistics.checkin.interfaces.TypeCallback
-import com.trueelogistics.checkin.model.HistoryInDataModel
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.format
+import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.TypeCallback
+import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainScanQrActivity : AppCompatActivity() {
     private var adapter = HistoryStaffAdapter()
@@ -35,13 +33,13 @@ class MainScanQrActivity : AppCompatActivity() {
             onBackPressed()
         }
         checkInBtn.setOnClickListener {
-            openScanQr(this, CheckInTELType.CheckIn.value)
+            openScanQr( CheckInTELType.CheckIn.value)
         }
         checkBetBtn.setOnClickListener {
-            openScanQr(this, CheckInTELType.CheckBetween.value)
+            openScanQr( CheckInTELType.CheckBetween.value)
         }
         checkOutBtn.setOnClickListener {
-            openScanQr(this, CheckInTELType.CheckOut.value)
+            openScanQr( CheckInTELType.CheckOut.value)
         }
 
     }
@@ -69,7 +67,7 @@ class MainScanQrActivity : AppCompatActivity() {
 
     }
 
-    private fun openScanQr(context: Context, type: String) {
+    private fun openScanQr( type: String) {
         CheckInTEL.checkInTEL?.openScanQRCode(this, type ,false, object : CheckInTELCallBack {
             override fun onCancel() {
 
@@ -98,7 +96,7 @@ class MainScanQrActivity : AppCompatActivity() {
                     layoutRecycle.visibility = View.VISIBLE
                 } else if (type == CheckInTELType.CheckOut.value) {
                     if (checkFirstInDay) {
-                        openScanQr(this@MainScanQrActivity, CheckInTELType.CheckIn.value)
+                        openScanQr( CheckInTELType.CheckIn.value)
                         checkFirstInDay = false
                     }
                     checkInBtn.visibility = View.VISIBLE

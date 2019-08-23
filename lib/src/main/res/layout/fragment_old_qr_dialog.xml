@@ -4,6 +4,7 @@
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent"
 			  tools:context=".fragment.OldQrDialogFragment"
+			  android:background="@color/white"
 			  android:orientation="vertical">
 	<ImageView
 			android:src="@drawable/pic_fail_checkin"

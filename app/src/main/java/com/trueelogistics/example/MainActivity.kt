@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CheckInTEL.userId = "1129700071976"
+        CheckInTEL.userId = "2222222222222"
         nav_view.setNavigationItemSelectedListener(this)
 
 
