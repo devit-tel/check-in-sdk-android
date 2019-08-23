@@ -20,28 +20,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         CheckInTEL.userId = "1129700071976"
         nav_view.setNavigationItemSelectedListener(this)
 
-        CheckInTEL.checkInTEL?.openScanQRCode(this,CheckInTELType.CheckIn.value,true, object : CheckInTELCallBack{
-            override fun onCheckInSuccess(result: String) {
-                Toast.makeText(
-                    this@MainActivity, result,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
 
-            override fun onCheckInFailure(message: String) {
-                Toast.makeText(
-                    this@MainActivity, message ,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            override fun onCancel() {
-                Toast.makeText(
-                    this@MainActivity, "on cancel",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_main, ScanQrFragment())
             .commit()

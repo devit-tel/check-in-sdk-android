@@ -54,6 +54,28 @@ class ScanQrFragment : Fragment() {
             checkOutBtn.setOnClickListener {
                 openScanQr(activity, CheckInTELType.CheckOut.value)
             }
+            CheckInTEL.checkInTEL?.openScanQRCode(activity,CheckInTELType.CheckIn.value,true, object : CheckInTELCallBack{
+                override fun onCheckInSuccess(result: String) {
+                    Toast.makeText(
+                        activity, result,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onCheckInFailure(message: String) {
+                    Toast.makeText(
+                        activity, message ,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onCancel() {
+                    Toast.makeText(
+                        activity, "on cancel",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
         }
     }
 
