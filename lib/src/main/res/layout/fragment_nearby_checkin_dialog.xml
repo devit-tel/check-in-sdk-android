@@ -38,7 +38,7 @@
 						android:layout_height="wrap_content"
 						android:adjustViewBounds="true"
 						android:padding="20dp"
-						android:src="@drawable/ic_checkin_color"
+						android:src="@drawable/ic_checkin_gray"
 						tools:ignore="ContentDescription" />
 
 				<TextView
@@ -110,7 +110,7 @@
 
 		<Button
 				android:id="@+id/cancel_nearBy"
-				android:text="@string/confirm_text"
+				android:text="@string/cancel_text"
 				android:textSize="20sp"
 				android:textColor="@color/purple"
 				android:background="@drawable/button_border"
@@ -119,7 +119,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginEnd="15dp"
-				android:gravity="center" />
+				android:gravity="center"
+				tools:ignore="ButtonStyle" />
 		<Button
 				android:id="@+id/confirm_nearBy"
 				android:text="@string/confirm_text"
@@ -131,7 +132,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="15dp"
-				android:gravity="center" />
+				android:gravity="center"
+				tools:ignore="ButtonStyle" />
 	</LinearLayout>
 
 </LinearLayout>

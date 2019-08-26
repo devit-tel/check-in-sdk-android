@@ -65,8 +65,10 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
 
     }
 
-    override fun onClickItem(view: View, dataModel: NearByHubModel) {
-
+    override fun onClickItem( dataModel: NearByHubModel) {
+        val nearByDialog = NearByCheckInDialogFragment()
+        nearByDialog.item = dataModel
+        nearByDialog.show(activity?.supportFragmentManager, "show")
     }
 
     fun getQr( hubId: String) {

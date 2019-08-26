@@ -50,4 +50,5 @@
 	<string name="auto_text">Auto Checkout</string>
 	<string name="nearby_fine">ค้นหาคลังรอบตัว</string>
 	<string name="finding">กำลังค้นหา...</string>
+	<string name="cancel_text">ยกเลิก</string>
 </resources>

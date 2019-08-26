@@ -69,7 +69,7 @@ class ManualCheckInFragment : Fragment() {
 
     private fun checkLocation(type: String, hub_id: String) {
         val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
-        val loadingDialog = ProgressDialog.show(context, "Saving History", "please wait...")
+        val loadingDialog = ProgressDialog.show(context, "$type Processing", "please wait...")
         activity?.let { activity ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(
@@ -82,11 +82,11 @@ class ManualCheckInFragment : Fragment() {
                         if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
-                            val call = retrofit?.getData(
+                            val call = retrofit.getData(
                                 type, "", hub_id
                                 , latitude.toString(), longitude.toString()
                             )
-                            call?.enqueue(object : Callback<ScanRootModel> {
+                            call.enqueue(object : Callback<ScanRootModel> {
                                 val intent = Intent(activity, CheckInTEL::class.java)
                                 override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                     //stop dialog and start camera

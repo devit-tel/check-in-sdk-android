@@ -144,8 +144,8 @@ class CheckInTEL {
 
     fun getLastCheckInHistory(typeCallback: TypeCallback) {
         val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
-        val call = retrofit?.getData()
-        call?.enqueue(object : Callback<HistoryTodayModel> {
+        val call = retrofit.getData()
+        call.enqueue(object : Callback<HistoryTodayModel> {
             override fun onFailure(call: Call<HistoryTodayModel>, t: Throwable) {
                 typeCallback.onFailure(t.message)
             }

@@ -32,8 +32,7 @@ class NearByAdapter( val onClickItem: OnClickItemCallback )  : RecyclerView.Adap
             hubName.text  = items[position].hubName
 
             view.setOnClickListener {
-                onClickItem.onClickItem(it, items[position])
-                NearByCheckInDialogFragment().item = items[position]
+                onClickItem.onClickItem( items[position])
             }
         }
     }
