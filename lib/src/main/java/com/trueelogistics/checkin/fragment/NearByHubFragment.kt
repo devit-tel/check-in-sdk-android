@@ -18,11 +18,13 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.NearByAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
+import com.trueelogistics.checkin.interfaces.OnClickItemCallback
+import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
-class NearByHubFragment : Fragment() {
-    private var adapter = NearByAdapter()
-    private var qrCodeNearBy : String ?= ""
+class NearByHubFragment : Fragment() , OnClickItemCallback {
+
+    private var adapter = NearByAdapter( this )
     private var mMessageListener: MessageListener? = null
     companion object {
         const val HUB_ID = "HUB_ID"
@@ -50,20 +52,24 @@ class NearByHubFragment : Fragment() {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
                 )
+                getQr( content.toString() )
             }
 
             override fun onLost(message: Message?) {
-                val content = message?.content?.toString(
-                    Charsets.UTF_8
-                )
+                nearbyRecycle.adapter = adapter
+                nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
+                adapter.items.remove( NearByHubModel(arguments?.getString(HUB_ID).toString()) )
             }
         }
-            getQr()
+            getQr(arguments?.getString(HUB_ID).toString())
 
     }
 
-    fun getQr() {
-//        val loadingDialogialog = ProgressDialog.show(context, "Changing Qr code", "please wait...", true, false)
+    override fun onClickItem(view: View, dataModel: NearByHubModel) {
+
+    }
+
+    fun getQr( hubId: String) {
         activity?.let { activity ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(
@@ -76,8 +82,7 @@ class NearByHubFragment : Fragment() {
                         if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
-                            CheckInTEL.checkInTEL?.qrGenerate(arguments?.getString(HUB_ID).toString(),
-                                arguments?.getString(HUB_ID).toString(),
+                            CheckInTEL.checkInTEL?.qrGenerate( hubId , hubId ,
                                 latitude.toString(), longitude.toString(),
                                 object : GenerateQrCallback {
                                     override fun onFailure(message: String?) {
@@ -87,8 +92,7 @@ class NearByHubFragment : Fragment() {
                                     override fun onResponse(hubName: String?, qrCodeText: String?, time: String?) {
                                         nearbyRecycle.adapter = adapter
                                         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
-                                        adapter.items.add(hubName.toString())
-                                        qrCodeNearBy = qrCodeText
+                                        adapter.items.add(NearByHubModel(hubId,hubName,qrCodeText))
                                     }
                                 })
                         } else {

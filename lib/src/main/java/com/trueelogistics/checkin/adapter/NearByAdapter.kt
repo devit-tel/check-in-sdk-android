@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.fragment.NearByCheckInDialogFragment
+import com.trueelogistics.checkin.interfaces.OnClickItemCallback
+import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.item_nearby.view.*
 
-class NearByAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val items: ArrayList<String> = arrayListOf()
+class NearByAdapter( val onClickItem: OnClickItemCallback )  : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val items: ArrayList<NearByHubModel> = arrayListOf()
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_nearby, viewGroup, false)
         return ViewHolder(view)
@@ -26,7 +29,12 @@ class NearByAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
             val hubName = view.hub_name
-            hubName.text  = items[position]
+            hubName.text  = items[position].hubName
+
+            view.setOnClickListener {
+                onClickItem.onClickItem(it, items[position])
+                NearByCheckInDialogFragment().item = items[position]
+            }
         }
     }
 }

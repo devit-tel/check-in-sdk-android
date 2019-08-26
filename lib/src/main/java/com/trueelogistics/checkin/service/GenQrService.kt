@@ -8,7 +8,7 @@ interface GenQrService{
     @POST("/check-in/v1/qrcode/create")
     @FormUrlEncoded
     fun getData(
-        @Field("qrcodeCreateBy") qrcodeCreateBy:String,
+        @Field("qrcodeCreateBy") qrcodeCreateBy:String ?= null,
         @Field("locationId")locationId:String,
         @Field("latitude")latitude:String,
         @Field("longitude")longitude:String
