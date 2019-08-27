@@ -10,6 +10,10 @@ import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.NearByHubFragment
+import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
+import com.trueelogistics.checkin.model.HubInDataModel
+import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.activity_near_by.*
 
 class NearByActivity : AppCompatActivity() {
@@ -30,19 +34,71 @@ class NearByActivity : AppCompatActivity() {
                 )
                 loading_hub_nearby.visibility = View.GONE
                 finding_text.visibility = View.GONE
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frag_nearby, NearByHubFragment.newInstance(content?:""))
-                    .commit()
+                CheckInTEL.checkInTEL?.hubGenerater(object :
+                    ArrayListGenericCallback<HubInDataModel> {
+                    override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
+                        var hubNameFromService : String ?= ""
+                        dataModel?.forEach {
+                            if (it._id == content )
+                                hubNameFromService = it.locationName
+                        }
+                        NearByHubFragment.arrayItem.add(
+                            NearByHubModel(
+                                content
+                                , hubNameFromService
+                            )
+                        )
+                        if (NearByHubFragment.arrayItem.size == 1) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.frag_nearby, NearByHubFragment.newInstance(content ?: ""))
+                                .commit()
+                        }
+                    }
+
+                    override fun onFailure(message: String?) {
+                        Toast.makeText(
+                            this@NearByActivity, " onFailure : $message "
+                            , Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                })
+
             }
 
             override fun onLost(message: Message?) {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
                 )
-                Toast.makeText(
-                    this@NearByActivity, " Lost message = $content",
-                    Toast.LENGTH_LONG
-                ).show()
+                CheckInTEL.checkInTEL?.hubGenerater(object :
+                    ArrayListGenericCallback<HubInDataModel> {
+                    override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
+                        var hubNameFromService : String ?= ""
+                        dataModel?.forEach {
+                            if (it._id == content )
+                                hubNameFromService = it.locationName
+                        }
+                        NearByHubFragment.arrayItem.remove(
+                            NearByHubModel(
+                                content
+                                , hubNameFromService
+                            )
+                        )
+                        if (NearByHubFragment.arrayItem.size == 0){
+                            supportFragmentManager.beginTransaction()
+                                .remove(NearByHubFragment())
+                                .commit()
+                        }
+                    }
+
+                    override fun onFailure(message: String?) {
+                        Toast.makeText(
+                            this@NearByActivity, " onFailure : $message "
+                            , Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                })
             }
         }
     }
