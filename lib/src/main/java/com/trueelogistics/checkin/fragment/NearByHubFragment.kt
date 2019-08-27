@@ -18,16 +18,20 @@ import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.NearByAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
+import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
-class NearByHubFragment : Fragment() , OnClickItemCallback {
+class NearByHubFragment : Fragment(), OnClickItemCallback {
 
-    private var adapter = NearByAdapter( this )
+    private var adapter = NearByAdapter(this)
     private var mMessageListener: MessageListener? = null
+
+
     companion object {
         const val HUB_ID = "HUB_ID"
         fun newInstance(hubId: String): NearByHubFragment {
@@ -39,6 +43,7 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
             return fragment
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,27 +55,70 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var hubNameFromService: String? = null
+        val arrayItem = arrayListOf<NearByHubModel>()
+        CheckInTEL.checkInTEL?.hubGenerater(object : ArrayListGenericCallback<HubInDataModel> {
+            override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
+                dataModel?.forEach {
+                    if (it._id == arguments?.getString(HUB_ID).toString())
+                        hubNameFromService = it.locationName
+                }
+                arrayItem.add(
+                    NearByHubModel(
+                        arguments?.getString(HUB_ID).toString()
+                        , hubNameFromService
+                    )
+                )
+                setAdapter(arrayItem)
+            }
+
+            override fun onFailure(message: String?) {
+                Toast.makeText(
+                    view.context, " onFailure : $message "
+                    , Toast.LENGTH_LONG
+                ).show()
+            }
+
+        })
 
         mMessageListener = object : MessageListener() {
             override fun onFound(message: Message?) {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
                 )
-                getQr( content.toString() )
+                arrayItem.add(
+                    NearByHubModel(
+                        content.toString()
+                        , hubNameFromService
+                    )
+                )
+                setAdapter(arrayItem)
             }
 
             override fun onLost(message: Message?) {
-                adapter.items.remove( NearByHubModel(arguments?.getString(HUB_ID).toString()) )
-                if ( adapter.items.size == 0){
+                val content = message?.content?.toString(
+                    Charsets.UTF_8
+                )
+                val lostItem = arrayItem.filter {
+                    id -> id.hubId == content
+                }
+                arrayItem.remove(lostItem[0])
+                if (adapter.items.size == 0) {
                     activity?.supportFragmentManager?.fragments?.remove(this@NearByHubFragment)
                 }
+                setAdapter(arrayItem)
             }
         }
-            getQr(arguments?.getString(HUB_ID).toString())
 
     }
 
-    override fun onClickItem( dataModel: NearByHubModel) {
+    fun setAdapter(  arrayItem : ArrayList<NearByHubModel> ){
+        nearbyRecycle.adapter = adapter
+        nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
+        adapter.items.addAll(arrayItem)
+        val num = adapter.itemCount
+    }
+    override fun onClickItem(dataModel: NearByHubModel) {
         val nearByDialog = NearByCheckInDialogFragment()
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
@@ -80,43 +128,9 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
             }
 
             override fun onFailure(message: String?) {
-                Toast.makeText(view?.context," Error $message ",Toast.LENGTH_LONG).show()
+                Toast.makeText(view?.context, " Error $message ", Toast.LENGTH_LONG).show()
             }
 
         })
-    }
-
-    fun getQr( hubId: String) {
-        activity?.let { activity ->
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
-            if (ContextCompat.checkSelfPermission(
-                    activity, Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                fusedLocationClient.lastLocation
-                    ?.addOnSuccessListener { location: Location? ->
-                        if (location?.isFromMockProvider == false) {
-                            val latitude = location.latitude
-                            val longitude = location.longitude
-                            CheckInTEL.checkInTEL?.qrGenerate( hubId , hubId ,
-                                latitude.toString(), longitude.toString(),
-                                object : GenerateQrCallback {
-                                    override fun onFailure(message: String?) {
-                                        Toast.makeText(view?.context," Error $message ",Toast.LENGTH_LONG).show()
-                                    }
-
-                                    override fun onResponse(hubName: String?, qrCodeText: String?, time: String?) {
-                                        nearbyRecycle.adapter = adapter
-                                        nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
-                                        adapter.items.add(NearByHubModel(hubId,hubName,qrCodeText))
-                                    }
-                                })
-                        } else {
-                            MockDialogFragment().show(activity.supportFragmentManager, "show")
-                        }
-                    }
-            }
-        }
     }
 }

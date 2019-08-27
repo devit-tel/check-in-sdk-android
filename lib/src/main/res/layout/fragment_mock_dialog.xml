@@ -35,6 +35,6 @@
 				android:background="@color/purple"
 				android:textColor="@color/white"
 				android:textSize="20sp"
-				android:text="@string/scanAgain"/>
+				android:text="@string/confirm_text"/>
 	</LinearLayout>
 </LinearLayout>
