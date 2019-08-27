@@ -167,12 +167,13 @@ class ScanQrFragment : Fragment() {
                                                         putString("result", "success")
                                                     }
                                                 )
+                                                SuccessDialogFragment.newInstance(type)
+                                                    .show(activity.supportFragmentManager, "show")
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
                                                     Activity.RESULT_OK, intent
                                                 )
-                                                SuccessDialogFragment.newInstance(type)
-                                                    .show(activity.supportFragmentManager, "show")
+
                                             }
                                             response.code() == 400 -> {
                                                 intent.putExtras(
@@ -180,12 +181,13 @@ class ScanQrFragment : Fragment() {
                                                         putString("error", "This QRCode Used")
                                                     }
                                                 )
+                                                OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                                 CheckInTEL.checkInTEL?.onActivityResult(
                                                     1750,
                                                     Activity.BIND_NOT_FOREGROUND, intent
                                                 )
 //                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
-                                                OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+
                                             }
                                             else -> {
                                                 intent.putExtras(
