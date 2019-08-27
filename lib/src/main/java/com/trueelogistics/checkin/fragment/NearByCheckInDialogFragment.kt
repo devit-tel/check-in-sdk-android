@@ -16,20 +16,19 @@ import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
-import com.trueelogistics.checkin.interfaces.TypeCallback
-import com.trueelogistics.checkin.model.HistoryInDataModel
 import com.trueelogistics.checkin.model.NearByHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_nearby_checkin_dialog.*
+import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
     var item : NearByHubModel ?= null
+    var typeFromLastCheckIn : String ?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,27 +43,59 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hub_name.text = item?.hubName
-        var typeCheckIn = CheckInTELType.CheckOut.value
-        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String?) {
-                typeCheckIn = type.toString()
-                fixTypeView(type ?: CheckInTELType.CheckOut.value)
-            }
+        var typeCheckIn = typeFromLastCheckIn ?: ""
 
-            override fun onFailure(message: String?) {
-                hub_name.text = message
-            }
-
-        })
+        fixTypeView(typeCheckIn)
+        checkin_pic.setOnClickListener {
+            typeCheckIn = CheckInTELType.CheckIn.value
+            selectedType(typeCheckIn)
+        }
+        between_pic.setOnClickListener {
+            typeCheckIn = CheckInTELType.CheckBetween.value
+            selectedType(typeCheckIn)
+        }
+        checkout_pic.setOnClickListener {
+            typeCheckIn = CheckInTELType.CheckOut.value
+            selectedType(typeCheckIn)
+        }
         confirm_nearBy.setOnClickListener {
             checkLocation(typeCheckIn, item?.hubId ?: " HubID is null ")
         }
         cancel_nearBy.setOnClickListener {
             dialog.cancel()
         }
+
+
     }
 
     private fun fixTypeView(type: String) {
+        when (type) {
+            CheckInTELType.CheckOut.value -> {
+                checkin_view.visibility = View.VISIBLE
+                between_view.visibility = View.GONE
+                checkout_view.visibility = View.GONE
+                checkin_pic.setImageResource(R.drawable.ic_checkin_color)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            CheckInTELType.CheckBetween.value , CheckInTELType.CheckIn.value -> {
+                checkin_view.visibility = View.GONE
+                between_view.visibility = View.VISIBLE
+                checkout_view.visibility = View.VISIBLE
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_color)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
+            }
+            else -> {
+                checkin_view.visibility = View.GONE
+                between_view.visibility = View.GONE
+                checkout_view.visibility = View.GONE
+
+            }
+        }
+    }
+
+    private fun selectedType(type: String) {
         when (type) {
             CheckInTELType.CheckIn.value -> {
                 checkin_pic.setImageResource(R.drawable.ic_checkin_color)
@@ -80,6 +111,11 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
                 checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_color)
+            }
+            else -> {
+                checkin_pic.setImageResource(R.drawable.ic_checkin_gray)
+                between_pic.setImageResource(R.drawable.ic_checkin_gray)
+                checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
         }
     }
@@ -150,6 +186,7 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
                                                 1750,
                                                 Activity.BIND_NOT_FOREGROUND, intent
                                             )
+                                            OldQrDialogFragment().fail_text.visibility = View.GONE
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
                                         }
                                         else -> {

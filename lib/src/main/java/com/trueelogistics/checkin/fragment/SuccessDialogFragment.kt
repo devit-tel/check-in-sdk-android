@@ -55,9 +55,9 @@ class SuccessDialogFragment : DialogFragment() {
     private fun translateType(type: String) : String{
         var typeTH = ""
         when(type){
-            "CHECK_IN" -> typeTH = getString(R.string.checkin_text)
-            "CHECK_IN_BETWEEN" -> typeTH = getString(R.string.check_between_text)
-            "CHECK_OUT" -> typeTH = getString(R.string.checkout_text)
+            "CHECK_IN" -> typeTH = getString(R.string.full_checkin_text)
+            "CHECK_IN_BETWEEN" -> typeTH = getString(R.string.full_check_between_text)
+            "CHECK_OUT" -> typeTH = getString(R.string.full_checkout_text)
         }
         return typeTH
     }

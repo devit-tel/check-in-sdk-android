@@ -81,7 +81,7 @@ class ScanQrFragment : Fragment() {
 
     private fun openScanQr(context: Context, type : String) {
         activity ?.let {
-            CheckInTEL.checkInTEL?.openScanQRCode(it,type,true, object : CheckInTELCallBack {
+            CheckInTEL.checkInTEL?.openScanQRCode(it,type,false, object : CheckInTELCallBack {
                 override fun onCancel() {
                     Toast.makeText(context, " ScanQr.onCancel === ", Toast.LENGTH_SHORT).show()
                 }
@@ -118,8 +118,8 @@ class ScanQrFragment : Fragment() {
                         activity?.let {
                             openScanQr(it, CheckInTELType.CheckIn.value)
                         }
-                        checkFirstInDay = false
                     }
+                    checkFirstInDay = false
                     checkInBtn.visibility = View.VISIBLE
                     checkBetBtn.visibility = View.GONE
                     checkOutBtn.visibility = View.GONE
@@ -141,6 +141,7 @@ class ScanQrFragment : Fragment() {
 
             override fun onFailure(message: String?) {
                 Toast.makeText(context, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                checkFirstInDay = false
                 checkInBtn.visibility = View.GONE
                 checkBetBtn.visibility = View.GONE
                 checkOutBtn.visibility = View.GONE

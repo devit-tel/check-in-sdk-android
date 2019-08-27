@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
@@ -19,6 +20,7 @@ import com.trueelogistics.checkin.adapter.NearByAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
@@ -47,6 +49,8 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         mMessageListener = object : MessageListener() {
             override fun onFound(message: Message?) {
                 val content = message?.content?.toString(
@@ -56,9 +60,10 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
             }
 
             override fun onLost(message: Message?) {
-                nearbyRecycle.adapter = adapter
-                nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
                 adapter.items.remove( NearByHubModel(arguments?.getString(HUB_ID).toString()) )
+                if ( adapter.items.size == 0){
+                    activity?.supportFragmentManager?.fragments?.remove(this@NearByHubFragment)
+                }
             }
         }
             getQr(arguments?.getString(HUB_ID).toString())
@@ -68,7 +73,17 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
     override fun onClickItem( dataModel: NearByHubModel) {
         val nearByDialog = NearByCheckInDialogFragment()
         nearByDialog.item = dataModel
-        nearByDialog.show(activity?.supportFragmentManager, "show")
+        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
+            override fun onResponse(type: String?) {
+                nearByDialog.typeFromLastCheckIn = type
+                nearByDialog.show(activity?.supportFragmentManager, "show")
+            }
+
+            override fun onFailure(message: String?) {
+                Toast.makeText(view?.context," Error $message ",Toast.LENGTH_LONG).show()
+            }
+
+        })
     }
 
     fun getQr( hubId: String) {
@@ -88,7 +103,7 @@ class NearByHubFragment : Fragment() , OnClickItemCallback {
                                 latitude.toString(), longitude.toString(),
                                 object : GenerateQrCallback {
                                     override fun onFailure(message: String?) {
-
+                                        Toast.makeText(view?.context," Error $message ",Toast.LENGTH_LONG).show()
                                     }
 
                                     override fun onResponse(hubName: String?, qrCodeText: String?, time: String?) {

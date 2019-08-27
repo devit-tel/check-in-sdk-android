@@ -13,7 +13,7 @@
 	<TextView
 			android:id="@+id/hub_name"
 			android:text="@string/hub_name_example"
-			android:textSize="30sp"
+			android:textSize="25sp"
 			android:layout_gravity="center_vertical"
 			android:layout_width="match_parent" android:layout_height="wrap_content"/>
 </LinearLayout>

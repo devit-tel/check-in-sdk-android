@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.fragment.NearByCheckInDialogFragment
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
 import com.trueelogistics.checkin.model.NearByHubModel
 import kotlinx.android.synthetic.main.item_nearby.view.*

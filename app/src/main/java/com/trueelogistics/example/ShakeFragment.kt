@@ -21,7 +21,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.kotlinpermissions.KotlinPermissions
+import com.trueelogistics.checkin.fragment.ManualCheckInFragment
+import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import kotlinx.android.synthetic.main.app_bar_main_menu.*
+import kotlinx.android.synthetic.main.app_bar_main_menu.toolbar
+import kotlinx.android.synthetic.main.fragment_shake.*
 
 class ShakeFragment : Fragment() {
 
@@ -33,7 +39,6 @@ class ShakeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_shake, container, false)
     }
 
-    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,87 +46,45 @@ class ShakeFragment : Fragment() {
         toolbar.setOnClickListener {
             mainActivity.actionToolbar()
         }
+        shake_phone_fine.setOnClickListener {
+            activity?.let {
+                CheckInTEL.checkInTEL?.openShake(it, object : CheckInTELCallBack{
+                    override fun onCheckInSuccess(result: String) {
+
+                    }
+
+                    override fun onCheckInFailure(message: String) {
+                    }
+
+                    override fun onCancel() {
+
+                    }
+
+                })
+            }
+            CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
+                override fun onResponse(type: String?) {
+                    activity?.supportFragmentManager?.beginTransaction()?.replace(
+                        R.id.fragment,
+                        ManualCheckInFragment.newInstance( type.toString() )
+                    )?.addToBackStack(ManualCheckInFragment::class.java.name)?.commit()
+                }
+
+                override fun onFailure(message: String?) {
+                    Toast.makeText(view?.context," Error $message ",Toast.LENGTH_LONG).show()
+                }
+
+            })
+        }
         activity?.let { fragActivity ->
-            val permissions = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
-            ActivityCompat.requestPermissions(fragActivity, permissions, 0)
-            KotlinPermissions.with(fragActivity) // where this is an FragmentActivity instance --> KotlinPermissions.with
-                .permissions(
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ).onAccepted {
-                    val fusedLocationClient: FusedLocationProviderClient =
-                        LocationServices.getFusedLocationProviderClient(fragActivity)
+
                     ShakeDetector.start()
                     ShakeDetector.create(fragActivity) {
-                        fusedLocationClient.lastLocation
-                            .addOnSuccessListener { location: Location? ->
-                                val latitude = location?.latitude.toString()
-                                val longitude = location?.longitude.toString()
-                                FirebaseApp.initializeApp(fragActivity)
-                                val ref = FirebaseDatabase.getInstance().getReference("driverLocation")
-                                ref.addValueEventListener(object : ValueEventListener {
-                                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                        ref.child("latitude").setValue(latitude)
-                                        ref.child("longitude").setValue(longitude)
-                                    }
-                                    override fun onCancelled(error: DatabaseError) {
-                                        Toast.makeText(
-                                            activity,
-                                            " Fail to set database !!!",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                })
-                                location?.let {
-                                    getManagerFirebase(it)
-                                }
-                            }
-                        object : CountDownTimer(5000, 1000) { // 1 second to onTick & 1 minit to onFinish
-                            override fun onTick(millisUntilFinished: Long) {
-                            }
-                            override fun onFinish() {
-                            }
-                        }.start()
+
                     }
                     ShakeDetector.destroy()
-                }.ask()
         }
     }
 
-    private fun getManagerFirebase(location: Location) {
-        val managerRef = FirebaseDatabase.getInstance().getReference("managerLocation")
-        managerRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val latDriver = dataSnapshot.child("latitude").value.toString()
-                val longDriver = dataSnapshot.child("longitude").value.toString()
-                val managerLocation = Location(LocationManager.GPS_PROVIDER)
-                managerLocation.latitude = latDriver.toDouble()
-                managerLocation.longitude = longDriver.toDouble()
-                val distance: Float? = location.distanceTo(managerLocation)
-                activity?.let {
-                    if (distance != null) {
-                        if (distance < 500)
-                            Toast.makeText(
-                                it,
-                                " distance so close == $distance",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        else
-                            Toast.makeText(
-                                it,
-                                " out of range == $distance",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                    }
-                }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(
-                    activity,
-                    " Fail to get database !!!",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }
 }
