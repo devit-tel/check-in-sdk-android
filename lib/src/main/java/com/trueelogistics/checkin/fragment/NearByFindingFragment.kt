@@ -13,6 +13,10 @@ import kotlinx.android.synthetic.main.fragment_near_by_finding.*
 class NearByFindingFragment : Fragment() {
 
     private var nearbyAnimation: AnimationDrawable? = null
+    companion object{
+        var showView = true
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,17 +31,20 @@ class NearByFindingFragment : Fragment() {
             activity?.onBackPressed()
         }
         nearByAnimation()
-        activity?.let {
-            NearByActivity().itemNearBy(it, object : NearByActivity.NearByCallback {
+
+        activity?.let { activity ->
+            NearByActivity().itemNearBy(activity, object : NearByActivity.NearByCallback {
                 override fun onFoundNearBy(hubId: String?) {
-                    activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.frag_nearby, NearByHubFragment())
-                        ?.addToBackStack(null)
-                        ?.commit()
+                    if (showView) {
+                        activity.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.frag_nearby, NearByHubFragment())
+                            ?.addToBackStack(null)
+                            ?.commit()
+                        showView = false
+                    }
                 }
 
                 override fun onLostNearBy(hubId: String?) {
-
                 }
 
             })

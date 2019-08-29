@@ -33,13 +33,11 @@ class NearByActivity : AppCompatActivity() {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
                 )
-                itemListener.onLostNearBy(content)
+                 itemListener.onLostNearBy(content)
             }
         }
-        mMessageListener?.let { mML ->
-            this.let {
-                Nearby.getMessagesClient(activity).subscribe(mML)
-            }
+        mMessageListener?.let{
+            Nearby.getMessagesClient(activity).subscribe(it)
         }
     }
 

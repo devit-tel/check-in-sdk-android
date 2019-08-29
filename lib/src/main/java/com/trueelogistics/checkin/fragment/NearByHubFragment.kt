@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.nearby.Nearby
-import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.adapter.NearByAdapter
@@ -23,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
 class NearByHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = NearByAdapter(this)
-    private var mMessageListener: MessageListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,6 +94,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         adapter.items.remove(value)
         adapter.notifyItemRemoved(removeIndex)
         if (adapter.itemCount == 0) {
+            NearByFindingFragment.showView = true
             activity?.supportFragmentManager?.popBackStack()
         }
     }
@@ -117,22 +115,4 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         })
     }
 
-
-    override fun onStart() {
-        super.onStart()
-        mMessageListener?.let { mML ->
-            activity?.let {
-                Nearby.getMessagesClient(it).subscribe(mML)
-            }
-        }
-    }
-
-    override fun onStop() {
-        mMessageListener?.let { mML ->
-            activity?.let {
-                Nearby.getMessagesClient(it).unsubscribe(mML)
-            }
-        }
-        super.onStop()
-    }
 }
