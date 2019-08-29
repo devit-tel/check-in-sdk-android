@@ -10,8 +10,10 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.NearByFindingFragment
 
 class NearByActivity : AppCompatActivity() {
+    companion object {
+        private var mMessageListener: MessageListener? = null
+    }
 
-    private var mMessageListener: MessageListener? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_by)
@@ -33,26 +35,21 @@ class NearByActivity : AppCompatActivity() {
                 val content = message?.content?.toString(
                     Charsets.UTF_8
                 )
-                 itemListener.onLostNearBy(content)
+                itemListener.onLostNearBy(content)
             }
         }
-        mMessageListener?.let{
+        mMessageListener?.let {
             Nearby.getMessagesClient(activity).subscribe(it)
         }
+
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 2) {
-            finish()
-        } else
-            super.onBackPressed()
-    }
-
-    override fun onStop() {
-        mMessageListener?.let { mML ->
-            Nearby.getMessagesClient(this).unsubscribe(mML)
+        mMessageListener?.let { ml ->
+            Nearby.getMessagesClient(this).unsubscribe(ml)
+            NearByFindingFragment.showView = true
         }
-        super.onStop()
+        finish()
     }
 
     interface NearByCallback {

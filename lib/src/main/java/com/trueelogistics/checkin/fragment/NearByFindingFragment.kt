@@ -13,7 +13,8 @@ import kotlinx.android.synthetic.main.fragment_near_by_finding.*
 class NearByFindingFragment : Fragment() {
 
     private var nearbyAnimation: AnimationDrawable? = null
-    companion object{
+
+    companion object {
         var showView = true
     }
 
@@ -27,6 +28,7 @@ class NearByFindingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         back_page.setOnClickListener {
             activity?.onBackPressed()
         }

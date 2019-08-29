@@ -115,4 +115,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         })
     }
 
+    interface OnBackPressed {
+        fun onBackPressed()
+    }
 }
