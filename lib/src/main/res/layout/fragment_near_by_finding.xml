@@ -5,7 +5,7 @@
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context=".fragment.NearByFinding">
+		tools:context=".fragment.NearByFindingFragment">
 
 	<android.support.design.widget.CollapsingToolbarLayout
 			android:layout_height="?android:attr/actionBarSize"

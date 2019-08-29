@@ -13,7 +13,7 @@ import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
 import kotlinx.android.synthetic.main.fragment_near_by_finding.*
 
-class NearByFinding : Fragment() {
+class NearByFindingFragment : Fragment() {
 
     private var mMessageListener: MessageListener? = null
     private var nearbyAnimation: AnimationDrawable? = null
@@ -40,6 +40,7 @@ class NearByFinding : Fragment() {
                 finding_text.visibility = View.GONE
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.frag_nearby, NearByHubFragment.newInstance(content ?: ""))
+                    ?.addToBackStack(null)
                     ?.commit()
                 mMessageListener?.let { mML ->
                     activity?.let {

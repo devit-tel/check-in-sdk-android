@@ -1,15 +1,11 @@
 package com.trueelogistics.checkin.activity
 
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import com.google.android.gms.nearby.Nearby
-import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
-import com.trueelogistics.checkin.fragment.NearByHubFragment
-import kotlinx.android.synthetic.main.activity_near_by.*
+import com.trueelogistics.checkin.fragment.NearByFindingFragment
 
 class NearByActivity : AppCompatActivity() {
 
@@ -18,6 +14,8 @@ class NearByActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_by)
 
+        supportFragmentManager.beginTransaction().add(R.id.frag_nearby, NearByFindingFragment())
+            .commit()
 
     }
 

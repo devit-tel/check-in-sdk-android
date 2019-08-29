@@ -47,6 +47,10 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        back_page.setOnClickListener {
+            activity?.finish()
+        }
         fine_nearby.text = getString(R.string.nearby_fine)
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
@@ -109,9 +113,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         adapter.items.remove(value)
         adapter.notifyItemRemoved(removeIndex)
         if (adapter.itemCount == 0) {
-            fine_nearby.text = ""
-            this.onDestroy()
-            activity?.recreate()
+            activity?.supportFragmentManager?.popBackStack()
         }
     }
 
