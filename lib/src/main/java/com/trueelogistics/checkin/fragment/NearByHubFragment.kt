@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.gms.nearby.Nearby
-import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.adapter.NearByAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
@@ -24,18 +24,6 @@ import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 class NearByHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = NearByAdapter(this)
     private var mMessageListener: MessageListener? = null
-
-    companion object {
-        const val HUB_ID = "HUB_ID"
-        fun newInstance(hubId: String): NearByHubFragment {
-            val fragment = NearByHubFragment()
-            val bundle = Bundle().apply {
-                putString(HUB_ID, hubId)
-            }
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,20 +42,16 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         fine_nearby.text = getString(R.string.nearby_fine)
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
-        mMessageListener = object : MessageListener() {
-            override fun onFound(message: Message?) {
-                val content = message?.content?.toString(
-                    Charsets.UTF_8
-                )
-                getHubNameFromService(content.toString(), true)
-            }
+        activity?.let {
+            NearByActivity().itemNearBy(it, object : NearByActivity.NearByCallback {
+                override fun onFoundNearBy(hubId: String?) {
+                    getHubNameFromService(hubId.toString(), true)
+                }
 
-            override fun onLost(message: Message?) {
-                val content = message?.content?.toString(
-                    Charsets.UTF_8
-                )
-                getHubNameFromService(content.toString(), false)
-            }
+                override fun onLostNearBy(hubId: String?) {
+                    getHubNameFromService(hubId.toString(), false)
+                }
+            })
         }
     }
 
@@ -132,7 +116,6 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
 
         })
     }
-
 
 
     override fun onStart() {
