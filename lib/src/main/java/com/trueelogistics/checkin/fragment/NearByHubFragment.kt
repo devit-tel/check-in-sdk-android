@@ -131,6 +131,8 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         })
     }
 
+
+
     override fun onStart() {
         super.onStart()
         mMessageListener?.let { mML ->
