@@ -114,8 +114,10 @@ class ScanQrFragment : Fragment() {
         //start dialog and stop camera
         if (isScan) {
             isScan = false
-            val loadingDialog = ProgressDialog.show(context, "Checking Qr code", "please wait...", true, false)
-            val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
+            val loadingDialog = ProgressDialog.show(context, "Checking Qr code"
+                , "please wait...", true, false)
+            val retrofit = RetrofitGenerater().build(true)
+                .create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             var fusedLocationClient: FusedLocationProviderClient
             var latitude: Double
@@ -133,8 +135,8 @@ class ScanQrFragment : Fragment() {
                                 latitude = location.latitude
                                 longitude = location.longitude
                                 val call =
-                                    retrofit?.getData(type, result, null, latitude.toString(), longitude.toString())
-                                call?.enqueue(object : Callback<ScanRootModel> {
+                                    retrofit.getData(type, result, null, latitude.toString(), longitude.toString())
+                                call.enqueue(object : Callback<ScanRootModel> {
                                     val intent = Intent(activity, CheckInTEL::class.java)
                                     override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
                                         //stop dialog and start camera

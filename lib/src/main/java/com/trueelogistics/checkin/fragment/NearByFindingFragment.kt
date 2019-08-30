@@ -1,5 +1,7 @@
 package com.trueelogistics.checkin.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.NearByActivity
+import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_near_by_finding.*
 
 class NearByFindingFragment : Fragment() {
@@ -30,7 +33,14 @@ class NearByFindingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.onBackPressed()
+            activity?.let{
+                val intent = Intent(it, CheckInTEL::class.java)
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.RESULT_CANCELED, intent
+                )
+                it.onBackPressed()
+            }
         }
         nearByAnimation()
 

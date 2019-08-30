@@ -1,5 +1,7 @@
 package com.trueelogistics.checkin.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +12,7 @@ import android.widget.Toast
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.adapter.NearByAdapter
+import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
@@ -34,7 +37,14 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.finish()
+            activity?.let{
+                val intent = Intent(it, CheckInTEL::class.java)
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.RESULT_CANCELED, intent
+                )
+                it.onBackPressed()
+            }
         }
         fine_nearby.text = getString(R.string.nearby_fine)
         nearbyRecycle.adapter = adapter
@@ -104,7 +114,15 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?) {
-                nearByDialog.typeFromLastCheckIn = type
+                val newType = when(type){
+                    CheckInTELType.CheckOut.value -> {
+                        CheckInTELType.CheckIn.value
+                    }
+                    else -> {
+                        CheckInTELType.CheckBetween.value
+                    }
+                }
+                nearByDialog.typeFromLastCheckIn = newType
                 nearByDialog.show(activity?.supportFragmentManager, "show")
             }
 
@@ -113,9 +131,5 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
             }
 
         })
-    }
-
-    interface OnBackPressed {
-        fun onBackPressed()
     }
 }

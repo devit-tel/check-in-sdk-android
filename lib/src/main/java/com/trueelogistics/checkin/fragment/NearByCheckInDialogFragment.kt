@@ -59,6 +59,7 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
             selectedType(typeCheckIn)
         }
         confirm_nearBy.setOnClickListener {
+            NearByFindingFragment.showView= true
             checkLocation(typeCheckIn, item?.hubId ?: " HubID is null ")
         }
         cancel_nearBy.setOnClickListener {
@@ -70,7 +71,7 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
 
     private fun fixTypeView(type: String) {
         when (type) {
-            CheckInTELType.CheckOut.value -> {
+            CheckInTELType.CheckIn.value -> {
                 checkin_view.visibility = View.VISIBLE
                 between_view.visibility = View.GONE
                 checkout_view.visibility = View.GONE
