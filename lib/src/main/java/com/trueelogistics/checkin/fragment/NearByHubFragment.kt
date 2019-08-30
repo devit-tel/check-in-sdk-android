@@ -82,6 +82,16 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                     activity, " name of Hub onFailure : $message "
                     , Toast.LENGTH_LONG
                 ).show()
+                val intent = Intent(activity, CheckInTEL::class.java)
+                intent.putExtras(
+                    Bundle().apply {
+                        putString("error"," get nameHub onFailure : $message ")
+                    }
+                )
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.BIND_NOT_FOREGROUND, intent
+                )
             }
 
         })
@@ -127,7 +137,16 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
             }
 
             override fun onFailure(message: String?) {
-                Toast.makeText(view?.context, " Error $message ", Toast.LENGTH_LONG).show()
+                val intent = Intent(activity, CheckInTEL::class.java)
+                intent.putExtras(
+                    Bundle().apply {
+                        putString("error"," getLastCheck.onFail : $message ")
+                    }
+                )
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.BIND_NOT_FOREGROUND, intent
+                )
             }
 
         })
