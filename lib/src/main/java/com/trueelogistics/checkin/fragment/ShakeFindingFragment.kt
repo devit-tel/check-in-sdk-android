@@ -1,0 +1,50 @@
+package com.trueelogistics.checkin.fragment
+
+import android.app.Activity
+import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.handler.CheckInTEL
+import kotlinx.android.synthetic.main.fragment_shake_finding.*
+
+class ShakeFindingFragment : Fragment() {
+
+    private var shakeAnimation: AnimationDrawable? = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_shake_finding, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        back_page.setOnClickListener {
+            activity?.let{
+                val intent = Intent(it, CheckInTEL::class.java)
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.RESULT_CANCELED, intent
+                )
+                it.onBackPressed()
+            }
+        }
+        nearByAnimation()
+
+
+    }
+
+
+    private fun nearByAnimation() {
+        loading_hub_shake.setBackgroundResource(R.drawable.nearby_finding)
+        shakeAnimation = loading_hub_shake.background as AnimationDrawable
+        shakeAnimation?.start()
+    }
+}

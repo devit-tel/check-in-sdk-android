@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
+import com.github.tbouron.shakedetector.library.ShakeDetector
 import com.google.gson.Gson
 import com.trueelogistics.checkin.activity.MainScanQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
@@ -254,8 +255,13 @@ class CheckInTEL {
 
     fun openShake(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
-        val intent = Intent(activity, ShakeActivity::class.java)
-        activity.startActivity(intent)
+        ShakeDetector.start()
+        ShakeDetector.create(activity) {
+            val intent = Intent(activity, ShakeActivity::class.java)
+            activity.startActivity(intent)
+        }
+        ShakeDetector.destroy()
+
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
