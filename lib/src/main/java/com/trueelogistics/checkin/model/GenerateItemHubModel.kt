@@ -1,6 +1,6 @@
 package com.trueelogistics.checkin.model
 
-data class NearByHubModel(
+data class GenerateItemHubModel(
     var hubId : String ?= "",
     var hubName : String ?= ""
 )

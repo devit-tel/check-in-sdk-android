@@ -1,6 +1,8 @@
 package com.trueelogistics.checkin.activity
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -10,11 +12,13 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.fragment.ShakeFindingFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.model.HubInDataModel
 
 class ShakeActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,57 +30,71 @@ class ShakeActivity : AppCompatActivity() {
             .permissions(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
-                onShakeDetect()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_shake , ShakeFindingFragment()).commit()
             }.onDenied {
-
+                onBackPressed()
+                val intent = Intent(this, CheckInTEL::class.java)
+                intent.putExtras(
+                    Bundle().apply {
+                        putString("error"," Permission of Location Denied !!")
+                    }
+                )
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    1750,
+                    Activity.BIND_NOT_FOREGROUND, intent
+                )
             }.ask()
 
     }
 
-    private fun onShakeDetect() {
+    fun itemShake( activity: Activity ,shakeListener: ShakeCallback ) {
+        //order to getLocation
         val fusedLocationClient: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
+            LocationServices.getFusedLocationProviderClient(activity)
+        fusedLocationClient.let {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener(activity) { location: Location? ->
+                    CheckInTEL.checkInTEL?.hubGenerater(
+                        object : ArrayListGenericCallback<HubInDataModel> {
+                            override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
+                                dataModel?.forEach {
+                                    val hubLocation = Location(LocationManager.GPS_PROVIDER)
+                                    hubLocation.latitude = it.latitude ?: 0.0
+                                    hubLocation.longitude = it.longitude ?: 0.0
+                                    val distance: Float? = location?.distanceTo(hubLocation)
+                                    if (distance != null) {
+                                        if (distance < 500)
+                                            shakeListener.onFound(it._id, it.locationName)
 
-            }
-    }
-
-    private fun checkLocation( shakeListner: ShakeCallback ) {
-        val fusedLocationClient: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                CheckInTEL.checkInTEL?.hubGenerater(
-                    object : ArrayListGenericCallback<HubInDataModel> {
-                        override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
-                            dataModel?.forEach {
-                                val hubLocation = Location(LocationManager.GPS_PROVIDER)
-                                hubLocation.latitude = it.latitude ?: 0.0
-                                hubLocation.longitude = it.longitude ?: 0.0
-                                val distance: Float? = location?.distanceTo(hubLocation)
-                                if (distance != null) {
-                                    if (distance < 500)
-                                        shakeListner.onFound(it._id, it.locationName)
-
+                                    }
                                 }
                             }
-                        }
 
-                        override fun onFailure(message: String?) {
+                            override fun onFailure(message: String?) {
+                                val intent = Intent(activity, CheckInTEL::class.java)
+                                intent.putExtras(
+                                    Bundle().apply {
+                                        putString("error", " get nameHub onFailure : $message ")
+                                    }
+                                )
+                                CheckInTEL.checkInTEL?.onActivityResult(
+                                    1750,
+                                    Activity.BIND_NOT_FOREGROUND, intent
+                                )
+                            }
 
-                        }
-
-                    })
-                location?.let {
-
+                        })
                 }
-            }
+        }
+    }
 
+    override fun onBackPressed() {
+        ShakeFindingFragment.showView = true
+        finish()
     }
 
     interface ShakeCallback {
-        fun onFound(hubId: String? = "", hubName: String? = "")
-        fun onLost(hubId: String? = "", hubName: String? = "")
+        fun onFound(hubId: String? = null, hubName: String? = null )
     }
 }

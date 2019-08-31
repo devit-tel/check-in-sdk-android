@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
-import com.github.tbouron.shakedetector.library.ShakeDetector
 import com.google.gson.Gson
 import com.trueelogistics.checkin.activity.MainScanQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
@@ -115,16 +114,25 @@ class CheckInTEL {
 
     fun qrGenerate(
         qrCodeCreateBy: String, locationId: String, latitude: String,
-        longitude: String, listener: GenerateQrCallback ) {
+        longitude: String, listener: GenerateQrCallback
+    ) {
         val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
         val call =
-            retrofit?.getData(qrCodeCreateBy, locationId, latitude, longitude) // "LeaderNo4","5d01d704136e06003c23024f"
+            retrofit?.getData(
+                qrCodeCreateBy,
+                locationId,
+                latitude,
+                longitude
+            ) // "LeaderNo4","5d01d704136e06003c23024f"
         call?.enqueue(object : Callback<GenQrRootModel> {
             override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
                 listener.onFailure(t.message)
             }
 
-            override fun onResponse(call: Call<GenQrRootModel>, response: Response<GenQrRootModel>) {
+            override fun onResponse(
+                call: Call<GenQrRootModel>,
+                response: Response<GenQrRootModel>
+            ) {
                 if (response.code() == 200) {
                     val root: GenQrRootModel? = response.body()
                     if (root?.status == "OK") {
@@ -151,7 +159,10 @@ class CheckInTEL {
                 typeCallback.onFailure(t.message)
             }
 
-            override fun onResponse(call: Call<HistoryTodayModel>, response: Response<HistoryTodayModel>) {
+            override fun onResponse(
+                call: Call<HistoryTodayModel>,
+                response: Response<HistoryTodayModel>
+            ) {
                 if (response.code() == 200) {
                     val logModel: HistoryTodayModel? = response.body()
                     if (logModel?.data?.size ?: 0 > 0) {
@@ -179,7 +190,10 @@ class CheckInTEL {
                 arrayListGenericCallback.onFailure(t.message)
             }
 
-            override fun onResponse(call: Call<HistoryTodayModel>, response: Response<HistoryTodayModel>) {
+            override fun onResponse(
+                call: Call<HistoryTodayModel>,
+                response: Response<HistoryTodayModel>
+            ) {
                 when {
                     response.code() == 200 -> {
                         val logModel: HistoryTodayModel? = response.body()
@@ -210,7 +224,10 @@ class CheckInTEL {
                 arrayListGenericCallback.onFailure(t.message)
             }
 
-            override fun onResponse(call: Call<HistoryRootModel>, response: Response<HistoryRootModel>) {
+            override fun onResponse(
+                call: Call<HistoryRootModel>,
+                response: Response<HistoryRootModel>
+            ) {
                 when {
                     response.code() == 200 -> {
                         val logModel: HistoryRootModel? = response.body()
@@ -238,7 +255,10 @@ class CheckInTEL {
                 putBoolean("disable", onDisableBack)
             }
         )
-        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL) // confirm you not from other activity
+        activity.startActivityForResult(
+            intent,
+            KEY_REQUEST_CODE_CHECK_IN_TEL
+        ) // confirm you not from other activity
     }
 
     fun openMainScanQrCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
@@ -255,12 +275,8 @@ class CheckInTEL {
 
     fun openShake(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
-        ShakeDetector.start()
-        ShakeDetector.create(activity) {
-            val intent = Intent(activity, ShakeActivity::class.java)
-            activity.startActivity(intent)
-        }
-        ShakeDetector.destroy()
+        val intent = Intent(activity, ShakeActivity::class.java)
+        activity.startActivity(intent)
 
     }
 

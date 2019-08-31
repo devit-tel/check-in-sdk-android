@@ -1,8 +1,7 @@
 package com.trueelogistics.checkin.interfaces
 
-import android.view.View
-import com.trueelogistics.checkin.model.NearByHubModel
+import com.trueelogistics.checkin.model.GenerateItemHubModel
 
 interface OnClickItemCallback {
-    fun onClickItem( dataModel: NearByHubModel)
+    fun onClickItem( dataModel: GenerateItemHubModel)
 }

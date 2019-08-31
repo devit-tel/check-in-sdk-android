@@ -9,12 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_shake_finding.*
 
 class ShakeFindingFragment : Fragment() {
 
     private var shakeAnimation: AnimationDrawable? = null
+    companion object{
+        var showView = true
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,8 +41,20 @@ class ShakeFindingFragment : Fragment() {
             }
         }
         nearByAnimation()
+        activity?.let {
+            ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
+                override fun onFound(hubId: String?, hubName: String?) {
+                    if (showView) {
+                        it.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.frag_nearby, ShakeHubFragment())
+                            ?.addToBackStack(null)
+                            ?.commit()
+                        showView = false
+                    }
+                }
 
-
+            })
+        }
     }
 
 

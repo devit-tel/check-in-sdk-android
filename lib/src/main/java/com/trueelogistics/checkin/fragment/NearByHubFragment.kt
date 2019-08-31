@@ -11,19 +11,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.NearByActivity
-import com.trueelogistics.checkin.adapter.NearByAdapter
+import com.trueelogistics.checkin.adapter.GenerateHubAdapter
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.HubInDataModel
-import com.trueelogistics.checkin.model.NearByHubModel
+import com.trueelogistics.checkin.model.GenerateItemHubModel
 import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
 
 class NearByHubFragment : Fragment(), OnClickItemCallback {
-    private var adapter = NearByAdapter(this)
+    private var adapter = GenerateHubAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +46,6 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 it.onBackPressed()
             }
         }
-        fine_nearby.text = getString(R.string.nearby_fine)
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
         activity?.let {
@@ -98,14 +97,14 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
     }
 
     fun insertItem(hubId: String, hubName: String) {
-        val value = NearByHubModel(hubId, hubName)
+        val value = GenerateItemHubModel(hubId, hubName)
         val insertIndex = adapter.items.size
         adapter.items.add(value)
         adapter.notifyItemInserted(insertIndex)
     }
 
     private fun removeItem(hubId: String, hubName: String) {
-        val value = NearByHubModel(hubId, hubName)
+        val value = GenerateItemHubModel(hubId, hubName)
         var removeIndex = adapter.items.size
         for (i in 0 until adapter.itemCount - 1) {
             if (adapter.items[i].hubId == hubId)
@@ -119,8 +118,8 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         }
     }
 
-    override fun onClickItem(dataModel: NearByHubModel) {
-        val nearByDialog = NearByCheckInDialogFragment()
+    override fun onClickItem(dataModel: GenerateItemHubModel) {
+        val nearByDialog = SelectHubCheckInDialogFragment()
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?) {

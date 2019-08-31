@@ -1,5 +1,6 @@
 package com.trueelogistics.example
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -33,30 +34,33 @@ class ShakeFragment : Fragment() {
         }
         shake_phone_fine.setOnClickListener {
             activity?.let {
-                CheckInTEL.checkInTEL?.openShake(it, object : CheckInTELCallBack {
-                    override fun onCheckInSuccess(result: String) {
-
-                    }
-
-                    override fun onCheckInFailure(message: String) {
-                    }
-
-                    override fun onCancel() {
-
-                    }
-
-                })
+                shakeFunction(it)
             }
         }
         activity?.let { fragActivity ->
-
             ShakeDetector.start()
             ShakeDetector.create(fragActivity) {
-
+                shakeFunction( fragActivity )
             }
             ShakeDetector.destroy()
         }
     }
 
+    fun shakeFunction( activity : Activity){
+        CheckInTEL.checkInTEL?.openShake(activity, object : CheckInTELCallBack {
+            override fun onCheckInSuccess(result: String) {
+                Toast.makeText(context, " Shake.onSuccess : $result", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCheckInFailure(message: String) {
+                Toast.makeText(context, " Shake.onFail : $message ", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCancel() {
+                Toast.makeText(context, " Shake.onCancel ", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
 
 }

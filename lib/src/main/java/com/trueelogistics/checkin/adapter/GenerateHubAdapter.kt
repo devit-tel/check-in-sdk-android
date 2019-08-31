@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
-import com.trueelogistics.checkin.model.NearByHubModel
+import com.trueelogistics.checkin.model.GenerateItemHubModel
 import kotlinx.android.synthetic.main.item_nearby.view.*
 
-class NearByAdapter( val onClickItem: OnClickItemCallback )  : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var items: ArrayList<NearByHubModel> = arrayListOf()
+class GenerateHubAdapter(val onClickItem: OnClickItemCallback )  : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var items: ArrayList<GenerateItemHubModel> = arrayListOf()
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_nearby, viewGroup, false)
         return ViewHolder(view)

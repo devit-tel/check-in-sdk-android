@@ -16,7 +16,7 @@ import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.model.NearByHubModel
+import com.trueelogistics.checkin.model.GenerateItemHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -26,8 +26,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
-    var item : NearByHubModel ?= null
+class SelectHubCheckInDialogFragment : BottomSheetDialogFragment(){
+    var item : GenerateItemHubModel ?= null
     var typeFromLastCheckIn : String ?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,11 +58,12 @@ class NearByCheckInDialogFragment : BottomSheetDialogFragment(){
             typeCheckIn = CheckInTELType.CheckOut.value
             selectedType(typeCheckIn)
         }
-        confirm_nearBy.setOnClickListener {
+        confirm_checkin.setOnClickListener {
             NearByFindingFragment.showView= true
+            ShakeFindingFragment.showView = true
             checkLocation(typeCheckIn, item?.hubId ?: " HubID is null ")
         }
-        cancel_nearBy.setOnClickListener {
+        cancel_checkin.setOnClickListener {
             dialog.cancel()
         }
 
