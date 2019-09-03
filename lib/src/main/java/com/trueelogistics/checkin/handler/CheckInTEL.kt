@@ -47,6 +47,8 @@ class CheckInTEL {
     }
 
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
+    private var page = 0
+    private var limit = 10
     private fun setEnv(env: EnvironmentType) {
         environmentType = if (env == EnvironmentType.Production)
             EnvironmentType.Production.value
@@ -168,11 +170,11 @@ class CheckInTEL {
                     if (logModel?.data?.size ?: 0 > 0) {
                         val lastDatePick = logModel?.data?.last()
                         if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
-                            typeCallback.onResponse(lastDatePick.eventType ?: "")
+                            typeCallback.onResponse(lastDatePick.eventType ?: "" , true)
                         else
-                            typeCallback.onResponse(CheckInTELType.CheckOut.value)
+                            typeCallback.onResponse(CheckInTELType.CheckOut.value , false)
                     } else {
-                        typeCallback.onResponse(CheckInTELType.CheckOut.value)
+                        typeCallback.onResponse(CheckInTELType.CheckOut.value , false)
                     }
                 } else {
                     typeCallback.onFailure(response.message())
@@ -216,10 +218,15 @@ class CheckInTEL {
     }
 
     fun getAllHistory(arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>) {
-
+        page++
         val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
-        val call = retrofit?.getData(Gson().toJson(SearchCitizenModel(userId.toString())))
-        call?.enqueue(object : Callback<HistoryRootModel> {
+        val call = retrofit.getData(
+            Gson().toJson(SearchCitizenModel(userId.toString())),
+            page,
+            limit
+
+        )
+        call.enqueue(object : Callback<HistoryRootModel> {
             override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
                 arrayListGenericCallback.onFailure(t.message)
             }
@@ -245,8 +252,7 @@ class CheckInTEL {
 
     fun openScanQRCode(
         activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
-        checkInTELCallBack: CheckInTELCallBack
-    ) {
+        checkInTELCallBack: CheckInTELCallBack ) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         intent.putExtras(

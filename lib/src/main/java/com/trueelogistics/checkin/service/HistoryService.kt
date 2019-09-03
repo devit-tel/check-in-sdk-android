@@ -8,6 +8,8 @@ import retrofit2.http.Query
 interface HistoryService{
     @GET("/check-in/v1/history")
     fun getData(
-        @Query("search")search  : String ?= null
+        @Query("search")search  : String ,
+        @Query("page") page  : Int ,
+        @Query("limit")limit  : Int
     ) : Call<HistoryRootModel>
 }

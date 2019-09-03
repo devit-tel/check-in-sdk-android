@@ -122,7 +122,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         val nearByDialog = SelectHubCheckInDialogFragment()
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String?) {
+            override fun onResponse(type: String? ,today : Boolean) {
                 val newType = when(type){
                     CheckInTELType.CheckOut.value -> {
                         CheckInTELType.CheckIn.value

@@ -8,10 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.github.tbouron.shakedetector.library.ShakeDetector
-import com.trueelogistics.checkin.fragment.ManualCheckInFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
-import com.trueelogistics.checkin.interfaces.TypeCallback
 import kotlinx.android.synthetic.main.app_bar_main_menu.toolbar
 import kotlinx.android.synthetic.main.fragment_shake.*
 
