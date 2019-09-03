@@ -125,7 +125,6 @@ class ScanQrFragment : Fragment() {
                     checkOutBtn.visibility = View.GONE
                     pic_checkin.visibility = View.VISIBLE
                     layoutRecycle.visibility = View.GONE
-
                 } else {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false

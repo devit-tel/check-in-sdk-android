@@ -7,8 +7,10 @@
 		android:orientation="horizontal">
 	<RadioButton 
 			android:id="@+id/stockBt"
+			android:shadowColor="@color/purple"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
+			android:buttonTint="@color/purple"
 			android:text="@string/stockStation"
 			android:textColor="@color/black"
 			android:textSize="18sp"/>
