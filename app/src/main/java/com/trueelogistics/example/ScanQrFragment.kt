@@ -105,7 +105,7 @@ class ScanQrFragment : Fragment() {
     var checkFirstInDay = true
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String?) {
+            override fun onResponse(type: String? , today : Boolean) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     checkFirstInDay = false
                     checkInBtn.visibility = View.GONE
