@@ -31,6 +31,7 @@ import java.util.*
 
 class CheckInTEL {
     companion object {
+        
         const val KEY_REQUEST_CODE_CHECK_IN_TEL = 1750
         var environmentType: String? = null
         var checkInTEL: CheckInTEL? = null
