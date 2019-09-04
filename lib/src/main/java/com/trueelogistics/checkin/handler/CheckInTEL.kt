@@ -30,7 +30,7 @@ import java.security.MessageDigest
 import java.util.*
 
 class CheckInTEL {
-    companion object {  // another class can call this value  by statis
+    companion object {
         const val KEY_REQUEST_CODE_CHECK_IN_TEL = 1750
         var environmentType: String? = null
         var checkInTEL: CheckInTEL? = null
@@ -46,7 +46,7 @@ class CheckInTEL {
         }
     }
 
-    private var checkInTELCallBack: CheckInTELCallBack? = null // ???
+    private var checkInTELCallBack: CheckInTELCallBack? = null
     private var page = 0
     private var limit = 10
     private fun setEnv(env: EnvironmentType) {
