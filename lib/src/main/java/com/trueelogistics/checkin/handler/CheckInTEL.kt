@@ -166,15 +166,53 @@ class CheckInTEL {
                 response: Response<HistoryTodayModel>
             ) {
                 if (response.code() == 200) {
-                    val logModel: HistoryTodayModel? = response.body()
-                    if (logModel?.data?.size ?: 0 > 0) {
-                        val lastDatePick = logModel?.data?.last()
-                        if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd"))
-                            typeCallback.onResponse(lastDatePick.eventType ?: "" , true)
-                        else
-                            typeCallback.onResponse(CheckInTELType.CheckOut.value , false)
+                    response.body()?.let {
+                        getCheckOverTime(it, typeCallback)
+                    } ?: run {
+                        typeCallback.onFailure("Error data history")
+                    }
+                } else {
+                    typeCallback.onFailure(response.message())
+                    response.errorBody()
+                }
+            }
+        })
+    }
+
+    fun getCheckOverTime(historyTodayModel: HistoryTodayModel, typeCallback: TypeCallback) {
+        val retrofit = RetrofitGenerater().build(true).create(HistoryTodayService::class.java)
+        val call = retrofit.getCheckInOverTime()
+        call.enqueue(object : Callback<CheckOverTimeModel> {
+            override fun onFailure(call: Call<CheckOverTimeModel>, t: Throwable) {
+                typeCallback.onFailure(t.message)
+            }
+
+            override fun onResponse(
+                call: Call<CheckOverTimeModel>,
+                response: Response<CheckOverTimeModel>
+            ) {
+                if (response.code() == 200) {
+                    val checkOverTimeModel: CheckOverTimeModel? = response.body()
+                    if (historyTodayModel?.data?.size > 0) {
+                        val lastDatePick = historyTodayModel?.data?.last()
+                        if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")) {
+                            typeCallback.onResponse(lastDatePick.eventType ?: "", true)
+                        } else {
+                            if (checkOverTimeModel?.data == true) {
+                                typeCallback.onResponse(CheckInTELType.CheckOut.value, false)
+                            } else {
+                                typeCallback.onResponse(
+                                    CheckInTELType.CheckOutOverTime.value,
+                                    false
+                                )
+                            }
+                        }
                     } else {
-                        typeCallback.onResponse(CheckInTELType.CheckOut.value , false)
+                        if (checkOverTimeModel?.data == true) {
+                            typeCallback.onResponse(CheckInTELType.CheckOut.value, false)
+                        } else {
+                            typeCallback.onResponse(CheckInTELType.CheckOutOverTime.value, false)
+                        }
                     }
                 } else {
                     typeCallback.onFailure(response.message())
@@ -252,7 +290,8 @@ class CheckInTEL {
 
     fun openScanQRCode(
         activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
-        checkInTELCallBack: CheckInTELCallBack ) {
+        checkInTELCallBack: CheckInTELCallBack
+    ) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         intent.putExtras(
