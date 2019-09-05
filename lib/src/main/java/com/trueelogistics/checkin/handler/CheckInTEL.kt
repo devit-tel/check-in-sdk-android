@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
-import com.google.gson.Gson
 import com.trueelogistics.checkin.activity.MainScanQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.activity.ScanQrActivity
@@ -217,41 +216,7 @@ class CheckInTEL {
         })
     }
 
-    fun getAllHistory(arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>) {
-        page++
-        val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
-        val call = retrofit.getData(
-            Gson().toJson(SearchCitizenModel(userId.toString())),
-            page,
-            limit
-
-        )
-        call.enqueue(object : Callback<HistoryRootModel> {
-            override fun onFailure(call: Call<HistoryRootModel>, t: Throwable) {
-                arrayListGenericCallback.onFailure(t.message)
-            }
-
-            override fun onResponse(
-                call: Call<HistoryRootModel>,
-                response: Response<HistoryRootModel>
-            ) {
-                when {
-                    response.code() == 200 -> {
-                        val logModel: HistoryRootModel? = response.body()
-                        if (logModel != null) {
-                            arrayListGenericCallback.onResponse(logModel.data.data)
-                        }
-                    }
-                    else -> {
-                        response.errorBody()
-                    }
-                }
-            }
-        })
-    }
-
-    fun openScanQRCode(
-        activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
+    fun openScanQRCode( activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
         checkInTELCallBack: CheckInTELCallBack ) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
