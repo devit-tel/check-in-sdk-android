@@ -46,8 +46,6 @@ class CheckInTEL {
     }
 
     private var checkInTELCallBack: CheckInTELCallBack? = null // ???
-    private var page = 0
-    private var limit = 10
     private fun setEnv(env: EnvironmentType) {
         environmentType = if (env == EnvironmentType.Production)
             EnvironmentType.Production.value
