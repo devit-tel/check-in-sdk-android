@@ -50,6 +50,7 @@ class CheckInTEL {
     private var checkInTELCallBack: CheckInTELCallBack? = null
     private var page = 0
     private var limit = 10
+
     private fun setEnv(env: EnvironmentType) {
         environmentType = if (env == EnvironmentType.Production)
             EnvironmentType.Production.value
@@ -289,10 +290,8 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode(
-        activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
-        checkInTELCallBack: CheckInTELCallBack
-    ) {
+    fun openScanQRCode( activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
+        checkInTELCallBack: CheckInTELCallBack ) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         intent.putExtras(
