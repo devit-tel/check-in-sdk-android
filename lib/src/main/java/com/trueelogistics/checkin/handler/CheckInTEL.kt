@@ -98,8 +98,8 @@ class CheckInTEL {
 
     fun hubGenerater(listener: ArrayListGenericCallback<HubInDataModel>) {
         val retrofit = RetrofitGenerater().build().create(HubService::class.java)
-        val call = retrofit?.getData()
-        call?.enqueue(object : Callback<HubRootModel> {
+        val call = retrofit.getData()
+        call.enqueue(object : Callback<HubRootModel> {
             override fun onFailure(call: Call<HubRootModel>, t: Throwable) {
                 listener.onFailure(t.toString())
             }
@@ -122,13 +122,13 @@ class CheckInTEL {
     ) {
         val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
         val call =
-            retrofit?.getData(
+            retrofit.getData(
                 qrCodeCreateBy,
                 locationId,
                 latitude,
                 longitude
             ) // "LeaderNo4","5d01d704136e06003c23024f"
-        call?.enqueue(object : Callback<GenQrRootModel> {
+        call.enqueue(object : Callback<GenQrRootModel> {
             override fun onFailure(call: Call<GenQrRootModel>, t: Throwable) {
                 listener.onFailure(t.message)
             }
@@ -195,9 +195,9 @@ class CheckInTEL {
             ) {
                 if (response.code() == 200) {
                     val checkOverTimeModel: CheckOverTimeModel? = response.body()
-                    if (historyTodayModel?.data?.size > 0) {
-                        val lastDatePick = historyTodayModel?.data?.last()
-                        if (lastDatePick?.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")) {
+                    if (historyTodayModel.data.size > 0) {
+                        val lastDatePick = historyTodayModel.data.last()
+                        if (lastDatePick.updatedAt?.formatISO("yyyy-MM-dd") == Date().format("yyyy-MM-dd")) {
                             typeCallback.onResponse(lastDatePick.eventType ?: "", true)
                         } else {
                             if (checkOverTimeModel?.data == true) {

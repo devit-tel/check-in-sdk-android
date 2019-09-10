@@ -46,7 +46,7 @@ class ShakeFindingFragment : Fragment() {
                 override fun onFound(hubId: String?, hubName: String?) {
                     if (showView) {
                         it.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.frag_nearby, ShakeHubFragment())
+                            ?.replace(R.id.fragment_shake, ShakeHubFragment())
                             ?.addToBackStack(null)
                             ?.commit()
                         showView = false

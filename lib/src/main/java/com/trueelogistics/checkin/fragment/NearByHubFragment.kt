@@ -119,7 +119,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val nearByDialog = SelectHubCheckInDialogFragment()
+        val nearByDialog = CheckInDialogFragment()
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String? ,today : Boolean) {
@@ -131,6 +131,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                         CheckInTELType.CheckBetween.value
                     }
                 }
+                nearByDialog.checkinType = "NEARBY"
                 nearByDialog.typeFromLastCheckIn = newType
                 nearByDialog.show(activity?.supportFragmentManager, "show")
             }

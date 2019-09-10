@@ -221,7 +221,6 @@ class ScanQrFragment : Fragment() {
                                     1750,
                                     Activity.BIND_NOT_FOREGROUND, intent
                                 )
-                                activity.recreate()
                             }
                         }
                 }

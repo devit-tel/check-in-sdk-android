@@ -46,7 +46,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
         activity?.let {
-            ShakeActivity().itemShake( it , object : ShakeActivity.ShakeCallback {
+            ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
                 override fun onFound(hubId: String?, hubName: String?) {
                     if (hubId != null && hubName !== null)
                         insertItem(hubId, hubName)
@@ -77,11 +77,11 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val shakeDialog = SelectHubCheckInDialogFragment()
+        val shakeDialog = CheckInDialogFragment()
         shakeDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String? , today : Boolean) {
-                val newType = when(type){
+            override fun onResponse(type: String?, today: Boolean) {
+                val newType = when (type) {
                     CheckInTELType.CheckOut.value -> {
                         CheckInTELType.CheckIn.value
                     }
@@ -89,6 +89,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                         CheckInTELType.CheckBetween.value
                     }
                 }
+                shakeDialog.checkinType = "SHAKE"
                 shakeDialog.typeFromLastCheckIn = newType
                 shakeDialog.show(activity?.supportFragmentManager, "show")
             }
@@ -97,7 +98,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error"," getLastCheck.onFail : $message ")
+                        putString("error", " getLastCheck.onFail : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

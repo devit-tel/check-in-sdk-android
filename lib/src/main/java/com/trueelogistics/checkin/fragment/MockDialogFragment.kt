@@ -20,9 +20,10 @@ class MockDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        onPause()
         scanAgain.setOnClickListener {
             dialog.cancel()
+            ScanQrFragment.isScan = true
             onResume()
         }
     }

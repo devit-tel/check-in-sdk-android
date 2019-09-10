@@ -13,6 +13,7 @@ interface ScanQrService{
         @Field("type") type:String,
         @Field("qrcodeUniqueKey")qrcodeUniqueKey:String ?= null,
         @Field("locationId")locationId:String ?= null,
+        @Field("checkinType")checkinType:String ?= null,
         @Field("latitude")latitude:String ?= null,
         @Field("longitude")longitude:String ?= null
     ): Call<ScanRootModel>

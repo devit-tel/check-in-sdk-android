@@ -114,7 +114,7 @@ class ScanQrFragment : Fragment() {
                     pic_checkin.visibility = View.GONE
                     layoutRecycle.visibility = View.VISIBLE
                 } else if (type == CheckInTELType.CheckOut.value) {
-                    if (checkFirstInDay) {
+                    if (checkFirstInDay && !today) {
                         activity?.let {
                             openScanQr(it, CheckInTELType.CheckIn.value)
                         }
@@ -123,8 +123,15 @@ class ScanQrFragment : Fragment() {
                     checkInBtn.visibility = View.VISIBLE
                     checkBetBtn.visibility = View.GONE
                     checkOutBtn.visibility = View.GONE
-                    pic_checkin.visibility = View.VISIBLE
-                    layoutRecycle.visibility = View.GONE
+                    if (today){
+                        pic_checkin.visibility = View.GONE
+                        layoutRecycle.visibility = View.VISIBLE
+                    }
+                    else{
+                        pic_checkin.visibility = View.VISIBLE
+                        layoutRecycle.visibility = View.GONE
+                    }
+
                 } else {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false
