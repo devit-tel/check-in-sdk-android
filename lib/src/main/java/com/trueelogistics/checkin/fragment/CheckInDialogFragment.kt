@@ -135,7 +135,7 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
             ) {
                 fusedLocationClient.lastLocation
                     ?.addOnSuccessListener { location: Location? ->
-                        if (location?.isFromMockProvider == true) {
+                        if (location?.isFromMockProvider == false) {
                             val latitude = location.latitude
                             val longitude = location.longitude
                             val call = retrofit.getData(
