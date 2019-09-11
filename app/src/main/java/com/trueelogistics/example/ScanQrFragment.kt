@@ -106,14 +106,16 @@ class ScanQrFragment : Fragment() {
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String? , today : Boolean) {
-                if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
+                if (type == CheckInTELType.CheckIn.value
+                    || type == CheckInTELType.CheckBetween.value) {
                     checkFirstInDay = false
                     checkInBtn.visibility = View.GONE
                     checkBetBtn.visibility = View.VISIBLE
                     checkOutBtn.visibility = View.VISIBLE
                     pic_checkin.visibility = View.GONE
                     layoutRecycle.visibility = View.VISIBLE
-                } else if (type == CheckInTELType.CheckOut.value) {
+                } else if (type == CheckInTELType.CheckOut.value
+                    || type == CheckInTELType.CheckOutOverTime.value) {
                     if (checkFirstInDay && !today) {
                         activity?.let {
                             openScanQr(it, CheckInTELType.CheckIn.value)

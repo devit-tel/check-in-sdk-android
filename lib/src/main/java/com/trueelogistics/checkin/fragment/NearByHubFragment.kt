@@ -17,8 +17,8 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.OnClickItemCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
-import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.GenerateItemHubModel
+import com.trueelogistics.checkin.model.HubInDataModel
 import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
 
@@ -37,14 +37,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.let{
-                val intent = Intent(it, CheckInTEL::class.java)
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.RESULT_CANCELED, intent
-                )
-                it.onBackPressed()
-            }
+            activity?.onBackPressed()
         }
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
@@ -84,7 +77,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error"," get nameHub onFailure : $message ")
+                        putString("error", " get nameHub onFailure : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
@@ -122,9 +115,9 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
         val nearByDialog = CheckInDialogFragment()
         nearByDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String? ,today : Boolean) {
-                val newType = when(type){
-                    CheckInTELType.CheckOut.value -> {
+            override fun onResponse(type: String?, today: Boolean) {
+                val newType = when (type) {
+                    CheckInTELType.CheckOut.value, CheckInTELType.CheckOutOverTime.value -> {
                         CheckInTELType.CheckIn.value
                     }
                     else -> {
@@ -140,7 +133,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error"," getLastCheck.onFail : $message ")
+                        putString("error", " getLastCheck.onFail : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

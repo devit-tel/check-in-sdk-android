@@ -34,14 +34,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.let {
-                val intent = Intent(it, CheckInTEL::class.java)
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.RESULT_CANCELED, intent
-                )
-                it.onBackPressed()
-            }
+            activity?.onBackPressed()
         }
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
@@ -82,7 +75,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
                 val newType = when (type) {
-                    CheckInTELType.CheckOut.value -> {
+                    CheckInTELType.CheckOut.value ,CheckInTELType.CheckOutOverTime.value -> {
                         CheckInTELType.CheckIn.value
                     }
                     else -> {

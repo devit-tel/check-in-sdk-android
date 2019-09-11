@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         CheckInTEL.userId = "2222222222222"
         nav_view.setNavigationItemSelectedListener(this)
 
-
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_main, ScanQrFragment())
             .commit()
