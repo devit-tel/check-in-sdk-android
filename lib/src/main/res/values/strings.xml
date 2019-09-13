@@ -31,7 +31,7 @@
 	<string name="generate_qrcode">generate QR Code</string>
 	<string name="littleMinute">น.</string>
 	<string name="qrUsed">QR code นี้ถูกใช้ไปแล้ว</string>
-	<string name="canNotCheckIn">ไม่สามารถ Check in ได้</string>
+	<string name="notWorking">ไม่สามารถใช้งานได้</string>
 	<string name="scanAgain">แสกนอีกครั้ง</string>
 	<string name="historyCheckIn">ประวัติการเข้างาน</string>
 	<string name="dateFormate">DD-MMMM-YYYY</string>

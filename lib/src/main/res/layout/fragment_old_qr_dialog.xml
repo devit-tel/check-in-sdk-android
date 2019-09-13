@@ -18,7 +18,7 @@
 			android:layout_height="wrap_content"
 			android:textSize="20sp"
 			android:textColor="@color/black"
-			android:text="@string/canNotCheckIn"/>
+			android:text="@string/notWorking"/>
 	<TextView
 			android:id="@+id/fail_text"
 			android:gravity="center"

@@ -6,7 +6,6 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
-import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,9 +16,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CheckInTEL.userId = "2222222222222"
+        CheckInTEL.userId = "1111111111114"
         nav_view.setNavigationItemSelectedListener(this)
-
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_main, ScanQrFragment())

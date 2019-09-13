@@ -34,19 +34,12 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.let {
-                val intent = Intent(it, CheckInTEL::class.java)
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.RESULT_CANCELED, intent
-                )
-                it.onBackPressed()
-            }
+            activity?.onBackPressed()
         }
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
         activity?.let {
-            ShakeActivity().itemShake( it , object : ShakeActivity.ShakeCallback {
+            ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
                 override fun onFound(hubId: String?, hubName: String?) {
                     if (hubId != null && hubName !== null)
                         insertItem(hubId, hubName)
@@ -77,18 +70,19 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val shakeDialog = SelectHubCheckInDialogFragment()
+        val shakeDialog = CheckInDialogFragment()
         shakeDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String? , today : Boolean) {
-                val newType = when(type){
-                    CheckInTELType.CheckOut.value -> {
+            override fun onResponse(type: String?, today: Boolean) {
+                val newType = when (type) {
+                    CheckInTELType.CheckOut.value ,CheckInTELType.CheckOutOverTime.value -> {
                         CheckInTELType.CheckIn.value
                     }
                     else -> {
                         CheckInTELType.CheckBetween.value
                     }
                 }
+                shakeDialog.checkinType = "SHAKE"
                 shakeDialog.typeFromLastCheckIn = newType
                 shakeDialog.show(activity?.supportFragmentManager, "show")
             }
@@ -97,7 +91,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error"," getLastCheck.onFail : $message ")
+                        putString("error", " getLastCheck.onFail : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

@@ -167,7 +167,8 @@ class ScanQrFragment : Fragment() {
                                                         )
                                                     }
                                                 )
-                                                SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
+                                                SuccessDialogFragment.newInstance(type)
+                                                    .show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
                                                 intent.putExtras(

@@ -30,24 +30,23 @@ class ShakeFragment : Fragment() {
         toolbar.setOnClickListener {
             mainActivity.actionToolbar()
         }
-        shake_phone_fine.setOnClickListener {
-            activity?.let {
-                shakeFunction(it)
-            }
-        }
+        ShakeDetector.start()
         activity?.let { fragActivity ->
-            ShakeDetector.start()
             ShakeDetector.create(fragActivity) {
                 shakeFunction( fragActivity )
+                ShakeDetector.stop()
             }
-            ShakeDetector.destroy()
+            shake_phone_fine.setOnClickListener {
+                shakeFunction(fragActivity)
+            }
         }
     }
 
-    fun shakeFunction( activity : Activity){
+    private fun shakeFunction(activity : Activity){
         CheckInTEL.checkInTEL?.openShake(activity, object : CheckInTELCallBack {
             override fun onCheckInSuccess(result: String) {
                 Toast.makeText(context, " Shake.onSuccess : $result", Toast.LENGTH_SHORT).show()
+                ShakeDetector.start()
             }
 
             override fun onCheckInFailure(message: String) {
@@ -56,6 +55,7 @@ class ShakeFragment : Fragment() {
 
             override fun onCancel() {
                 Toast.makeText(context, " Shake.onCancel ", Toast.LENGTH_SHORT).show()
+                ShakeDetector.start()
             }
 
         })

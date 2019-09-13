@@ -83,7 +83,7 @@ class ManualCheckInFragment : Fragment() {
                             val latitude = location.latitude
                             val longitude = location.longitude
                             val call = retrofit.getData(
-                                type, "", hub_id
+                                type, "", hub_id ,"MANUAL"
                                 , latitude.toString(), longitude.toString()
                             )
                             call.enqueue(object : Callback<ScanRootModel> {

@@ -32,25 +32,22 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val hub = view.hubCheckIn
             val time = view.timeCheckIn
             val typeScan = view.type_scan
-            val eventType = items[position].eventType ?: "old"
-            when (eventType) {
-                CheckInTELType.CheckIn.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
-                CheckInTELType.CheckBetween.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_between)
-                CheckInTELType.CheckOut.value -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
-                else -> view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
-            }
-            type.text = when (eventType) {
-                CheckInTELType.CheckIn.value -> {
-                    view.context.getString(R.string.full_checkin_text)
+            when (val eventType = items[position].eventType ?: "old") {
+                CheckInTELType.CheckIn.value ->{
+                    view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
+                    type.text = view.context.getString(R.string.full_checkin_text)
                 }
                 CheckInTELType.CheckBetween.value -> {
-                    view.context.getString(R.string.full_check_between_text)
+                    view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_between)
+                    type.text = view.context.getString(R.string.full_check_between_text)
                 }
                 CheckInTELType.CheckOut.value -> {
-                    view.context.getString(R.string.full_checkout_text)
+                    view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_out)
+                    type.text = view.context.getString(R.string.full_checkout_text)
                 }
                 else -> {
-                    eventType
+                    view.iconTypeCheckIn.setImageResource(R.drawable.ic_checkin_gray)
+                    type.text = eventType
                 }
             }
             hub.text = items[position].locationName

@@ -20,21 +20,22 @@ import com.trueelogistics.checkin.model.GenerateItemHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
-import kotlinx.android.synthetic.main.fragment_nearby_checkin_dialog.*
+import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SelectHubCheckInDialogFragment : BottomSheetDialogFragment(){
+class CheckInDialogFragment : BottomSheetDialogFragment(){
     var item : GenerateItemHubModel ?= null
     var typeFromLastCheckIn : String ?= null
+    var checkinType : String ?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(
-            R.layout.fragment_nearby_checkin_dialog,
+            R.layout.fragment_checkin_dialog,
             container,
             false
         )
@@ -138,7 +139,7 @@ class SelectHubCheckInDialogFragment : BottomSheetDialogFragment(){
                             val latitude = location.latitude
                             val longitude = location.longitude
                             val call = retrofit.getData(
-                                type, "", hub_id
+                                type, "", hub_id, checkinType
                                 , latitude.toString(), longitude.toString()
                             )
                             call.enqueue(object : Callback<ScanRootModel> {

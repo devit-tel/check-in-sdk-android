@@ -31,14 +31,7 @@ class ShakeFindingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         back_page.setOnClickListener {
-            activity?.let{
-                val intent = Intent(it, CheckInTEL::class.java)
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.RESULT_CANCELED, intent
-                )
-                it.onBackPressed()
-            }
+            activity?.onBackPressed()
         }
         nearByAnimation()
         activity?.let {
@@ -46,7 +39,7 @@ class ShakeFindingFragment : Fragment() {
                 override fun onFound(hubId: String?, hubName: String?) {
                     if (showView) {
                         it.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.frag_nearby, ShakeHubFragment())
+                            ?.replace(R.id.fragment_shake, ShakeHubFragment())
                             ?.addToBackStack(null)
                             ?.commit()
                         showView = false
