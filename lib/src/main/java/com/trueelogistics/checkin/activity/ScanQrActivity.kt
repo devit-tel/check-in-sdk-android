@@ -10,8 +10,11 @@ import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
+
 
 class ScanQrActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_qr)
@@ -28,18 +31,17 @@ class ScanQrActivity : AppCompatActivity() {
                 ).commit()
             }.onDenied {
                 Toast.makeText(
-                    this, "Permission Denied",
+                    this,
+                    "Permission Denied",
                     Toast.LENGTH_LONG
                 ).show()
-                val intent = Intent(this, CheckInTEL::class.java)
-                intent.putExtras(
-                    Bundle().apply {
-                        putString("error", "Permission Denied!!")
-                    }
-                )
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.BIND_NOT_FOREGROUND, intent
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent(this, CheckInTEL::class.java).putExtras(
+                        Bundle().apply {
+                            this.putString(KEY_ERROR_CHECK_IN_TEL, "Permission Denied!!")
+                        }
+                    )
                 )
                 finish()
             }
@@ -51,13 +53,8 @@ class ScanQrActivity : AppCompatActivity() {
         val disable = intent.getBooleanExtra("disable", false)
         if (f != ScanQrFragment::class.java || !disable) {
             super.onBackPressed()
-        }
-        else if (ScanQrFragment.cancelFirstCheckIn){
-            val intent = Intent(this, CheckInTEL::class.java)
-            CheckInTEL.checkInTEL?.onActivityResult(
-                1750,
-                Activity.RESULT_CANCELED, intent
-            )
+        } else if (ScanQrFragment.cancelFirstCheckIn) {
+            setResult(Activity.RESULT_CANCELED)
             finish()
         }
     }

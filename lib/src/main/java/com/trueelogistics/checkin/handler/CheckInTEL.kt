@@ -31,8 +31,10 @@ import java.util.*
 
 class CheckInTEL {
     companion object {
-        
+
         const val KEY_REQUEST_CODE_CHECK_IN_TEL = 1750
+        const val KEY_RESULT_CHECK_IN_TEL = "KEY_RESULT_CHECK_IN_TEL"
+        const val KEY_ERROR_CHECK_IN_TEL = "KEY_ERROR_CHECK_IN_TEL"
         var environmentType: String? = null
         var checkInTEL: CheckInTEL? = null
         var packageName: String? = null
@@ -290,8 +292,12 @@ class CheckInTEL {
         })
     }
 
-    fun openScanQRCode( activity: Activity, typeCheckIn: String?, onDisableBack: Boolean,
-        checkInTELCallBack: CheckInTELCallBack ) {
+    fun openScanQRCode(
+        activity: Activity,
+        typeCheckIn: String?,
+        onDisableBack: Boolean,
+        checkInTELCallBack: CheckInTELCallBack
+    ) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ScanQrActivity::class.java)
         intent.putExtras(
@@ -303,7 +309,7 @@ class CheckInTEL {
         activity.startActivityForResult(
             intent,
             KEY_REQUEST_CODE_CHECK_IN_TEL
-        ) // confirm you not from other activity
+        )
     }
 
     fun openMainScanQrCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
@@ -328,14 +334,31 @@ class CheckInTEL {
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == KEY_REQUEST_CODE_CHECK_IN_TEL) {
             when (resultCode) {
-                Activity.RESULT_OK ->
-                    checkInTELCallBack?.onCheckInSuccess(data?.getStringExtra("result") ?: "")
-                Activity.RESULT_CANCELED ->
+                Activity.RESULT_OK -> {
+                    if (data != null) {
+                        if (!data.getStringExtra(KEY_RESULT_CHECK_IN_TEL).isNullOrEmpty()) {
+                            checkInTELCallBack?.onCheckInSuccess(
+                                data.getStringExtra(
+                                    KEY_RESULT_CHECK_IN_TEL
+                                )
+                            )
+                        } else if (!data.getStringExtra(KEY_ERROR_CHECK_IN_TEL).isNullOrEmpty()) {
+                            checkInTELCallBack?.onCheckInFailure(
+                                data.getStringExtra(
+                                    KEY_ERROR_CHECK_IN_TEL
+                                )
+                            )
+                        } else {
+                            checkInTELCallBack?.onCheckInFailure("Error not data empty")
+                        }
+                    } else {
+                        checkInTELCallBack?.onCheckInFailure("Error not data empty")
+                    }
+                }
+                else -> {
                     checkInTELCallBack?.onCancel()
-                else ->
-                    checkInTELCallBack?.onCheckInFailure(data?.getStringExtra("error") ?: "")
+                }
             }
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package com.trueelogistics.checkin.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -7,17 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.extensions.format
+import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.util.*
 
 class SuccessDialogFragment : DialogFragment() {
-    companion object{
+    companion object {
         var TYPE_STATUS = "@string/checkin_text"
-        fun newInstance(type : String) : SuccessDialogFragment{
+        fun newInstance(type: String): SuccessDialogFragment {
             val fragment = SuccessDialogFragment()
 
-            val bundle = Bundle().apply{
-                putString(TYPE_STATUS,type)
+            val bundle = Bundle().apply {
+                putString(TYPE_STATUS, type)
             }
             fragment.arguments = bundle
             return fragment
@@ -41,7 +44,15 @@ class SuccessDialogFragment : DialogFragment() {
         confirm.setOnClickListener {
             onResume()
             ScanQrFragment.isScan = true
-            activity?.finish() //activity where call this fragment will finish
+            activity?.setResult(
+                Activity.RESULT_OK,
+                Intent(activity, CheckInTEL::class.java).putExtras(
+                    Bundle().apply {
+                        this.putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL, "success")
+                    }
+                )
+            )
+            activity?.finish()
         }
     }
 
@@ -52,9 +63,9 @@ class SuccessDialogFragment : DialogFragment() {
         dialog.window?.setLayout(width, height)
     }
 
-    private fun translateType(type: String) : String{
+    private fun translateType(type: String): String {
         var typeTH = ""
-        when(type){
+        when (type) {
             "CHECK_IN" -> typeTH = getString(R.string.full_checkin_text)
             "CHECK_IN_BETWEEN" -> typeTH = getString(R.string.full_check_between_text)
             "CHECK_OUT" -> typeTH = getString(R.string.full_checkout_text)

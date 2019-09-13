@@ -1,7 +1,6 @@
 package com.trueelogistics.checkin.fragment
 
 import android.Manifest
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +11,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.zxing.ResultPoint
@@ -20,6 +20,8 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
+import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_RESULT_CHECK_IN_TEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -41,11 +43,11 @@ class ScanQrFragment : Fragment() {
         var cancelFirstCheckIn = false
         const val TYPE_KEY = "TYPE_KEY"
         const val CHECK_DISABLE = "CHECK_DISABLE"
-        fun newInstance(type: String, checkDisble: Boolean): ScanQrFragment {
+        fun newInstance(type: String, checkDisable: Boolean): ScanQrFragment {
             val fragment = ScanQrFragment()
             val bundle = Bundle().apply {
                 putString("TYPE_KEY", type)
-                putBoolean("CHECK_DISABLE", checkDisble)
+                putBoolean("CHECK_DISABLE", checkDisable)
             }
             fragment.arguments = bundle
             return fragment
@@ -53,7 +55,7 @@ class ScanQrFragment : Fragment() {
 
     }
 
-    fun showBackPressed(){
+    fun showBackPressed() {
         cancelFirstCheckIn = true
         this.back_page.visibility = View.VISIBLE
     }
@@ -72,7 +74,7 @@ class ScanQrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setDisableBackPage()
-        type_check_in.text = when ( arguments?.getString(TYPE_KEY).toString() ) {
+        type_check_in.text = when (arguments?.getString(TYPE_KEY).toString()) {
             CheckInTELType.CheckIn.value -> {
                 getString(R.string.full_checkin_text)
             }
@@ -89,11 +91,6 @@ class ScanQrFragment : Fragment() {
         scanner_fragment?.setStatusText("")
         scanner_fragment?.decodeContinuous(callback)
         back_page.setOnClickListener {
-            val intent = Intent(activity, CheckInTEL::class.java)
-            CheckInTEL.checkInTEL?.onActivityResult(
-                1750,
-                Activity.RESULT_CANCELED, intent
-            )
             activity?.onBackPressed()
         }
         self_checkin.setOnClickListener {
@@ -114,8 +111,10 @@ class ScanQrFragment : Fragment() {
         //start dialog and stop camera
         if (isScan) {
             isScan = false
-            val loadingDialog = ProgressDialog.show(context, "Checking Qr code"
-                , "please wait...", true, false)
+            val loadingDialog = ProgressDialog.show(
+                context, "Checking Qr code"
+                , "please wait...", true, false
+            )
             val retrofit = RetrofitGenerater().build(true)
                 .create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
@@ -135,72 +134,61 @@ class ScanQrFragment : Fragment() {
                                 latitude = location.latitude
                                 longitude = location.longitude
                                 val call =
-                                    retrofit.getData(type, result, null, latitude.toString(), longitude.toString())
+                                    retrofit.getData(
+                                        type,
+                                        result,
+                                        null,
+                                        latitude.toString(),
+                                        longitude.toString()
+                                    )
                                 call.enqueue(object : Callback<ScanRootModel> {
                                     val intent = Intent(activity, CheckInTEL::class.java)
-                                    override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
-                                        //stop dialog and start camera
+                                    override fun onFailure(
+                                        call: Call<ScanRootModel>,
+                                        t: Throwable
+                                    ) {
                                         loadingDialog?.dismiss()
                                         isScan = true
-
-                                        intent.putExtras(
-                                            Bundle().apply {
-                                                putString("error", t.message)
-                                            }
-                                        )
-                                        CheckInTEL.checkInTEL?.onActivityResult(
-                                            1750,
-                                            Activity.BIND_NOT_FOREGROUND, intent
-                                        )
                                     }
 
                                     override fun onResponse(
                                         call: Call<ScanRootModel>,
                                         response: Response<ScanRootModel>
                                     ) {
-                                        //stop dialog
                                         loadingDialog?.dismiss()
-
                                         when {
                                             response.code() == 200 -> {
                                                 onPause()
                                                 intent.putExtras(
                                                     Bundle().apply {
-                                                        putString("result", "success")
+                                                        putString(
+                                                            KEY_RESULT_CHECK_IN_TEL,
+                                                            "success"
+                                                        )
                                                     }
                                                 )
-                                                SuccessDialogFragment.newInstance(type)
-                                                    .show(activity.supportFragmentManager, "show")
-                                                CheckInTEL.checkInTEL?.onActivityResult(
-                                                    1750,
-                                                    Activity.RESULT_OK, intent
-                                                )
-
+                                                SuccessDialogFragment.newInstance(type).show(activity.supportFragmentManager, "show")
                                             }
                                             response.code() == 400 -> {
                                                 intent.putExtras(
                                                     Bundle().apply {
-                                                        putString("error", "This QRCode Used")
+                                                        putString(
+                                                            KEY_ERROR_CHECK_IN_TEL,
+                                                            "This QRCode Used"
+                                                        )
                                                     }
                                                 )
-                                                OldQrDialogFragment().show(activity.supportFragmentManager, "show")
-                                                CheckInTEL.checkInTEL?.onActivityResult(
-                                                    1750,
-                                                    Activity.BIND_NOT_FOREGROUND, intent
+                                                OldQrDialogFragment().show(
+                                                    activity.supportFragmentManager,
+                                                    "show"
                                                 )
-//                                                OldQrDialogFragment().fail_text.text = getString(R.string.qrUsed)
-
                                             }
                                             else -> {
-                                                intent.putExtras(
-                                                    Bundle().apply {
-                                                        putString("error", "response.code() = "+response.code())
-                                                    }
-                                                )
-                                                CheckInTEL.checkInTEL?.onActivityResult(
-                                                    1750,
-                                                    Activity.BIND_NOT_FOREGROUND, intent
-                                                )
+                                                Toast.makeText(
+                                                    context,
+                                                    "ไม่สามารถสแกนเพื่อระบุตำแหน่งได้",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
                                                 showBackPressed()
                                                 isScan = true
                                             }
@@ -211,31 +199,12 @@ class ScanQrFragment : Fragment() {
                             } else {
                                 loadingDialog?.dismiss()
                                 MockDialogFragment().show(activity.supportFragmentManager, "show")
-                                val intent = Intent(activity, CheckInTEL::class.java)
-                                intent.putExtras(
-                                    Bundle().apply {
-                                        putString("error", "GPS is Mock !!")
-                                    }
-                                )
-                                CheckInTEL.checkInTEL?.onActivityResult(
-                                    1750,
-                                    Activity.BIND_NOT_FOREGROUND, intent
-                                )
-                                activity.recreate()
                             }
                         }
-                }
-                else{
-                    val intent = Intent(activity, CheckInTEL::class.java)
-                    intent.putExtras(
-                        Bundle().apply {
-                            putString("error", "Permission GPS Denied!!")
-                        }
-                    )
-                    CheckInTEL.checkInTEL?.onActivityResult(
-                        1750,
-                        Activity.BIND_NOT_FOREGROUND, intent
-                    )
+                } else {
+                    Toast.makeText(activity, "กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง", Toast.LENGTH_LONG)
+                        .show()
+                    activity.finishAffinity()
                 }
             }
         }
