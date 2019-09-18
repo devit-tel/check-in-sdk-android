@@ -23,15 +23,19 @@
 				android:value="AIzaSyA71Q-6Vd7G5qw0kbneCJKu5IvLztHHWzQ"/>
 		<activity
 				android:name=".activity.MainScanQrActivity"
+				android:launchMode="singleTask"
 				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activity.NearByActivity"
+				android:launchMode="singleTask"
 				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activity.ScanQrActivity"
+				android:launchMode="singleTask"
 				android:screenOrientation="portrait"/>
 		<activity
 				android:name=".activity.ShakeActivity"
+				android:launchMode="singleTask"
 				android:screenOrientation="portrait"/>
 	</application>
 

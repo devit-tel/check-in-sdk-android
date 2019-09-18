@@ -68,8 +68,10 @@ class ManualCheckInFragment : Fragment() {
     }
 
     private fun checkLocation(type: String, hub_id: String) {
-        val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
-        val loadingDialog = ProgressDialog.show(context, "$type Processing", "please wait...")
+        val retrofit = RetrofitGenerater().build(true)
+            .create(ScanQrService::class.java)
+        val loadingDialog = ProgressDialog
+            .show(context, "$type Processing", "please wait...")
         activity?.let { activity ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(

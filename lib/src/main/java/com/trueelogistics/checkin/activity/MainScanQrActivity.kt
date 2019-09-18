@@ -33,13 +33,13 @@ class MainScanQrActivity : AppCompatActivity() {
             onBackPressed()
         }
         checkInBtn.setOnClickListener {
-            openScanQr( CheckInTELType.CheckIn.value)
+            openScanQr(CheckInTELType.CheckIn.value)
         }
         checkBetBtn.setOnClickListener {
-            openScanQr( CheckInTELType.CheckBetween.value)
+            openScanQr(CheckInTELType.CheckBetween.value)
         }
         checkOutBtn.setOnClickListener {
-            openScanQr( CheckInTELType.CheckOut.value)
+            openScanQr(CheckInTELType.CheckOut.value)
         }
 
     }
@@ -67,26 +67,27 @@ class MainScanQrActivity : AppCompatActivity() {
 
     }
 
-    private fun openScanQr( type: String) {
-        CheckInTEL.checkInTEL?.openScanQRCode(this, type ,false, object : CheckInTELCallBack {
-            override fun onCancel() {
+    private fun openScanQr(type: String) {
+        CheckInTEL.checkInTEL?.openScanQRCode(this, type, false,
+            object : CheckInTELCallBack {
+                override fun onCancel() {
 
-            }
+                }
 
-            override fun onCheckInFailure(message: String) {
+                override fun onCheckInFailure(message: String) {
 
-            }
+                }
 
-            override fun onCheckInSuccess(result: String) {
+                override fun onCheckInSuccess(result: String) {
 
-            }
-        })
+                }
+            })
     }
 
     var checkFirstInDay = true
     private fun checkButton() {
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String? , today : Boolean) {
+            override fun onResponse(type: String?, today: Boolean) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     checkFirstInDay = false
                     checkInBtn.visibility = View.GONE
@@ -94,35 +95,74 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkOutBtn.visibility = View.VISIBLE
                     pic_checkin.visibility = View.GONE
                     layoutRecycle.visibility = View.VISIBLE
-                } else if (type == CheckInTELType.CheckOut.value) {
-                    if (checkFirstInDay) {
-                        openScanQr( CheckInTELType.CheckIn.value)
+                } else if (type == CheckInTELType.CheckOut.value || type == CheckInTELType.CheckOutOverTime.value) {
+                    if (checkFirstInDay && !today && type != CheckInTELType.CheckOutOverTime.value) {
+                        openScanQr(CheckInTELType.CheckIn.value)
                         checkFirstInDay = false
                     }
                     checkInBtn.visibility = View.VISIBLE
                     checkBetBtn.visibility = View.GONE
                     checkOutBtn.visibility = View.GONE
-                    pic_checkin.visibility = View.VISIBLE
-                    layoutRecycle.visibility = View.GONE
+                    if (today) {
+                        pic_checkin.visibility = View.GONE
+                        layoutRecycle.visibility = View.VISIBLE
+                    } else {
+                        pic_checkin.visibility = View.VISIBLE
+                        layoutRecycle.visibility = View.GONE
+                    }
                 } else {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false
                     checkBetBtn.isEnabled = false
                     checkOutBtn.isEnabled = false
-                    checkInBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
-                    checkBetBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
-                    checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
+                    checkInBtn.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@MainScanQrActivity,
+                            R.color.gray
+                        )
+                    )
+                    checkBetBtn.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@MainScanQrActivity,
+                            R.color.gray
+                        )
+                    )
+                    checkOutBtn.setBackgroundColor(
+                        ContextCompat.getColor(
+                            this@MainScanQrActivity,
+                            R.color.gray
+                        )
+                    )
                 }
             }
 
             override fun onFailure(message: String?) {
-                Toast.makeText(this@MainScanQrActivity, " ScanQr.onCheckFail = $message ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainScanQrActivity,
+                    " ScanQr.onCheckFail = $message ",
+                    Toast.LENGTH_SHORT
+                ).show()
                 checkInBtn.isEnabled = false
                 checkBetBtn.isEnabled = false
                 checkOutBtn.isEnabled = false
-                checkInBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
-                checkBetBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
-                checkOutBtn.setBackgroundColor(ContextCompat.getColor(this@MainScanQrActivity, R.color.gray))
+                checkInBtn.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                    )
+                )
+                checkBetBtn.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                    )
+                )
+                checkOutBtn.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                    )
+                )
             }
         })
     }
