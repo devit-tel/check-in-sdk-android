@@ -99,6 +99,12 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkOutBtn.visibility = View.VISIBLE
                     pic_checkin.visibility = View.GONE
                     layoutRecycle.visibility = View.VISIBLE
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success")
+                        }
+                    )
                 } else if (type == CheckInTELType.CheckOut.value || type == CheckInTELType.CheckOutOverTime.value) {
                     if (checkFirstInDay && !today && type != CheckInTELType.CheckOutOverTime.value) {
                         openScanQr(CheckInTELType.CheckIn.value)
@@ -114,6 +120,12 @@ class MainScanQrActivity : AppCompatActivity() {
                         pic_checkin.visibility = View.VISIBLE
                         layoutRecycle.visibility = View.GONE
                     }
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success")
+                        }
+                    )
                 } else {
                     checkFirstInDay = false
                     checkInBtn.isEnabled = false
@@ -137,7 +149,17 @@ class MainScanQrActivity : AppCompatActivity() {
                             R.color.purple
                         )
                     )
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success")
+                        }
+                    )
                 }
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                    Activity.RESULT_OK, intent
+                )
             }
 
             override fun onFailure(message: String?) {
