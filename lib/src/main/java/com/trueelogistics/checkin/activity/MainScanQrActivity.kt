@@ -1,5 +1,7 @@
 package com.trueelogistics.checkin.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -75,7 +77,8 @@ class MainScanQrActivity : AppCompatActivity() {
                 }
 
                 override fun onCheckInFailure(message: String) {
-
+                    Toast.makeText(this@MainScanQrActivity,"openScan.onFail : $message"
+                    ,Toast.LENGTH_LONG).show()
                 }
 
                 override fun onCheckInSuccess(result: String) {
@@ -86,6 +89,7 @@ class MainScanQrActivity : AppCompatActivity() {
 
     var checkFirstInDay = true
     private fun checkButton() {
+        val intent = Intent(this,CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
@@ -118,19 +122,19 @@ class MainScanQrActivity : AppCompatActivity() {
                     checkInBtn.setBackgroundColor(
                         ContextCompat.getColor(
                             this@MainScanQrActivity,
-                            R.color.gray
+                            R.color.purple
                         )
                     )
                     checkBetBtn.setBackgroundColor(
                         ContextCompat.getColor(
                             this@MainScanQrActivity,
-                            R.color.gray
+                            R.color.purple
                         )
                     )
                     checkOutBtn.setBackgroundColor(
                         ContextCompat.getColor(
                             this@MainScanQrActivity,
-                            R.color.gray
+                            R.color.purple
                         )
                     )
                 }
@@ -162,6 +166,15 @@ class MainScanQrActivity : AppCompatActivity() {
                         this@MainScanQrActivity,
                         R.color.gray
                     )
+                )
+                intent.putExtras(
+                    Bundle().apply {
+                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                        , "getLastHistory.onFail : $message")
+                })
+                CheckInTEL.checkInTEL?.onActivityResult(
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                    Activity.RESULT_OK, intent
                 )
             }
         })

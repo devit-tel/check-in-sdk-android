@@ -306,28 +306,25 @@ class CheckInTEL {
                 putBoolean("disable", onDisableBack)
             }
         )
-        activity.startActivityForResult(
-            intent,
-            KEY_REQUEST_CODE_CHECK_IN_TEL
-        )
+        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL)
     }
 
     fun openMainScanQrCode(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, MainScanQrActivity::class.java)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL)
     }
 
     fun openNearBy(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, NearByActivity::class.java)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL)
     }
 
     fun openShake(activity: Activity, checkInTELCallBack: CheckInTELCallBack) {
         this.checkInTELCallBack = checkInTELCallBack
         val intent = Intent(activity, ShakeActivity::class.java)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL)
 
     }
 
@@ -349,10 +346,10 @@ class CheckInTEL {
                                 )
                             )
                         } else {
-                            checkInTELCallBack?.onCheckInFailure("Error not data empty")
+                            checkInTELCallBack?.onCheckInFailure("Return Data == ${data.data}")
                         }
                     } else {
-                        checkInTELCallBack?.onCheckInFailure("Error not data empty")
+                        checkInTELCallBack?.onCheckInFailure("Data is empty")
                     }
                 }
                 else -> {

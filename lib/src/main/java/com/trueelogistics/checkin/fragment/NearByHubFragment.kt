@@ -77,12 +77,13 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error", " get nameHub onFailure : $message ")
+                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " get nameHub onFailure : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.BIND_NOT_FOREGROUND, intent
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                    Activity.RESULT_OK, intent
                 )
             }
 
@@ -133,11 +134,12 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error", " getLastCheck.onFail : $message ")
+                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " getLastCheck.onFail : $message ")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                     Activity.BIND_NOT_FOREGROUND, intent
                 )
             }

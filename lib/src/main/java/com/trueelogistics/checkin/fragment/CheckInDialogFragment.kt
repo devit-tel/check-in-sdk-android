@@ -150,12 +150,13 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
 
                                     intent.putExtras(
                                         Bundle().apply {
-                                            putString("error", t.message)
+                                            putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                , t.message)
                                         }
                                     )
                                     CheckInTEL.checkInTEL?.onActivityResult(
-                                        1750,
-                                        Activity.BIND_NOT_FOREGROUND, intent
+                                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                                        Activity.RESULT_OK, intent
                                     )
                                     ScanQrFragment.cancelFirstCheckIn = true
 
@@ -168,11 +169,12 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                                         response.code() == 200 -> {
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("result", "success")
+                                                    putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                                        , "success")
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
-                                                1750,
+                                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                                                 Activity.RESULT_OK, intent
                                             )
                                             SuccessDialogFragment.newInstance(type)
@@ -182,12 +184,13 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                                             onPause()
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("error", getString(R.string.wrong_locationId))
+                                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        , getString(R.string.wrong_locationId))
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
-                                                1750,
-                                                Activity.BIND_NOT_FOREGROUND, intent
+                                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                                                Activity.RESULT_OK, intent
                                             )
                                             OldQrDialogFragment().fail_text.visibility = View.GONE
                                             OldQrDialogFragment().show(activity.supportFragmentManager, "show")
@@ -196,12 +199,13 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                                             ScanQrFragment.cancelFirstCheckIn = true
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString("error", "${response.code()} : ${response.message()}")
+                                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        , "${response.code()} : ${response.message()}")
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
-                                                1750,
-                                                Activity.BIND_NOT_FOREGROUND, intent
+                                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                                                Activity.RESULT_OK, intent
                                             )
                                         }
                                     }
@@ -213,12 +217,13 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                             val intent = Intent(activity, CheckInTEL::class.java)
                             intent.putExtras(
                                 Bundle().apply {
-                                    putString("error", "GPS is Mock !!")
+                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                        , "GPS is Mock !!")
                                 }
                             )
                             CheckInTEL.checkInTEL?.onActivityResult(
-                                1750,
-                                Activity.BIND_NOT_FOREGROUND, intent
+                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                                Activity.RESULT_OK, intent
                             )
                         }
                     }
@@ -226,12 +231,13 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error", "Permission GPS Denied!!")
+                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , "Permission GPS Denied!!")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.BIND_NOT_FOREGROUND, intent
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                    Activity.RESULT_OK, intent
                 )
             }
         }

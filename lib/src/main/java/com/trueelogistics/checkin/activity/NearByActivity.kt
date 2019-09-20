@@ -53,7 +53,7 @@ class NearByActivity : AppCompatActivity() {
         }
         val intent = Intent(this, CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.onActivityResult(
-            1750,
+            CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
             Activity.RESULT_CANCELED, intent
         )
         finish()

@@ -37,12 +37,13 @@ class ShakeActivity : AppCompatActivity() {
                 val intent = Intent(this, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString("error"," Permission of Location Denied !!")
+                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            ," Permission of Location Denied !!")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    1750,
-                    Activity.BIND_NOT_FOREGROUND, intent
+                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                    Activity.RESULT_OK, intent
                 )
             }.ask()
 
@@ -75,12 +76,13 @@ class ShakeActivity : AppCompatActivity() {
                                 val intent = Intent(activity, CheckInTEL::class.java)
                                 intent.putExtras(
                                     Bundle().apply {
-                                        putString("error", " get nameHub onFailure : $message ")
+                                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                            , " get nameHub onFailure : $message ")
                                     }
                                 )
                                 CheckInTEL.checkInTEL?.onActivityResult(
-                                    1750,
-                                    Activity.BIND_NOT_FOREGROUND, intent
+                                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                                    Activity.RESULT_OK, intent
                                 )
                             }
 
@@ -94,7 +96,7 @@ class ShakeActivity : AppCompatActivity() {
         finish()
         val intent = Intent(this, CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.onActivityResult(
-            1750,
+            CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
             Activity.RESULT_CANCELED, intent
         )
     }
