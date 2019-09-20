@@ -54,7 +54,10 @@ class ScanQrActivity : AppCompatActivity() {
         if (f != ScanQrFragment::class.java || !disable) {
             super.onBackPressed()
         } else if (ScanQrFragment.cancelFirstCheckIn) {
-            setResult(Activity.RESULT_CANCELED)
+            CheckInTEL.checkInTEL?.onActivityResult(
+                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                Activity.RESULT_CANCELED, Intent(this,CheckInTEL::class.java)
+            )
             finish()
         }
     }

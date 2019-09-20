@@ -51,10 +51,9 @@ class NearByActivity : AppCompatActivity() {
             Nearby.getMessagesClient(this).unsubscribe(ml)
             NearByFindingFragment.showView = true
         }
-        val intent = Intent(this, CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.onActivityResult(
             CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-            Activity.RESULT_CANCELED, intent
+            Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
         )
         finish()
     }

@@ -94,10 +94,9 @@ class ShakeActivity : AppCompatActivity() {
     override fun onBackPressed() {
         ShakeFindingFragment.showView = true
         finish()
-        val intent = Intent(this, CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.onActivityResult(
             CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-            Activity.RESULT_CANCELED, intent
+            Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
         )
     }
 
