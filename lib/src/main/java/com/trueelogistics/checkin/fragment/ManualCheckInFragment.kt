@@ -113,16 +113,6 @@ class ManualCheckInFragment : Fragment() {
                                     loadingDialog.dismiss()
                                     when {
                                         response.code() == 200 -> {
-                                            intent.putExtras(
-                                                Bundle().apply {
-                                                    putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                                        , "success")
-                                                }
-                                            )
-                                            CheckInTEL.checkInTEL?.onActivityResult(
-                                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                                                Activity.RESULT_OK, intent
-                                            )
                                             SuccessDialogFragment.newInstance(type)
                                                 .show( activity.supportFragmentManager, "show")
                                         }

@@ -21,7 +21,6 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
-import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_RESULT_CHECK_IN_TEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
@@ -147,6 +146,7 @@ class ScanQrFragment : Fragment() {
                                         call: Call<ScanRootModel>,
                                         t: Throwable
                                     ) {
+                                        showBackPressed()
                                         loadingDialog?.dismiss()
                                         isScan = true
                                     }
@@ -159,14 +159,6 @@ class ScanQrFragment : Fragment() {
                                         when {
                                             response.code() == 200 -> {
                                                 onPause()
-                                                intent.putExtras(
-                                                    Bundle().apply {
-                                                        putString(
-                                                            KEY_RESULT_CHECK_IN_TEL,
-                                                            "success"
-                                                        )
-                                                    }
-                                                )
                                                 SuccessDialogFragment.newInstance(type)
                                                     .show(activity.supportFragmentManager, "show")
                                             }

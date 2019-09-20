@@ -67,7 +67,6 @@ class ShakeActivity : AppCompatActivity() {
                                     if (distance != null) {
                                         if (distance < 500)
                                             shakeListener.onFound(it._id, it.locationName)
-
                                     }
                                 }
                             }
@@ -85,7 +84,6 @@ class ShakeActivity : AppCompatActivity() {
                                     Activity.RESULT_OK, intent
                                 )
                             }
-
                         })
                 }
         }

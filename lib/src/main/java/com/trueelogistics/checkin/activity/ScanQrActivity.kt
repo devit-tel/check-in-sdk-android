@@ -49,15 +49,15 @@ class ScanQrActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val f = this.supportFragmentManager.fragments[0].javaClass
+        val currentFrag = this.supportFragmentManager.fragments[0].javaClass
+        val scanQr = ScanQrFragment::class.java
         val disable = intent.getBooleanExtra("disable", false)
-        if (f != ScanQrFragment::class.java || !disable) {
+        if (currentFrag != scanQr ) {
             super.onBackPressed()
-        } else if (ScanQrFragment.cancelFirstCheckIn) {
+        } else if (ScanQrFragment.cancelFirstCheckIn || !disable) {
             CheckInTEL.checkInTEL?.onActivityResult(
-                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                Activity.RESULT_CANCELED, Intent(this,CheckInTEL::class.java)
-            )
+                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL
+                ,Activity.RESULT_CANCELED,Intent(this,CheckInTEL::class.java))
             finish()
         }
     }

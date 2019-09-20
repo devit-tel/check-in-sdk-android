@@ -44,13 +44,14 @@ class SuccessDialogFragment : DialogFragment() {
         confirm.setOnClickListener {
             onResume()
             ScanQrFragment.isScan = true
-            activity?.setResult(
-                Activity.RESULT_OK,
-                Intent(activity, CheckInTEL::class.java).putExtras(
+            val intent = Intent(activity, CheckInTEL::class.java).putExtras(
                     Bundle().apply {
                         this.putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL, "success")
                     }
                 )
+            CheckInTEL.checkInTEL?.onActivityResult(
+                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                Activity.RESULT_OK, intent
             )
             activity?.finish()
         }
