@@ -3,8 +3,6 @@ package com.trueelogistics.checkin.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,8 +75,10 @@ class NearByHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback 
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " get nameHub onFailure : $message ")
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " get nameHub onFailure : $message "
+                        )
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
@@ -134,8 +134,10 @@ class NearByHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback 
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " getLastCheck.onFail : $message ")
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " getLastCheck.onFail : $message "
+                        )
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

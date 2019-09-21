@@ -7,11 +7,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
@@ -86,7 +85,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
                             val latitude = location.latitude
                             val longitude = location.longitude
                             val call = retrofit.getData(
-                                type, "", hub_id ,"MANUAL"
+                                type, "", hub_id, "MANUAL"
                                 , latitude.toString(), longitude.toString()
                             )
                             call.enqueue(object : Callback<ScanRootModel> {
@@ -97,7 +96,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
 
                                     intent.putExtras(
                                         Bundle().apply {
-                                            putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL, t.message)
+                                            putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL, t.message)
                                         }
                                     )
                                     CheckInTEL.checkInTEL?.onActivityResult(
@@ -108,34 +107,45 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
 
                                 }
 
-                                override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
+                                override fun onResponse(
+                                    call: Call<ScanRootModel>,
+                                    response: Response<ScanRootModel>
+                                ) {
                                     //stop dialog
                                     loadingDialog.dismiss()
                                     when {
                                         response.code() == 200 -> {
                                             SuccessDialogFragment.newInstance(type)
-                                                .show( activity.supportFragmentManager, "show")
+                                                .show(activity.supportFragmentManager, "show")
                                         }
                                         response.code() == 400 -> {
                                             onPause()
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                        , getString(R.string.wrong_locationId))
+                                                    putString(
+                                                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        , getString(R.string.wrong_locationId)
+                                                    )
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
                                                 CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                                                 Activity.RESULT_OK, intent
                                             )
-                                            OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+                                            OldQrDialogFragment().show(
+                                                activity.supportFragmentManager,
+                                                "show"
+                                            )
                                         }
                                         else -> {
                                             ScanQrFragment.cancelFirstCheckIn = true
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                        , "${response.code()} : ${response.message()}")
+                                                    putString(
+                                                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        ,
+                                                        "${response.code()} : ${response.message()}"
+                                                    )
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -152,7 +162,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
                             val intent = Intent(activity, CheckInTEL::class.java)
                             intent.putExtras(
                                 Bundle().apply {
-                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL , "GPS is Mock !!")
+                                    putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL, "GPS is Mock !!")
                                 }
                             )
                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -165,7 +175,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL, "Permission GPS Denied!!")
+                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL, "Permission GPS Denied!!")
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

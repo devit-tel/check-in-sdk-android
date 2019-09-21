@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
-		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:orientation="vertical"
 		tools:context=".fragment.ShakeFindingFragment">
 
 	<com.google.android.material.appbar.CollapsingToolbarLayout
-			android:layout_height="?android:attr/actionBarSize"
-			android:layout_width="match_parent">
+			android:layout_width="match_parent"
+			android:layout_height="?android:attr/actionBarSize">
+
 		<ImageView
 				android:id="@+id/back_page"
-				android:src="@drawable/ic_back"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
-				android:layout_height="match_parent"
-				android:layout_width="wrap_content"
-				tools:ignore="ContentDescription"/>
+				android:src="@drawable/ic_back"
+				tools:ignore="ContentDescription" />
 	</com.google.android.material.appbar.CollapsingToolbarLayout>
+
 	<FrameLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
+
 		<ImageView
 				android:id="@+id/loading_hub_shake"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
 				android:layout_margin="50dp"
 				android:layout_marginTop="20dp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				tools:ignore="ContentDescription"/>
+				tools:ignore="ContentDescription" />
+
 		<TextView
 				android:id="@+id/finding_text"
-				android:text="@string/finding"
-				android:textSize="30sp"
-				android:textColor="@color/black"
-				android:layout_marginBottom="100dp"
-				android:layout_gravity="bottom"
-				android:gravity="center"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
+				android:layout_height="wrap_content"
+				android:layout_gravity="bottom"
+				android:layout_marginBottom="100dp"
+				android:gravity="center"
+				android:text="@string/finding"
+				android:textColor="@color/black"
+				android:textSize="30sp" />
 	</FrameLayout>
 
 </LinearLayout>

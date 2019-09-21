@@ -3,11 +3,10 @@ package com.trueelogistics.checkin.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
 import com.trueelogistics.checkin.enums.CheckInTELType
@@ -21,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import java.util.*
 
 class MainScanQrActivity : AppCompatActivity() {
+
     private var adapter = HistoryStaffAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,8 +78,10 @@ class MainScanQrActivity : AppCompatActivity() {
                 }
 
                 override fun onCheckInFailure(message: String) {
-                    Toast.makeText(this@MainScanQrActivity,"openScan.onFail : $message"
-                    ,Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@MainScanQrActivity, "openScan.onFail : $message"
+                        , Toast.LENGTH_LONG
+                    ).show()
                 }
 
                 override fun onCheckInSuccess(result: String) {
@@ -90,7 +92,7 @@ class MainScanQrActivity : AppCompatActivity() {
 
     var checkFirstInDay = true
     private fun checkButton() {
-        val intent = Intent(this,CheckInTEL::class.java)
+        val intent = Intent(this, CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
@@ -102,8 +104,10 @@ class MainScanQrActivity : AppCompatActivity() {
                     layoutRecycle.visibility = View.VISIBLE
                     intent.putExtras(
                         Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
+                            putString(
+                                CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success"
+                            )
                         }
                     )
                 } else if (type == CheckInTELType.CheckOut.value || type == CheckInTELType.CheckOutOverTime.value) {
@@ -123,8 +127,10 @@ class MainScanQrActivity : AppCompatActivity() {
                     }
                     intent.putExtras(
                         Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
+                            putString(
+                                CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success"
+                            )
                         }
                     )
                 } else {
@@ -152,8 +158,10 @@ class MainScanQrActivity : AppCompatActivity() {
                     )
                     intent.putExtras(
                         Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
+                            putString(
+                                CheckInTEL.KEY_RESULT_CHECK_IN_TEL
+                                , "Success"
+                            )
                         }
                     )
                 }
@@ -192,9 +200,11 @@ class MainScanQrActivity : AppCompatActivity() {
                 )
                 intent.putExtras(
                     Bundle().apply {
-                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                        , "getLastHistory.onFail : $message")
-                })
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , "getLastHistory.onFail : $message"
+                        )
+                    })
                 CheckInTEL.checkInTEL?.onActivityResult(
                     CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
                     Activity.RESULT_OK, intent

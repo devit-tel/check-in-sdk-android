@@ -7,12 +7,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
@@ -26,10 +26,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CheckInDialogFragment : BottomSheetDialogFragment(){
-    var item : GenerateItemHubModel ?= null
-    var typeFromLastCheckIn : String ?= null
-    var checkinType : String ?= null
+class CheckInDialogFragment : BottomSheetDialogFragment() {
+    var item: GenerateItemHubModel? = null
+    var typeFromLastCheckIn: String? = null
+    var checkinType: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,7 +60,7 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
             selectedType(typeCheckIn)
         }
         confirm_checkin.setOnClickListener {
-            NearByFindingFragment.showView= true
+            NearByFindingFragment.showView = true
             ShakeFindingFragment.showView = true
             checkLocation(typeCheckIn, item?.hubId ?: " HubID is null ")
         }
@@ -81,7 +81,7 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                 between_pic.setImageResource(R.drawable.ic_checkin_gray)
                 checkout_pic.setImageResource(R.drawable.ic_checkin_gray)
             }
-            CheckInTELType.CheckBetween.value , CheckInTELType.CheckIn.value -> {
+            CheckInTELType.CheckBetween.value, CheckInTELType.CheckIn.value -> {
                 checkin_view.visibility = View.GONE
                 between_view.visibility = View.VISIBLE
                 checkout_view.visibility = View.VISIBLE
@@ -150,8 +150,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
 
                                     intent.putExtras(
                                         Bundle().apply {
-                                            putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                , t.message)
+                                            putString(
+                                                CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                , t.message
+                                            )
                                         }
                                     )
                                     CheckInTEL.checkInTEL?.onActivityResult(
@@ -162,7 +164,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
 
                                 }
 
-                                override fun onResponse(call: Call<ScanRootModel>, response: Response<ScanRootModel>) {
+                                override fun onResponse(
+                                    call: Call<ScanRootModel>,
+                                    response: Response<ScanRootModel>
+                                ) {
                                     //stop dialog
                                     loadingDialog.dismiss()
                                     when {
@@ -174,8 +179,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                                             onPause()
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                        , getString(R.string.wrong_locationId))
+                                                    putString(
+                                                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        , getString(R.string.wrong_locationId)
+                                                    )
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -183,14 +190,20 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                                                 Activity.RESULT_OK, intent
                                             )
                                             OldQrDialogFragment().fail_text.visibility = View.GONE
-                                            OldQrDialogFragment().show(activity.supportFragmentManager, "show")
+                                            OldQrDialogFragment().show(
+                                                activity.supportFragmentManager,
+                                                "show"
+                                            )
                                         }
                                         else -> {
                                             ScanQrFragment.cancelFirstCheckIn = true
                                             intent.putExtras(
                                                 Bundle().apply {
-                                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                        , "${response.code()} : ${response.message()}")
+                                                    putString(
+                                                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                        ,
+                                                        "${response.code()} : ${response.message()}"
+                                                    )
                                                 }
                                             )
                                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -207,8 +220,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                             val intent = Intent(activity, CheckInTEL::class.java)
                             intent.putExtras(
                                 Bundle().apply {
-                                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                        , "GPS is Mock !!")
+                                    putString(
+                                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                        , "GPS is Mock !!"
+                                    )
                                 }
                             )
                             CheckInTEL.checkInTEL?.onActivityResult(
@@ -221,8 +236,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment(){
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , "Permission GPS Denied!!")
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , "Permission GPS Denied!!"
+                        )
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(

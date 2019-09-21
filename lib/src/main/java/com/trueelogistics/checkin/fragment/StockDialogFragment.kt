@@ -2,13 +2,12 @@ package com.trueelogistics.checkin.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.core.content.ContextCompat
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.HubAdapter
 import com.trueelogistics.checkin.handler.CheckInTEL
@@ -53,7 +52,11 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         })
     }
 
-    override fun onItemLocationClick(item: HubInDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
+    override fun onItemLocationClick(
+        item: HubInDataModel,
+        oldRadioButton: RadioButton?,
+        newRadioButton: RadioButton?
+    ) {
         oldRadioButton?.isChecked = false
         newRadioButton?.isChecked = true
         activity?.let {

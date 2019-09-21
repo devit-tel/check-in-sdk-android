@@ -1,6 +1,5 @@
 package com.trueelogistics.checkin.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,15 @@ import com.trueelogistics.checkin.extensions.formatISO
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.item_history_retrofit.view.*
 
-class HistoryStaffAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+class HistoryStaffAdapter :
+    androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
-    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.item_history_retrofit, viewGroup, false)
+    override fun onCreateViewHolder(
+        viewGroup: ViewGroup,
+        position: Int
+    ): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.item_history_retrofit, viewGroup, false)
         return ViewHolder(view)
     }
 
@@ -21,19 +25,23 @@ class HistoryStaffAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<an
         return items.size
     }
 
-    override fun onBindViewHolder(view: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        view: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+        position: Int
+    ) {
         val viewHolder = view as ViewHolder
         viewHolder.bind(position)
     }
 
-    inner class ViewHolder(private val view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val view: View) :
+        androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
             val type = view.typeCheckIn
             val hub = view.hubCheckIn
             val time = view.timeCheckIn
             val typeScan = view.type_scan
             when (val eventType = items[position].eventType ?: "old") {
-                CheckInTELType.CheckIn.value ->{
+                CheckInTELType.CheckIn.value -> {
                     view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
                     type.text = view.context.getString(R.string.full_checkin_text)
                 }

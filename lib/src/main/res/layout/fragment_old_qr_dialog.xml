@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  xmlns:tools="http://schemas.android.com/tools"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  tools:context=".fragment.OldQrDialogFragment"
-			  android:background="@color/white"
-			  android:orientation="vertical">
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/white"
+		android:orientation="vertical"
+		tools:context=".fragment.OldQrDialogFragment">
+
 	<ImageView
-			android:src="@drawable/pic_fail_checkin"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			tools:ignore="ContentDescription"/>
+			android:src="@drawable/pic_fail_checkin"
+			tools:ignore="ContentDescription" />
+
 	<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:paddingTop="20dp"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textSize="20sp"
+			android:text="@string/notWorking"
 			android:textColor="@color/black"
-			android:text="@string/notWorking"/>
+			android:textSize="20sp" />
+
 	<TextView
 			android:id="@+id/fail_text"
-			android:gravity="center"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textSize="20sp"
-			android:text="@string/qrUsed"/>
+			android:gravity="center"
+			android:text="@string/qrUsed"
+			android:textSize="20sp" />
+
 	<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:padding="20dp">
+
 		<Button
 				android:id="@+id/scanAgain"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:background="@color/purple"
+				android:text="@string/scanAgain"
 				android:textColor="@color/white"
-				android:textSize="20sp"
-				android:text="@string/scanAgain"/>
+				android:textSize="20sp" />
 	</LinearLayout>
 </LinearLayout>

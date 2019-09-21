@@ -2,7 +2,6 @@ package com.trueelogistics.checkin.fragment
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,11 @@ import kotlinx.android.synthetic.main.fragment_shake_finding.*
 class ShakeFindingFragment : androidx.fragment.app.Fragment() {
 
     private var shakeAnimation: AnimationDrawable? = null
-    companion object{
+
+    companion object {
         var showView = true
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -4,8 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.ScanQrFragment
@@ -52,12 +52,13 @@ class ScanQrActivity : AppCompatActivity() {
         val currentFrag = this.supportFragmentManager.fragments[0].javaClass
         val scanQr = ScanQrFragment::class.java
         val disable = intent.getBooleanExtra("disable", false)
-        if (currentFrag != scanQr ) {
+        if (currentFrag != scanQr) {
             super.onBackPressed()
         } else if (ScanQrFragment.cancelFirstCheckIn || !disable) {
             CheckInTEL.checkInTEL?.onActivityResult(
                 CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL
-                ,Activity.RESULT_CANCELED,Intent(this,CheckInTEL::class.java))
+                , Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
+            )
             finish()
         }
     }

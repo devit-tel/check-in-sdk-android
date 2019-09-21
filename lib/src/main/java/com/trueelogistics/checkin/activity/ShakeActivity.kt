@@ -6,8 +6,8 @@ import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.kotlinpermissions.KotlinPermissions
@@ -31,14 +31,16 @@ class ShakeActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_shake , ShakeFindingFragment()).commit()
+                    .add(R.id.fragment_shake, ShakeFindingFragment()).commit()
             }.onDenied {
                 onBackPressed()
                 val intent = Intent(this, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            ," Permission of Location Denied !!")
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " Permission of Location Denied !!"
+                        )
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
@@ -49,7 +51,7 @@ class ShakeActivity : AppCompatActivity() {
 
     }
 
-    fun itemShake( activity: Activity ,shakeListener: ShakeCallback ) {
+    fun itemShake(activity: Activity, shakeListener: ShakeCallback) {
         //order to getLocation
         val fusedLocationClient: FusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(activity)
@@ -75,8 +77,10 @@ class ShakeActivity : AppCompatActivity() {
                                 val intent = Intent(activity, CheckInTEL::class.java)
                                 intent.putExtras(
                                     Bundle().apply {
-                                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                            , " get nameHub onFailure : $message ")
+                                        putString(
+                                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                            , " get nameHub onFailure : $message "
+                                        )
                                     }
                                 )
                                 CheckInTEL.checkInTEL?.onActivityResult(
@@ -99,6 +103,6 @@ class ShakeActivity : AppCompatActivity() {
     }
 
     interface ShakeCallback {
-        fun onFound(hubId: String? = null, hubName: String? = null )
+        fun onFound(hubId: String? = null, hubName: String? = null)
     }
 }
