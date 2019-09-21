@@ -3,9 +3,9 @@ package com.trueelogistics.checkin.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
 import com.trueelogistics.checkin.R
@@ -54,7 +54,8 @@ class MainScanQrActivity : AppCompatActivity() {
 
     private fun getHistoryToday() {
         historyRecycle.adapter = adapter
-        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
+        historyRecycle?.layoutManager =
+            androidx.recyclerview.widget.LinearLayoutManager(this@MainScanQrActivity)
         CheckInTEL.checkInTEL?.getHistory(object : ArrayListGenericCallback<HistoryInDataModel> {
             override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
                 adapter.items.removeAll(dataModel ?: arrayListOf())

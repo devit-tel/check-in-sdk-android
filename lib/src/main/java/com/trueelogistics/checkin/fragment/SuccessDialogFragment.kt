@@ -3,7 +3,7 @@ package com.trueelogistics.checkin.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.util.*
 
-class SuccessDialogFragment : DialogFragment() {
+class SuccessDialogFragment : androidx.fragment.app.DialogFragment() {
     companion object {
         var TYPE_STATUS = "@string/checkin_text"
         fun newInstance(type: String): SuccessDialogFragment {

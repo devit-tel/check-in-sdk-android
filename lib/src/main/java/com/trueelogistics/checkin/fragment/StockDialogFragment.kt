@@ -2,9 +2,9 @@ package com.trueelogistics.checkin.fragment
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +39,8 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         CheckInTEL.checkInTEL?.hubGenerater(object : ArrayListGenericCallback<HubInDataModel> {
             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 activity?.also {
-                    recycleView?.layoutManager = LinearLayoutManager(it)
+                    recycleView?.layoutManager =
+                        androidx.recyclerview.widget.LinearLayoutManager(it)
                     recycleView.adapter = HubAdapter(dataModel ?: arrayListOf(), it).apply {
                         onItemLocationClickListener = this@StockDialogFragment
                     }

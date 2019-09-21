@@ -3,8 +3,8 @@ package com.trueelogistics.checkin.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.GenerateItemHubModel
 import kotlinx.android.synthetic.main.fragment_shake_hub.*
 
-class ShakeHubFragment : Fragment(), OnClickItemCallback {
+class ShakeHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback {
 
     private var adapter = GenerateHubAdapter(this)
 
@@ -37,7 +37,7 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
             activity?.onBackPressed()
         }
         nearbyRecycle.adapter = adapter
-        nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
+        nearbyRecycle?.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         activity?.let {
             ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
                 override fun onFound(hubId: String?, hubName: String?) {

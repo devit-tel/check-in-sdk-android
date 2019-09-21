@@ -1,14 +1,14 @@
 package com.trueelogistics.checkin.fragment
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
-class OldQrDialogFragment : DialogFragment() {
+class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

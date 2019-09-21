@@ -2,7 +2,7 @@ package com.trueelogistics.checkin.fragment
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +10,7 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.ShakeActivity
 import kotlinx.android.synthetic.main.fragment_shake_finding.*
 
-class ShakeFindingFragment : Fragment() {
+class ShakeFindingFragment : androidx.fragment.app.Fragment() {
 
     private var shakeAnimation: AnimationDrawable? = null
     companion object{
