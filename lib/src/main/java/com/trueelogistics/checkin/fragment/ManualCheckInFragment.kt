@@ -17,7 +17,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.api.service.RetrofitGenerater
+import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.api.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
 import retrofit2.Call
@@ -69,7 +69,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun checkLocation(type: String, hub_id: String) {
-        val retrofit = RetrofitGenerater().build(true)
+        val retrofit = RetrofitGenerator().build(true)
             .create(ScanQrService::class.java)
         val loadingDialog = ProgressDialog
             .show(context, "$type Processing", "please wait...")

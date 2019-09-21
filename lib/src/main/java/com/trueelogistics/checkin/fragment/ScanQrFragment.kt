@@ -21,7 +21,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.api.service.RetrofitGenerater
+import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.api.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
@@ -113,7 +113,7 @@ class ScanQrFragment : androidx.fragment.app.Fragment() {
                 context, "Checking Qr code"
                 , "please wait...", true, false
             )
-            val retrofit = RetrofitGenerater().build(true)
+            val retrofit = RetrofitGenerator().build(true)
                 .create(ScanQrService::class.java)
             val type = arguments?.getString(TYPE_KEY).toString()
             var fusedLocationClient: FusedLocationProviderClient

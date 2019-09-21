@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.api.service
+package com.trueelogistics.checkin.api
 
 import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.handler.CheckInTEL
@@ -7,7 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitGenerater {
+class RetrofitGenerator {
     fun build(isRequestHeader: Boolean? = false): Retrofit {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY

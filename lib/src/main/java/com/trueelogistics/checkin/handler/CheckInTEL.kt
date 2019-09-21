@@ -13,6 +13,7 @@ import com.trueelogistics.checkin.activity.MainScanQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
 import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.activity.ShakeActivity
+import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.format
@@ -99,7 +100,7 @@ class CheckInTEL {
     }
 
     fun hubGenerater(listener: ArrayListGenericCallback<HubInDataModel>) {
-        val retrofit = RetrofitGenerater().build().create(HubService::class.java)
+        val retrofit = RetrofitGenerator().build().create(HubService::class.java)
         val call = retrofit.getData()
         call.enqueue(object : Callback<HubRootModel> {
             override fun onFailure(call: Call<HubRootModel>, t: Throwable) {
@@ -122,7 +123,7 @@ class CheckInTEL {
         qrCodeCreateBy: String, locationId: String, latitude: String,
         longitude: String, listener: GenerateQrCallback
     ) {
-        val retrofit = RetrofitGenerater().build().create(GenQrService::class.java)
+        val retrofit = RetrofitGenerator().build().create(GenQrService::class.java)
         val call =
             retrofit.getData(
                 qrCodeCreateBy,
@@ -158,7 +159,7 @@ class CheckInTEL {
     }
 
     fun getLastCheckInHistory(typeCallback: TypeCallback) {
-        val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
+        val retrofit = RetrofitGenerator().build(false).create(HistoryTodayService::class.java)
         val call = retrofit.getData()
         call.enqueue(object : Callback<HistoryTodayModel> {
             override fun onFailure(call: Call<HistoryTodayModel>, t: Throwable) {
@@ -184,7 +185,7 @@ class CheckInTEL {
     }
 
     fun getCheckOverTime(historyTodayModel: HistoryTodayModel, typeCallback: TypeCallback) {
-        val retrofit = RetrofitGenerater().build(true).create(HistoryTodayService::class.java)
+        val retrofit = RetrofitGenerator().build(true).create(HistoryTodayService::class.java)
         val call = retrofit.getCheckInOverTime()
         call.enqueue(object : Callback<CheckOverTimeModel> {
             override fun onFailure(call: Call<CheckOverTimeModel>, t: Throwable) {
@@ -227,7 +228,7 @@ class CheckInTEL {
     }
 
     fun getHistory(arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>) {
-        val retrofit = RetrofitGenerater().build(false).create(HistoryTodayService::class.java)
+        val retrofit = RetrofitGenerator().build(false).create(HistoryTodayService::class.java)
         val call = retrofit.getData()
         call.enqueue(object : Callback<HistoryTodayModel> {
             override fun onFailure(call: Call<HistoryTodayModel>, t: Throwable) {
@@ -261,7 +262,7 @@ class CheckInTEL {
 
     fun getAllHistory(arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>) {
         page++
-        val retrofit = RetrofitGenerater().build(false).create(HistoryService::class.java)
+        val retrofit = RetrofitGenerator().build(false).create(HistoryService::class.java)
         val call = retrofit.getData(
             Gson().toJson(SearchCitizenModel(userId.toString())),
             page,

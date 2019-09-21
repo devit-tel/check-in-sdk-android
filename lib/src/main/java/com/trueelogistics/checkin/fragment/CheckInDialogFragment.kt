@@ -18,7 +18,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.GenerateItemHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.api.service.RetrofitGenerater
+import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.api.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
@@ -124,7 +124,7 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun checkLocation(type: String, hub_id: String) {
-        val retrofit = RetrofitGenerater().build(true).create(ScanQrService::class.java)
+        val retrofit = RetrofitGenerator().build(true).create(ScanQrService::class.java)
         val loadingDialog = ProgressDialog.show(context, "$type Processing", "please wait...")
         activity?.let { activity ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
