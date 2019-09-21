@@ -17,8 +17,8 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HubInDataModel
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.service.RetrofitGenerater
-import com.trueelogistics.checkin.service.ScanQrService
+import com.trueelogistics.checkin.api.service.RetrofitGenerater
+import com.trueelogistics.checkin.api.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,7 +59,9 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
                 setView(it)
                 hubId = it._id.toString()
             }
-            stockDialogFragment.show(activity?.supportFragmentManager, "show")
+            activity?.supportFragmentManager?.also {
+                stockDialogFragment.show(it, "show")
+            }
         }
         confirm.setOnClickListener {
             checkLocation(type, hubId)

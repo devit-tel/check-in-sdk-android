@@ -22,7 +22,7 @@ import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
 import com.trueelogistics.checkin.model.*
-import com.trueelogistics.checkin.service.*
+import com.trueelogistics.checkin.api.service.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

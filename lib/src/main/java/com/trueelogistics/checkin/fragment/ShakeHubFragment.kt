@@ -83,7 +83,9 @@ class ShakeHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback {
                 }
                 shakeDialog.checkinType = "SHAKE"
                 shakeDialog.typeFromLastCheckIn = newType
-                shakeDialog.show(activity?.supportFragmentManager, "show")
+                activity?.supportFragmentManager?.also {
+                    shakeDialog.show(it, "show")
+                }
             }
 
             override fun onFailure(message: String?) {

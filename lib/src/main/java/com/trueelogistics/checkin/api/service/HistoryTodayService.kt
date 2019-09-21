@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.service
+package com.trueelogistics.checkin.api.service
 
 import com.trueelogistics.checkin.model.CheckOverTimeModel
 import com.trueelogistics.checkin.model.HistoryTodayModel

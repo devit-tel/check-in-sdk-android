@@ -21,7 +21,7 @@ class MockDialogFragment : androidx.fragment.app.DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         onPause()
         scanAgain.setOnClickListener {
-            dialog.cancel()
+            dialog?.cancel()
             ScanQrFragment.isScan = true
             onResume()
         }
@@ -31,6 +31,6 @@ class MockDialogFragment : androidx.fragment.app.DialogFragment() {
         super.onStart()
         val width = ViewGroup.LayoutParams.WRAP_CONTENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
-        dialog.window?.setLayout(width, height)
+        dialog?.window?.setLayout(width, height)
     }
 }

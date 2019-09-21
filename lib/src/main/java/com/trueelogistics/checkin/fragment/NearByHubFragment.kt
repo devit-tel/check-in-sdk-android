@@ -127,7 +127,9 @@ class NearByHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback 
                 }
                 nearByDialog.checkinType = "NEARBY"
                 nearByDialog.typeFromLastCheckIn = newType
-                nearByDialog.show(activity?.supportFragmentManager, "show")
+                activity?.supportFragmentManager?.also {
+                    nearByDialog.show(it, "show")
+                }
             }
 
             override fun onFailure(message: String?) {
