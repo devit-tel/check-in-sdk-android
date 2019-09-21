@@ -19,18 +19,11 @@ class MainActivity : AppCompatActivity() {
         btnShakeCheckIn.setOnClickListener { shakeCheckIn() }
     }
 
-    private fun historyCheckIn() {
-    }
+    private fun historyCheckIn() {}
 
-    private fun scanCheckIn() {
+    private fun scanCheckIn() {}
 
-    }
+    private fun nearByCheckIn() {}
 
-    private fun nearByCheckIn() {
-
-    }
-
-    private fun shakeCheckIn() {
-
-    }
+    private fun shakeCheckIn() {}
 }
