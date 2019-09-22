@@ -27,6 +27,7 @@ import com.trueelogistics.checkin.dialog.MockDialogFragment
 import com.trueelogistics.checkin.dialog.OldQrDialogFragment
 import com.trueelogistics.checkin.dialog.SuccessDialogFragment
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -35,6 +36,7 @@ import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 class ScanQrFragment : androidx.fragment.app.Fragment() {
 
     companion object {
+        const val TAG = "ScanQrFragment"
         var isScan = true
         var cancelFirstCheckIn = false
         fun newInstance(bundle: Bundle? = Bundle()): ScanQrFragment {
@@ -139,8 +141,11 @@ class ScanQrFragment : androidx.fragment.app.Fragment() {
         longitude: Double
     ) {
         val loadingDialog = ProgressDialog.show(
-            context, "Checking Qr code"
-            , "please wait...", true, false
+            context,
+            "Checking Qr code",
+            "please wait...",
+            true,
+            false
         )
         checkInResponse.postCheckIn(
             arguments?.getString(KEY_TYPE_SCAN_QR).toString(),
@@ -177,10 +182,12 @@ class ScanQrFragment : androidx.fragment.app.Fragment() {
     }
 
     fun openScanManual() {
-        activity?.supportFragmentManager?.beginTransaction()?.replace(
+        replaceFragmentInActivity(
             R.id.fragment,
-            ManualCheckInFragment.newInstance(arguments?.getString(KEY_TYPE_SCAN_QR).toString())
-        )?.addToBackStack(ManualCheckInFragment::class.java.name)?.commit()
+            ManualCheckInFragment.newInstance(arguments),
+            ManualCheckInFragment.TAG,
+            true
+        )
     }
 
     fun openDialogMockLocation() {

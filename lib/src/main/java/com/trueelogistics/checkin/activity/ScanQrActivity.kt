@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInErrorType
+import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
@@ -51,16 +52,13 @@ class ScanQrActivity : AppCompatActivity() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
-                supportFragmentManager.beginTransaction().replace(
+                replaceFragmentInActivity(
                     R.id.fragment,
-                    ScanQrFragment.newInstance(intent.extras)
-                ).commit()
+                    ScanQrFragment.newInstance(intent.extras),
+                    ScanQrFragment.TAG
+                )
             }.onDenied {
-                Toast.makeText(
-                    this,
-                    CheckInErrorType.PERMISSION_DENIED_ERROR.message,
-                    Toast.LENGTH_LONG
-                ).show()
+                showToastMessage(CheckInErrorType.PERMISSION_DENIED_ERROR.message)
                 setResult(
                     Activity.RESULT_OK,
                     Intent(this, CheckInTEL::class.java).putExtras(
@@ -81,5 +79,13 @@ class ScanQrActivity : AppCompatActivity() {
         if (!intent.getBooleanExtra(KEY_DISABLE_BACK, false)) {
             super.onBackPressed()
         }
+    }
+
+    fun showToastMessage(message: String?) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
