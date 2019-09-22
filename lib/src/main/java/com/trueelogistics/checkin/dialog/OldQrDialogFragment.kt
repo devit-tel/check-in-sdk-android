@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
 class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
 
-    companion object{
+    companion object {
         const val TAG = "OldQrDialogFragment"
     }
 
@@ -18,7 +18,6 @@ class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_old_qr_dialog, container, false)
     }
 
@@ -38,5 +37,4 @@ class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
     }
-
 }

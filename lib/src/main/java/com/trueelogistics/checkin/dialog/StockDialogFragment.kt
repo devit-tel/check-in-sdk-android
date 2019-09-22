@@ -68,7 +68,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         }
     }
 
-    fun setOnItemLocationClick(doSomething: ((item: HubInDataModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
-        this.doSomething = doSomething  //save class who call this function
+    fun setOnItemLocationClick(doSomething: ((item: HubInDataModel) -> Unit)? = null) {
+        this.doSomething = doSomething
     }
 }
