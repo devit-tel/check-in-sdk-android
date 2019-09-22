@@ -20,6 +20,7 @@ import com.trueelogistics.checkin.dialog.MockDialogFragment
 import com.trueelogistics.checkin.dialog.OldQrDialogFragment
 import com.trueelogistics.checkin.dialog.StockDialogFragment
 import com.trueelogistics.checkin.dialog.SuccessDialogFragment
+import com.trueelogistics.checkin.enums.CheckInErrorType
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HubInDataModel
@@ -62,13 +63,13 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
         fixTypeView(arguments?.getString(KEY_TYPE_SCAN_QR).toString())
         var hubId = ""
         checkInHub.setOnClickListener {
-            val stockDialogFragment = StockDialogFragment()
-            stockDialogFragment.setOnItemLocationClick {
-                setView(it)
-                hubId = it._id.toString()
-            }
-            activity?.supportFragmentManager?.also {
-                stockDialogFragment.show(it, "show")
+            activity?.supportFragmentManager?.also { supportFragmentManager ->
+                StockDialogFragment().apply {
+                    this.setOnItemLocationClick { hubInDataModel ->
+                        setView(hubInDataModel)
+                        hubId = hubInDataModel._id.toString()
+                    }
+                }.show(supportFragmentManager, StockDialogFragment.TAG)
             }
         }
         confirm.setOnClickListener {
@@ -102,16 +103,7 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
                         }
                     }
             } else {
-                val intent = Intent(activity, CheckInTEL::class.java)
-                intent.putExtras(
-                    Bundle().apply {
-                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL, "Permission GPS Denied!!")
-                    }
-                )
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
-                )
+                showToastMessage(CheckInErrorType.PERMISSION_DENIED_ERROR.message)
             }
         }
     }
@@ -134,7 +126,6 @@ class ManualCheckInFragment : androidx.fragment.app.Fragment() {
             loadingDialog?.dismiss()
             when {
                 it.code() == 200 -> {
-                    onPause()
                     scanCompleteOpenDialogSuccess()
                 }
                 it.code() == 400 -> {

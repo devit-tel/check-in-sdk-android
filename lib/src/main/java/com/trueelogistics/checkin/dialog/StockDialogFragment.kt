@@ -17,6 +17,10 @@ import kotlinx.android.synthetic.main.fragment_stock_dialog.*
 
 class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocationClickListener {
 
+    companion object {
+        const val TAG = "StockDialogFragment"
+    }
+
     private var doSomething: ((item: HubInDataModel) -> Unit)? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
