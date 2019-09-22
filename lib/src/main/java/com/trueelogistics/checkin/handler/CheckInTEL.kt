@@ -15,6 +15,7 @@ import com.trueelogistics.checkin.activity.ShakeActivity
 import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.api.service.HubService
+import com.trueelogistics.checkin.enums.CheckInErrorType
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.enums.EnvironmentType
 import com.trueelogistics.checkin.extensions.format
@@ -230,10 +231,10 @@ class CheckInTEL {
                     if (historyList.isNullOrEmpty()) {
                         arrayListGenericCallback.onResponse(historyList)
                     } else {
-                        arrayListGenericCallback.onFailure("Data empty")
+                        arrayListGenericCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                     }
                 } ?: run {
-                    arrayListGenericCallback.onFailure("Data empty")
+                    arrayListGenericCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                 }
             } else {
                 arrayListGenericCallback.onFailure(it.message())
@@ -256,10 +257,10 @@ class CheckInTEL {
                     if (historyList.isNullOrEmpty()) {
                         arrayListGenericCallback.onResponse(historyList)
                     } else {
-                        arrayListGenericCallback.onFailure("Data empty")
+                        arrayListGenericCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                     }
                 } ?: run {
-                    arrayListGenericCallback.onFailure("Data empty")
+                    arrayListGenericCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                 }
             } else {
                 arrayListGenericCallback.onFailure(it.message())
@@ -337,10 +338,10 @@ class CheckInTEL {
                                 ) ?: ""
                             )
                         } else {
-                            checkInTELCallBack?.onCheckInFailure("Return Data == ${data.data}")
+                            checkInTELCallBack?.onCheckInFailure(CheckInErrorType.RESULT_INVALID_ERROR.message)
                         }
                     } else {
-                        checkInTELCallBack?.onCheckInFailure("Data is empty")
+                        checkInTELCallBack?.onCheckInFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                     }
                 }
                 else -> {
