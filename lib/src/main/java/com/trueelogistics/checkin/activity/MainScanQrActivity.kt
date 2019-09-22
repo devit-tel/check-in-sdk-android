@@ -34,7 +34,6 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     fun bindingData() {
-        CheckInTEL.userId = "22222222222222"
         disableCheckIn()
         date.text = String.format(
             getString(R.string.date_checkin),

@@ -180,7 +180,7 @@ class CheckInTEL {
         repository.getCheckInOverTime().subscribe({
             if (it.code() == 200) {
                 it.body()?.let { checkOverTimeModel ->
-                    if (historyTodayModel.data.isNullOrEmpty()) {
+                    if (historyTodayModel.data.size > 0) {
                         val lastDatePick = historyTodayModel.data.last()
                         if (lastDatePick
                                 .updatedAt
