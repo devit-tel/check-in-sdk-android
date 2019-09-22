@@ -1,64 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:gravity="center"
 		android:orientation="vertical">
 
+	<TextView
+			android:id="@+id/tvStatusLastHistory"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+
 	<Button
-			android:id="@+id/btnCheckHistory"
+			android:id="@+id/btnCheckLastHistory"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Check Last History"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/tvStatusLastCheckIn" />
+			android:text="Check Last History" />
 
 	<Button
 			android:id="@+id/btnMainCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Main  Ckecin"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/btnCheckHistory" />
+			android:text="Main  Ckecin" />
 
 	<Button
 			android:id="@+id/btnScanCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Scan CheckIn"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/btnCheckHistory" />
+			android:text="Scan CheckIn" />
 
 	<Button
 			android:id="@+id/btnNearByCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Nearby CheckIn"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/btnCheckHistory" />
+			android:text="Nearby CheckIn" />
 
 	<Button
 			android:id="@+id/btnShakeCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Shake CheckIn"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/btnNearByCheckIn" />
+			android:text="Shake CheckIn" />
 
 	<Button
 			android:id="@+id/btnCreateQRCodeCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Generate QR Code Check In"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/btnNearByCheckIn" />
+			android:text="Generate QR Code Check In" />
 
 	<TextView
 			android:id="@+id/tvHubName"

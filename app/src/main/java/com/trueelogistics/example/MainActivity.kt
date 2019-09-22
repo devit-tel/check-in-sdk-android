@@ -12,6 +12,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
+import com.trueelogistics.checkin.interfaces.TypeCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindingData() {
-        btnCheckHistory.setOnClickListener { historyCheckIn() }
+        btnCheckLastHistory.setOnClickListener { historyCheckIn() }
         btnMainCheckIn.setOnClickListener { mainCheckIn() }
         btnScanCheckIn.setOnClickListener { scanCheckIn() }
         btnNearByCheckIn.setOnClickListener { nearByCheckIn() }
@@ -32,7 +33,18 @@ class MainActivity : AppCompatActivity() {
         btnCreateQRCodeCheckIn.setOnClickListener { createQRCodeCheckIn() }
     }
 
-    private fun historyCheckIn() {}
+    private fun historyCheckIn() {
+        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
+
+            override fun onResponse(type: String?, today: Boolean) {
+                tvStatusLastHistory.text = type
+            }
+
+            override fun onFailure(message: String?) {
+                showToastMessage(message)
+            }
+        })
+    }
 
     private fun mainCheckIn() {
         CheckInTEL.checkInTEL?.openMainScanQrCode(
