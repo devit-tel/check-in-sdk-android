@@ -66,9 +66,43 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun nearByCheckIn() {}
+    private fun nearByCheckIn() {
+        CheckInTEL.checkInTEL?.openNearBy(
+            activity = this,
+            checkInTELCallBack = object : CheckInTELCallBack {
+                override fun onCheckInSuccess(result: String) {
+                    showToastMessage(result)
+                }
 
-    private fun shakeCheckIn() {}
+                override fun onCheckInFailure(message: String) {
+                    showToastMessage(message)
+                }
+
+                override fun onCancel() {
+                    showToastMessage("Cancel")
+                }
+            }
+        )
+    }
+
+    private fun shakeCheckIn() {
+        CheckInTEL.checkInTEL?.openShake(
+            activity = this,
+            checkInTELCallBack = object : CheckInTELCallBack {
+                override fun onCheckInSuccess(result: String) {
+                    showToastMessage(result)
+                }
+
+                override fun onCheckInFailure(message: String) {
+                    showToastMessage(message)
+                }
+
+                override fun onCancel() {
+                    showToastMessage("Cancel")
+                }
+            }
+        )
+    }
 
     private fun showToastMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
