@@ -1,7 +1,6 @@
 package com.trueelogistics.checkin.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.nearby.Nearby
@@ -9,11 +8,15 @@ import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.fragment.NearByFindingFragment
-import com.trueelogistics.checkin.handler.CheckInTEL
 
 class NearByActivity : AppCompatActivity() {
     companion object {
         private var mMessageListener: MessageListener? = null
+    }
+
+    interface NearByCallback {
+        fun onFoundNearBy(hubId: String? = "")
+        fun onLostNearBy(hubId: String? = "")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,15 +54,6 @@ class NearByActivity : AppCompatActivity() {
             Nearby.getMessagesClient(this).unsubscribe(ml)
             NearByFindingFragment.showView = true
         }
-        CheckInTEL.checkInTEL?.onActivityResult(
-            CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-            Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
-        )
         finish()
-    }
-
-    interface NearByCallback {
-        fun onFoundNearBy(hubId: String? = "")
-        fun onLostNearBy(hubId: String? = "")
     }
 }
