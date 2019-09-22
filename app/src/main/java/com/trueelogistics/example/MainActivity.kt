@@ -114,10 +114,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun createQRCodeCheckIn() {
         CheckInTEL.checkInTEL?.qrGenerate(
-            "qrCodeCrateBy",
-            "0",
-            "0.00",
-            "0.00",
+            "5d877d1f1f21e7f72e5decda",
+            "5d4963f59d5b1fba2e0c37d7",
+            "13.715383600000013",
+            "100.50457460000007",
             object : GenerateQrCallback {
                 override fun onResponse(hubName: String?, qrCodeText: String?, time: String?) {
                     tvHubName.text = hubName
