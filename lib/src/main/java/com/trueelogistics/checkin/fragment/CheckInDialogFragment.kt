@@ -30,6 +30,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class CheckInDialogFragment : BottomSheetDialogFragment() {
+
+    companion object{
+        const val TAG = "CheckInDialogFragment"
+    }
+
     var item: GenerateItemHubModel? = null
     var typeFromLastCheckIn: String? = null
     var checkinType: String? = null
