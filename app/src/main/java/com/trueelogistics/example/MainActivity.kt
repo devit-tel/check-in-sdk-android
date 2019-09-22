@@ -10,9 +10,11 @@ import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.interfaces.ArrayListGenericCallback
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
 import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import com.trueelogistics.checkin.interfaces.TypeCallback
+import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -27,11 +29,27 @@ class MainActivity : AppCompatActivity() {
     private fun bindingData() {
         CheckInTEL.userId = "2222222222222"
         btnCheckLastHistory.setOnClickListener { historyCheckIn() }
+        btnGetAllHistory.setOnClickListener { allHistoryCheckIN() }
         btnMainCheckIn.setOnClickListener { mainCheckIn() }
         btnScanCheckIn.setOnClickListener { scanCheckIn() }
         btnNearByCheckIn.setOnClickListener { nearByCheckIn() }
         btnShakeCheckIn.setOnClickListener { shakeCheckIn() }
         btnCreateQRCodeCheckIn.setOnClickListener { createQRCodeCheckIn() }
+    }
+
+    private fun allHistoryCheckIN() {
+        CheckInTEL.checkInTEL?.getAllHistory(
+            1,
+            10,
+            object : ArrayListGenericCallback<HistoryInDataModel> {
+                override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
+                    showToastMessage(dataModel.toString())
+                }
+
+                override fun onFailure(message: String?) {
+                    showToastMessage(message)
+                }
+            })
     }
 
     private fun historyCheckIn() {

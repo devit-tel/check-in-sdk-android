@@ -17,6 +17,12 @@
 			android:text="Check Last History" />
 
 	<Button
+			android:id="@+id/btnGetAllHistory"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Check All History" />
+
+	<Button
 			android:id="@+id/btnMainCheckIn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

@@ -245,8 +245,8 @@ class CheckInTEL {
     }
 
     fun getAllHistory(
-        limit: Int,
         page: Int,
+        limit: Int,
         arrayListGenericCallback: ArrayListGenericCallback<HistoryInDataModel>
     ) {
 
