@@ -53,7 +53,7 @@ class NearByHubFragment : androidx.fragment.app.Fragment(), OnClickItemCallback 
     }
 
     fun getHubNameFromService(hubId: String, foundItem: Boolean) {
-        CheckInTEL.checkInTEL?.hubGenerater(object :
+        CheckInTEL.checkInTEL?.hubGenerator(object :
             ArrayListGenericCallback<HubInDataModel> {
             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 var hubNameFromService: String? = ""

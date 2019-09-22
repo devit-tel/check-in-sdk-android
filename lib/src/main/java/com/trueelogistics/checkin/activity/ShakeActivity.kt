@@ -58,7 +58,7 @@ class ShakeActivity : AppCompatActivity() {
         fusedLocationClient.let {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener(activity) { location: Location? ->
-                    CheckInTEL.checkInTEL?.hubGenerater(
+                    CheckInTEL.checkInTEL?.hubGenerator(
                         object : ArrayListGenericCallback<HubInDataModel> {
                             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                                 dataModel?.forEach {
