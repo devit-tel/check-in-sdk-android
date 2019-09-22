@@ -76,7 +76,7 @@ class ScanQrActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (intent.getBooleanExtra("disable", false)) {
+        if (intent.getBooleanExtra(KEY_DISABLE_BACK, false)) {
             super.onBackPressed()
         }
     }
