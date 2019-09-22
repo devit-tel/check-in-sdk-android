@@ -33,18 +33,20 @@ class ShakeFindingFragment : androidx.fragment.app.Fragment() {
         }
         nearByAnimation()
         activity?.let {
-            ShakeActivity().itemShake(
-                object : ShakeActivity.ShakeCallback {
-                    override fun onFound(hubId: String?, hubName: String?) {
-                        if (showView) {
-                            it.supportFragmentManager?.beginTransaction()
-                                ?.replace(R.id.fragment_shake, ShakeHubFragment())
-                                ?.addToBackStack(null)
-                                ?.commit()
-                            showView = false
+            if (it is ShakeActivity) {
+                it.itemShake(
+                    object : ShakeActivity.ShakeCallback {
+                        override fun onFound(hubId: String?, hubName: String?) {
+                            if (showView) {
+                                it.supportFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_shake, ShakeHubFragment())
+                                    .addToBackStack(null)
+                                    .commit()
+                                showView = false
+                            }
                         }
-                    }
-                })
+                    })
+            }
         }
     }
 

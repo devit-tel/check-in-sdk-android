@@ -52,8 +52,7 @@ class ShakeActivity : AppCompatActivity() {
     }
 
     fun itemShake(shakeListener: ShakeCallback) {
-        val fusedLocationClient: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(this)
+        val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(applicationContext)
         fusedLocationClient.let {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener(this) { location: Location? ->
