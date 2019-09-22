@@ -1,16 +1,17 @@
-package com.trueelogistics.checkin.fragment
+package com.trueelogistics.checkin.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
-import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
+import com.trueelogistics.checkin.fragment.ScanQrFragment
+import kotlinx.android.synthetic.main.fragment_mock_dialog.*
 
-class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
+class MockDialogFragment : androidx.fragment.app.DialogFragment() {
 
-    companion object{
-        const val TAG = "OldQrDialogFragment"
+    companion object {
+        const val TAG = "MockDialogFragment"
     }
 
     override fun onCreateView(
@@ -18,7 +19,7 @@ class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_old_qr_dialog, container, false)
+        return inflater.inflate(R.layout.fragment_mock_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,5 +38,4 @@ class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
     }
-
 }

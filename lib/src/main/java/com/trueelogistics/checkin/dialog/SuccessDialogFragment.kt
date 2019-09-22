@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.fragment
+package com.trueelogistics.checkin.dialog
 
 import android.app.Activity
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.format
+import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
 import java.util.*

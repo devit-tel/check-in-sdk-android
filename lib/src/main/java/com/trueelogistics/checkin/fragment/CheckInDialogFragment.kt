@@ -20,6 +20,9 @@ import com.trueelogistics.checkin.model.GenerateItemHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.api.RetrofitGenerator
 import com.trueelogistics.checkin.api.service.ScanQrService
+import com.trueelogistics.checkin.dialog.MockDialogFragment
+import com.trueelogistics.checkin.dialog.OldQrDialogFragment
+import com.trueelogistics.checkin.dialog.SuccessDialogFragment
 import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call
@@ -216,7 +219,8 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
                             })
                         } else {
                             loadingDialog.dismiss()
-                            MockDialogFragment().show(activity.supportFragmentManager, "show")
+                            MockDialogFragment()
+                                .show(activity.supportFragmentManager, "show")
                             val intent = Intent(activity, CheckInTEL::class.java)
                             intent.putExtras(
                                 Bundle().apply {

@@ -23,6 +23,9 @@ import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.ScanQrActivity.Companion.KEY_DISABLE_BACK
 import com.trueelogistics.checkin.activity.ScanQrActivity.Companion.KEY_TYPE_SCAN_QR
 import com.trueelogistics.checkin.api.repository.CheckInRepository
+import com.trueelogistics.checkin.dialog.MockDialogFragment
+import com.trueelogistics.checkin.dialog.OldQrDialogFragment
+import com.trueelogistics.checkin.dialog.SuccessDialogFragment
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import io.reactivex.disposables.CompositeDisposable

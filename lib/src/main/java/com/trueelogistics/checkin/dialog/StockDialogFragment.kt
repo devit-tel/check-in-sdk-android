@@ -1,4 +1,4 @@
-package com.trueelogistics.checkin.fragment
+package com.trueelogistics.checkin.dialog
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
