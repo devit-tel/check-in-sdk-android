@@ -3,19 +3,21 @@ package com.trueelogistics.checkin.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.enums.HistoryStaffType
 import com.trueelogistics.checkin.extensions.formatISO
 import com.trueelogistics.checkin.model.HistoryInDataModel
 import kotlinx.android.synthetic.main.item_history_retrofit.view.*
 
-class HistoryStaffAdapter :
-    androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     val items: ArrayList<HistoryInDataModel> = arrayListOf()
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         position: Int
-    ): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+    ): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.item_history_retrofit, viewGroup, false)
         return ViewHolder(view)
@@ -26,15 +28,14 @@ class HistoryStaffAdapter :
     }
 
     override fun onBindViewHolder(
-        view: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+        view: RecyclerView.ViewHolder,
         position: Int
     ) {
         val viewHolder = view as ViewHolder
         viewHolder.bind(position)
     }
 
-    inner class ViewHolder(private val view: View) :
-        androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(position: Int) {
             val type = view.typeCheckIn
             val hub = view.hubCheckIn
@@ -61,14 +62,14 @@ class HistoryStaffAdapter :
             hub.text = items[position].locationName
             time.text = items[position].updatedAt?.formatISO("HH:mm")
             typeScan.text = when (items[position].checkinType) {
-                "NORMAL" -> {
-                    view.context.getString(R.string.camera_text)
+                HistoryStaffType.NORMAL.name -> {
+                    view.context.getString(HistoryStaffType.NORMAL.res)
                 }
-                "MANUAL" -> {
-                    view.context.getString(R.string.manual_text)
+                HistoryStaffType.MANUAL.name -> {
+                    view.context.getString(HistoryStaffType.MANUAL.res)
                 }
-                "AUTO" -> {
-                    view.context.getString(R.string.auto_text)
+                HistoryStaffType.AUTO.name -> {
+                    view.context.getString(HistoryStaffType.AUTO.res)
                 }
                 else -> {
                     items[position].checkinType.toString()
