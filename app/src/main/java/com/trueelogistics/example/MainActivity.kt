@@ -1,12 +1,19 @@
 package com.trueelogistics.example
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
+import com.google.zxing.qrcode.QRCodeWriter
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.interfaces.CheckInTELCallBack
+import com.trueelogistics.checkin.interfaces.GenerateQrCallback
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         btnScanCheckIn.setOnClickListener { scanCheckIn() }
         btnNearByCheckIn.setOnClickListener { nearByCheckIn() }
         btnShakeCheckIn.setOnClickListener { shakeCheckIn() }
+        btnCreateQRCodeCheckIn.setOnClickListener { createQRCodeCheckIn() }
     }
 
     private fun historyCheckIn() {}
@@ -104,7 +112,58 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun showToastMessage(message: String) {
+    private fun createQRCodeCheckIn() {
+        CheckInTEL.checkInTEL?.qrGenerate(
+            "qrCodeCrateBy",
+            "0",
+            "0.00",
+            "0.00",
+            object : GenerateQrCallback {
+                override fun onResponse(hubName: String?, qrCodeText: String?, time: String?) {
+                    tvHubName.text = hubName
+                    createQRCode(qrCodeText)
+                }
+
+                override fun onFailure(message: String?) {
+                    showToastMessage(message)
+                }
+            }
+        )
+    }
+
+    private fun showToastMessage(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun createQRCode(qrCode: String?) {
+        val writer = QRCodeWriter()
+        try {
+            qrCode?.also {
+                val bitMatrix = writer.encode(
+                    it,
+                    BarcodeFormat.QR_CODE,
+                    512,
+                    512
+                )
+                val bmp = Bitmap.createBitmap(
+                    bitMatrix.width,
+                    bitMatrix.height,
+                    Bitmap.Config.RGB_565
+                )
+                for (x in 0 until bitMatrix.width) {
+                    for (y in 0 until bitMatrix.height) {
+                        bmp.setPixel(
+                            x,
+                            y,
+                            if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE
+                        )
+                    }
+                }
+                imgQRCode.setImageBitmap(bmp)
+            }
+
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
     }
 }
