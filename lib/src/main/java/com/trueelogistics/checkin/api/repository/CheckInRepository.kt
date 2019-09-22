@@ -1,10 +1,7 @@
 package com.trueelogistics.checkin.api.repository
 
 import com.trueelogistics.checkin.api.ApiService
-import com.trueelogistics.checkin.model.CheckOverTimeModel
-import com.trueelogistics.checkin.model.GenQrRootModel
-import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.model.HistoryTodayModel
+import com.trueelogistics.checkin.model.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -51,6 +48,25 @@ class CheckInRepository {
     ): Observable<Response<HistoryRootModel>> {
         return ApiService.checkInService().getHistory(
             search, page, limit
+        ).observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.newThread())
+    }
+
+    fun postCheckIn(
+        type: String,
+        qrcodeUniqueKey: String? = null,
+        locationId: String? = null,
+        checkinType: String? = null,
+        latitude: String? = null,
+        longitude: String? = null
+    ): Observable<Response<ScanRootModel>> {
+        return ApiService.checkInService().postCheckIn(
+            type,
+            qrcodeUniqueKey,
+            locationId,
+            checkinType,
+            latitude,
+            longitude
         ).observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.newThread())
     }

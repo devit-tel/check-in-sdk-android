@@ -1,9 +1,6 @@
 package com.trueelogistics.checkin.api.service
 
-import com.trueelogistics.checkin.model.CheckOverTimeModel
-import com.trueelogistics.checkin.model.GenQrRootModel
-import com.trueelogistics.checkin.model.HistoryRootModel
-import com.trueelogistics.checkin.model.HistoryTodayModel
+import com.trueelogistics.checkin.model.*
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.*
@@ -32,4 +29,14 @@ interface CheckInService {
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null
     ): Observable<Response<HistoryRootModel>>
+
+    @FormUrlEncoded
+    fun postCheckIn(
+        @Field("type") type: String,
+        @Field("qrcodeUniqueKey") qrcodeUniqueKey: String? = null,
+        @Field("locationId") locationId: String? = null,
+        @Field("checkinType") checkinType: String? = null,
+        @Field("latitude") latitude: String? = null,
+        @Field("longitude") longitude: String? = null
+    ): Observable<Response<ScanRootModel>>
 }

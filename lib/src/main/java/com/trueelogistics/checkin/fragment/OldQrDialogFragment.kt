@@ -9,6 +9,10 @@ import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
 class OldQrDialogFragment : androidx.fragment.app.DialogFragment() {
 
+    companion object{
+        const val TAG = "OldQrDialogFragment"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.format
 import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_success_checkin.*
@@ -14,12 +15,13 @@ import java.util.*
 
 class SuccessDialogFragment : androidx.fragment.app.DialogFragment() {
     companion object {
-        var TYPE_STATUS = "@string/checkin_text"
+        var KEY_TYPE_STATUS = "KEY_TYPE_STATUS"
+        const val TAG = "SuccessDialogFragment"
         fun newInstance(type: String): SuccessDialogFragment {
             val fragment = SuccessDialogFragment()
 
             val bundle = Bundle().apply {
-                putString(TYPE_STATUS, type)
+                putString(KEY_TYPE_STATUS, type)
             }
             fragment.arguments = bundle
             return fragment
@@ -36,22 +38,19 @@ class SuccessDialogFragment : androidx.fragment.app.DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onPause()
-        status_checkin1.text = translateType(arguments?.getString(TYPE_STATUS).toString())
-        status_checkin2.text = translateType(arguments?.getString(TYPE_STATUS).toString())
+        status_checkin1.text = translateType(arguments?.getString(KEY_TYPE_STATUS).toString())
+        status_checkin2.text = translateType(arguments?.getString(KEY_TYPE_STATUS).toString())
         timeCheckIn.text = Date().format("HH:mm")
         isCancelable = false
         confirm.setOnClickListener {
             onResume()
             ScanQrFragment.isScan = true
-            val intent = Intent(activity, CheckInTEL::class.java).putExtras(
+            activity?.setResult(Activity.RESULT_OK,
+                Intent(activity, CheckInTEL::class.java).putExtras(
                     Bundle().apply {
                         this.putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL, "success")
                     }
-                )
-            CheckInTEL.checkInTEL?.onActivityResult(
-                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                Activity.RESULT_OK, intent
-            )
+                ))
             activity?.finish()
         }
     }
@@ -66,9 +65,10 @@ class SuccessDialogFragment : androidx.fragment.app.DialogFragment() {
     private fun translateType(type: String): String {
         var typeTH = ""
         when (type) {
-            "CHECK_IN" -> typeTH = getString(R.string.full_checkin_text)
-            "CHECK_IN_BETWEEN" -> typeTH = getString(R.string.full_check_between_text)
-            "CHECK_OUT" -> typeTH = getString(R.string.full_checkout_text)
+            CheckInTELType.CheckIn.name -> typeTH = getString(R.string.full_checkin_text)
+            CheckInTELType.CheckBetween.name -> typeTH = getString(R.string.full_check_between_text)
+            CheckInTELType.CheckOutOverTime.name -> typeTH = getString(R.string.full_checkout_text)
+            CheckInTELType.CheckOut.name -> typeTH = getString(R.string.full_checkout_text)
         }
         return typeTH
     }

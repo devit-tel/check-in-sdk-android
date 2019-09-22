@@ -9,6 +9,10 @@ import kotlinx.android.synthetic.main.fragment_mock_dialog.*
 
 class MockDialogFragment : androidx.fragment.app.DialogFragment() {
 
+    companion object {
+        const val TAG = "MockDialogFragment"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

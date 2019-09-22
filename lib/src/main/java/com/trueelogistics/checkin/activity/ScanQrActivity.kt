@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlinpermissions.KotlinPermissions
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.enums.CheckInErrorType
 import com.trueelogistics.checkin.fragment.ScanQrFragment
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
@@ -16,7 +17,7 @@ import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_I
 class ScanQrActivity : AppCompatActivity() {
 
     companion object {
-        const val KEY_TYPE = "KEY_TYPE_SCAN_QR"
+        const val KEY_TYPE_SCAN_QR = "KEY_TYPE_SCAN_QR"
         const val KEY_DISABLE_BACK = "KEY_DISABLE_BACK"
         fun startActivityForResult(
             activity: Activity?,
@@ -28,7 +29,7 @@ class ScanQrActivity : AppCompatActivity() {
                 Intent(activity, ScanQrActivity::class.java).apply {
                     this.putExtras(
                         Bundle().apply {
-                            putString(KEY_TYPE, typeCheckIn)
+                            putString(KEY_TYPE_SCAN_QR, typeCheckIn)
                             putBoolean(KEY_DISABLE_BACK, onDisableBack)
                         }
                     )
@@ -50,23 +51,24 @@ class ScanQrActivity : AppCompatActivity() {
                 Manifest.permission.CAMERA,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ).onAccepted {
-                val type = intent.getStringExtra("type")
-                val disable = intent.getBooleanExtra("disable", false)
                 supportFragmentManager.beginTransaction().replace(
                     R.id.fragment,
-                    ScanQrFragment.newInstance(type ?: "", disable)
+                    ScanQrFragment.newInstance(intent.extras)
                 ).commit()
             }.onDenied {
                 Toast.makeText(
                     this,
-                    "Permission Denied",
+                    CheckInErrorType.PERMISSION_DENIED_ERROR.message,
                     Toast.LENGTH_LONG
                 ).show()
                 setResult(
                     Activity.RESULT_OK,
                     Intent(this, CheckInTEL::class.java).putExtras(
                         Bundle().apply {
-                            this.putString(KEY_ERROR_CHECK_IN_TEL, "Permission Denied!!")
+                            this.putString(
+                                KEY_ERROR_CHECK_IN_TEL,
+                                CheckInErrorType.PERMISSION_DENIED_ERROR.message
+                            )
                         }
                     )
                 )
@@ -76,7 +78,7 @@ class ScanQrActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (intent.getBooleanExtra(KEY_DISABLE_BACK, false)) {
+        if (!intent.getBooleanExtra(KEY_DISABLE_BACK, false)) {
             super.onBackPressed()
         }
     }
