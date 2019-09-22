@@ -21,16 +21,26 @@ import kotlinx.android.synthetic.main.activity_main_scan_qr.*
 import java.util.*
 
 class MainScanQrActivity : AppCompatActivity() {
+
     private var adapter = HistoryStaffAdapter()
+    private var isCallOpenScan = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_scan_qr)
+        bindingData()
         checkButton()
         getHistoryToday()
-        val day = Date().format("EE")
-        val nDay = Date().format("dd")
-        val mouth = Date().format("MMM")
-        date.text = String.format(this.getString(R.string.date_checkin), day, nDay, mouth)
+    }
+
+    fun bindingData() {
+        disableCheckIn()
+        date.text = String.format(
+                getString(R.string.date_checkin),
+                Date().format("EE"),
+                Date().format("dd"),
+                Date().format("MMM")
+        )
         back_to_menu.setOnClickListener {
             onBackPressed()
         }
@@ -43,7 +53,8 @@ class MainScanQrActivity : AppCompatActivity() {
         checkOutBtn.setOnClickListener {
             openScanQr(CheckInTELType.CheckOut.value)
         }
-
+        historyRecycle.adapter = adapter
+        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
     }
 
     override fun onResume() {
@@ -53,152 +64,157 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     private fun getHistoryToday() {
-        historyRecycle.adapter = adapter
-        historyRecycle?.layoutManager = LinearLayoutManager(this@MainScanQrActivity)
         CheckInTEL.checkInTEL?.getHistory(object : ArrayListGenericCallback<HistoryInDataModel> {
             override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
-                adapter.items.removeAll(dataModel ?: arrayListOf())
+                adapter.items.clear()
                 adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
                 historyRecycle.scrollToPosition((dataModel?.size)?.minus(1) ?: 0)
             }
 
             override fun onFailure(message: String?) {
+                showToastMessage(message)
             }
         })
-
     }
 
     private fun openScanQr(type: String) {
-        CheckInTEL.checkInTEL?.openScanQRCode(this, type, false,
-            object : CheckInTELCallBack {
-                override fun onCancel() {
+        CheckInTEL.checkInTEL?.openScanQRCode(
+                this,
+                type,
+                false,
+                object : CheckInTELCallBack {
+                    override fun onCancel() {
+                        // cancel scan in lib main scan
+                    }
 
-                }
+                    override fun onCheckInFailure(message: String) {
+                        showToastMessage(message)
+                    }
 
-                override fun onCheckInFailure(message: String) {
-                    Toast.makeText(this@MainScanQrActivity,"openScan.onFail : $message"
-                    ,Toast.LENGTH_LONG).show()
-                }
-
-                override fun onCheckInSuccess(result: String) {
-
-                }
-            })
+                    override fun onCheckInSuccess(result: String) {
+                        // scan success will be reload history
+                    }
+                })
     }
 
-    var checkFirstInDay = true
     private fun checkButton() {
-        val intent = Intent(this,CheckInTEL::class.java)
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
-                    checkFirstInDay = false
-                    checkInBtn.visibility = View.GONE
-                    checkBetBtn.visibility = View.VISIBLE
-                    checkOutBtn.visibility = View.VISIBLE
-                    pic_checkin.visibility = View.GONE
-                    layoutRecycle.visibility = View.VISIBLE
-                    intent.putExtras(
-                        Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
-                        }
-                    )
+                    showLastCheckIn()
                 } else if (type == CheckInTELType.CheckOut.value || type == CheckInTELType.CheckOutOverTime.value) {
-                    if (checkFirstInDay && !today && type != CheckInTELType.CheckOutOverTime.value) {
-                        openScanQr(CheckInTELType.CheckIn.value)
-                        checkFirstInDay = false
-                    }
-                    checkInBtn.visibility = View.VISIBLE
-                    checkBetBtn.visibility = View.GONE
-                    checkOutBtn.visibility = View.GONE
-                    if (today) {
-                        pic_checkin.visibility = View.GONE
-                        layoutRecycle.visibility = View.VISIBLE
-                    } else {
-                        pic_checkin.visibility = View.VISIBLE
-                        layoutRecycle.visibility = View.GONE
-                    }
-                    intent.putExtras(
-                        Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
-                        }
-                    )
+                    if (!isCallOpenScan) openScanQr(CheckInTELType.CheckIn.value)
+                    isCallOpenScan = true
+                    showLastCheckOut()
                 } else {
-                    checkFirstInDay = false
-                    checkInBtn.isEnabled = false
-                    checkBetBtn.isEnabled = false
-                    checkOutBtn.isEnabled = false
-                    checkInBtn.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this@MainScanQrActivity,
-                            R.color.purple
-                        )
-                    )
-                    checkBetBtn.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this@MainScanQrActivity,
-                            R.color.purple
-                        )
-                    )
-                    checkOutBtn.setBackgroundColor(
-                        ContextCompat.getColor(
-                            this@MainScanQrActivity,
-                            R.color.purple
-                        )
-                    )
-                    intent.putExtras(
-                        Bundle().apply {
-                            putString( CheckInTEL.KEY_RESULT_CHECK_IN_TEL
-                                , "Success")
-                        }
-                    )
+                    disableCheckIn()
                 }
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
-                )
             }
 
             override fun onFailure(message: String?) {
-                Toast.makeText(
-                    this@MainScanQrActivity,
-                    " ScanQr.onCheckFail = $message ",
-                    Toast.LENGTH_SHORT
-                ).show()
-                checkInBtn.isEnabled = false
-                checkBetBtn.isEnabled = false
-                checkOutBtn.isEnabled = false
-                checkInBtn.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@MainScanQrActivity,
-                        R.color.gray
-                    )
-                )
-                checkBetBtn.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@MainScanQrActivity,
-                        R.color.gray
-                    )
-                )
-                checkOutBtn.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this@MainScanQrActivity,
-                        R.color.gray
-                    )
-                )
-                intent.putExtras(
-                    Bundle().apply {
-                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                        , "getLastHistory.onFail : $message")
-                })
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
-                )
+                showToastMessage(message)
+                disableCheckIn()
             }
         })
+    }
+
+    fun showLastCheckOut() {
+        checkBetBtn.visibility = View.GONE
+        checkOutBtn.visibility = View.GONE
+        disableButtonCheckInBetween()
+        disableButtonCheckOut()
+    }
+
+    fun showLastCheckIn() {
+        checkInBtn.visibility = View.VISIBLE
+        checkBetBtn.visibility = View.VISIBLE
+        checkOutBtn.visibility = View.VISIBLE
+        enableCheckIn()
+    }
+
+    fun disableCheckIn() {
+        disableButtonCheckIn()
+        disableButtonCheckInBetween()
+        disableButtonCheckOut()
+    }
+
+    fun enableCheckIn() {
+        enableButtonCheckIn()
+        enableButtonCheckInBetween()
+        enableButtonCheckOut()
+    }
+
+    fun disableButtonCheckIn() {
+        checkInBtn.isEnabled = false
+        checkInBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                )
+        )
+    }
+
+    fun disableButtonCheckInBetween() {
+        checkBetBtn.isEnabled = false
+        checkBetBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                )
+        )
+    }
+
+    fun disableButtonCheckOut() {
+        checkOutBtn.isEnabled = false
+        checkOutBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.gray
+                )
+        )
+    }
+
+    fun enableButtonCheckIn() {
+        checkInBtn.isEnabled = true
+        checkInBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.purple
+                )
+        )
+    }
+
+    fun enableButtonCheckInBetween() {
+        checkBetBtn.isEnabled = true
+        checkBetBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.purple
+                )
+        )
+    }
+
+    fun enableButtonCheckOut() {
+        checkOutBtn.isEnabled = true
+        checkOutBtn.setBackgroundColor(
+                ContextCompat.getColor(
+                        this@MainScanQrActivity,
+                        R.color.purple
+                )
+        )
+    }
+
+    fun showToastMessage(message: String?) {
+        Toast.makeText(
+                this@MainScanQrActivity,
+                message
+                , Toast.LENGTH_LONG
+        ).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        CheckInTEL.checkInTEL?.onActivityResult(requestCode, resultCode, data)
     }
 }

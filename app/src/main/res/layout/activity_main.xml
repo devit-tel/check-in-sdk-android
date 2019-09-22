@@ -1,25 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
-		android:id="@+id/drawer_layout"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:fitsSystemWindows="true"
-		tools:openDrawer="start">
-	<LinearLayout
-			android:id="@+id/frag_main"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="horizontal">
-	</LinearLayout>
-	<android.support.design.widget.NavigationView
-			android:id="@+id/nav_view"
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:layout_gravity="start"
-			android:fitsSystemWindows="true"
-			app:headerLayout="@layout/activity_main_menu_drawer"
-			app:menu="@menu/menu_main"/>
-</android.support.v4.widget.DrawerLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	android:orientation="vertical">
+
+	<TextView
+		android:id="@+id/tvStatusLastHistory"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+
+	<Button
+		android:id="@+id/btnCheckLastHistory"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Check Last History" />
+
+	<Button
+		android:id="@+id/btnGetAllHistory"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Check All History" />
+
+	<Button
+		android:id="@+id/btnMainCheckIn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Main  Ckecin" />
+
+	<Button
+		android:id="@+id/btnScanCheckIn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Scan CheckIn" />
+
+	<Button
+		android:id="@+id/btnNearByCheckIn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Nearby CheckIn" />
+
+	<Button
+		android:id="@+id/btnShakeCheckIn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Shake CheckIn" />
+
+	<Button
+		android:id="@+id/btnCreateQRCodeCheckIn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Generate QR Code Check In" />
+
+	<TextView
+		android:id="@+id/tvHubName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+	<ImageView
+		android:id="@+id/imgQRCode"
+		android:layout_width="200dp"
+		android:layout_height="200dp" />
+</LinearLayout>

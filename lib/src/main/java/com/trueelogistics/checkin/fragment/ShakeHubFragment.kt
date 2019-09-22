@@ -23,10 +23,9 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = GenerateHubAdapter(this)
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shake_hub, container, false)
     }
 
@@ -39,27 +38,29 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
         nearbyRecycle.adapter = adapter
         nearbyRecycle?.layoutManager = LinearLayoutManager(activity)
         activity?.let {
-            ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
-                override fun onFound(hubId: String?, hubName: String?) {
-                    if (hubId != null && hubName !== null)
-                        insertItem(hubId, hubName)
-                    else {
-                        val intent = Intent(activity, CheckInTEL::class.java)
-                        intent.putExtras(
-                            Bundle().apply {
-                                putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                    , " HubId and HubName is null")
-                            }
-                        )
-                        CheckInTEL.checkInTEL?.onActivityResult(
-                            CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                            Activity.RESULT_OK, intent
-                        )
-                        it.onBackPressed()
+            if (it is ShakeActivity) {
+                it.itemShake(object : ShakeActivity.ShakeCallback {
+                    override fun onFound(hubId: String?, hubName: String?) {
+                        if (hubId != null && hubName !== null)
+                            insertItem(hubId, hubName)
+                        else {
+                            activity?.setResult(
+                                    Activity.RESULT_OK,
+                                    Intent(activity, CheckInTEL::class.java).apply {
+                                        this.putExtras(
+                                                Bundle().apply {
+                                                    putString(
+                                                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                            , " HubId and HubName is null"
+                                                    )
+                                                }
+                                        )
+                                    })
+                            activity?.finish()
+                        }
                     }
-                }
-
-            })
+                })
+            }
         }
     }
 
@@ -71,37 +72,40 @@ class ShakeHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val shakeDialog = CheckInDialogFragment()
-        shakeDialog.item = dataModel
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
                 val newType = when (type) {
-                    CheckInTELType.CheckOut.value ,CheckInTELType.CheckOutOverTime.value -> {
+                    CheckInTELType.CheckOut.value, CheckInTELType.CheckOutOverTime.value -> {
                         CheckInTELType.CheckIn.value
                     }
                     else -> {
                         CheckInTELType.CheckBetween.value
                     }
                 }
-                shakeDialog.checkinType = "SHAKE"
-                shakeDialog.typeFromLastCheckIn = newType
-                shakeDialog.show(activity?.supportFragmentManager, "show")
+                activity?.supportFragmentManager?.also {
+                    CheckInDialogFragment().apply {
+                        this.checkinType = "SHAKE"
+                        this.typeFromLastCheckIn = newType
+                        this.item = dataModel
+                    }.show(it, CheckInDialogFragment.TAG)
+                }
             }
 
             override fun onFailure(message: String?) {
-                val intent = Intent(activity, CheckInTEL::class.java)
-                intent.putExtras(
-                    Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " getLastCheck.onFail : $message ")
-                    }
-                )
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
-                )
+                activity?.setResult(
+                        Activity.RESULT_OK,
+                        Intent(activity, CheckInTEL::class.java).apply {
+                            this.putExtras(
+                                    Bundle().apply {
+                                        putString(
+                                                CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                                , " getLastCheck.onFail : $message"
+                                        )
+                                    }
+                            )
+                        })
+                activity?.finish()
             }
-
         })
     }
 }

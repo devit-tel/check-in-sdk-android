@@ -1,18 +1,52 @@
 package com.trueelogistics.checkin.model
 
-data class ScanDataModel (
-    var _id : String? = null,
-    var deleted : Boolean? = false,
-    var locationId : String ?= null ,
-    var latitude : String ?= null ,
-    var longtitude : String ?= null ,
-    var qrcodeId : String? = null,
-    var packageName : String? = null,
-    var citizenId : String ?= null ,
-    var userId : String? = null,
-    var eventType : String? = null,
-    var checkinType : String? = null,
-    var updatedAt : String? = null,
-    var createdAt : String? = null,
-    var __v : String? = null
-)
+import android.os.Parcelable
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class ScanDataModel(
+    @SerializedName("_id")
+    @Expose
+    var _id: String? = null,
+    @SerializedName("deleted")
+    @Expose
+    var deleted: Boolean? = false,
+    @SerializedName("locationId")
+    @Expose
+    var locationId: String? = null,
+    @SerializedName("latitude")
+    @Expose
+    var latitude: String? = null,
+    @SerializedName("longtitude")
+    @Expose
+    var longtitude: String? = null,
+    @SerializedName("qrcodeId")
+    @Expose
+    var qrcodeId: String? = null,
+    @SerializedName("packageName")
+    @Expose
+    var packageName: String? = null,
+    @SerializedName("citizenId")
+    @Expose
+    var citizenId: String? = null,
+    @SerializedName("userId")
+    @Expose
+    var userId: String? = null,
+    @SerializedName("eventType")
+    @Expose
+    var eventType: String? = null,
+    @SerializedName("checkinType")
+    @Expose
+    var checkinType: String? = null,
+    @SerializedName("updatedAt")
+    @Expose
+    var updatedAt: String? = null,
+    @SerializedName("createdAt")
+    @Expose
+    var createdAt: String? = null,
+    @SerializedName("__v")
+    @Expose
+    var __v: String? = null
+) : Parcelable

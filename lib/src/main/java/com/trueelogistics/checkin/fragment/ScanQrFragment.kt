@@ -1,6 +1,7 @@
 package com.trueelogistics.checkin.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,49 +19,40 @@ import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.ScanQrActivity
+import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
 import com.trueelogistics.checkin.model.ScanRootModel
 import com.trueelogistics.checkin.service.RetrofitGenerater
 import com.trueelogistics.checkin.service.ScanQrService
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ScanQrFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_scan_qrcode, container, false)
-    }
 
     companion object {
+        const val TAG = "ScanQrFragment"
         var isScan = true
         var cancelFirstCheckIn = false
-        const val TYPE_KEY = "TYPE_KEY"
-        const val CHECK_DISABLE = "CHECK_DISABLE"
-        fun newInstance(type: String, checkDisable: Boolean): ScanQrFragment {
+        fun newInstance(bundle: Bundle? = Bundle()): ScanQrFragment {
             val fragment = ScanQrFragment()
-            val bundle = Bundle().apply {
-                putString("TYPE_KEY", type)
-                putBoolean("CHECK_DISABLE", checkDisable)
-            }
             fragment.arguments = bundle
             return fragment
         }
-
     }
 
-    fun showBackPressed() {
-        cancelFirstCheckIn = true
-        this.back_page.visibility = View.VISIBLE
-    }
+    private val checkInResponse = CheckInRepository.instance
+    private var compositeDisposable = CompositeDisposable()
 
     private val callback = object : BarcodeCallback {
-        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {  // do noting in action
+        override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
         }
 
         override fun barcodeResult(result: BarcodeResult) {
@@ -70,133 +62,70 @@ class ScanQrFragment : Fragment() {
         }
     }
 
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_scan_qrcode, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindingData()
+    }
+
+    fun bindingData() {
         setDisableBackPage()
-        type_check_in.text = when (arguments?.getString(TYPE_KEY).toString()) {
+        type_check_in.text = when (arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString()) {
             CheckInTELType.CheckIn.value -> {
-                getString(R.string.full_checkin_text)
+                getString(CheckInTELType.CheckIn.res)
             }
             CheckInTELType.CheckBetween.value -> {
-                getString(R.string.full_check_between_text)
+                getString(CheckInTELType.CheckBetween.res)
             }
             CheckInTELType.CheckOut.value -> {
-                getString(R.string.full_checkout_text)
+                getString(CheckInTELType.CheckOut.res)
+            }
+            CheckInTELType.CheckOutOverTime.value -> {
+                getString(CheckInTELType.CheckOutOverTime.res)
             }
             else -> {
-                arguments?.getString(TYPE_KEY).toString()
+                arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString()
             }
         }
         scanner_fragment?.setStatusText("")
         scanner_fragment?.decodeContinuous(callback)
-        back_page.setOnClickListener {
-            activity?.onBackPressed()
-        }
-        self_checkin.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()?.replace(
-                R.id.fragment,
-                ManualCheckInFragment.newInstance(arguments?.getString(TYPE_KEY).toString())
-            )?.addToBackStack(ManualCheckInFragment::class.java.name)?.commit()
-        }
+        back_page.setOnClickListener { activity?.onBackPressed() }
+        self_checkin.setOnClickListener { openScanManual() }
     }
 
     private fun setDisableBackPage() {
-        val check = arguments?.getBoolean(CHECK_DISABLE)
-        if (check == true)
-            back_page.visibility = View.GONE
+        if (arguments?.getBoolean(ScanQrActivity.KEY_DISABLE_BACK, false) == true) {
+            disableBack()
+        }
     }
 
     private fun checkLocation(result: String) {
-        //start dialog and stop camera
         if (isScan) {
             isScan = false
-            val loadingDialog = ProgressDialog.show(
-                context, "Checking Qr code"
-                , "please wait...", true, false
-            )
-            val retrofit = RetrofitGenerater().build(true)
-                .create(ScanQrService::class.java)
-            val type = arguments?.getString(TYPE_KEY).toString()
             var fusedLocationClient: FusedLocationProviderClient
-            var latitude: Double
-            var longitude: Double
             activity?.let { activity ->
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
                 if (ContextCompat.checkSelfPermission(
-                        activity, Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                    == PackageManager.PERMISSION_GRANTED
+                                activity,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    fusedLocationClient.lastLocation
-                        ?.addOnSuccessListener { location: Location? ->
-                            if (location?.isFromMockProvider == false) {
-                                latitude = location.latitude
-                                longitude = location.longitude
-                                val call =
-                                    retrofit.getData(
-                                        type,
-                                        result,
-                                        null,
-                                        latitude.toString(),
-                                        longitude.toString()
-                                    )
-                                call.enqueue(object : Callback<ScanRootModel> {
-                                    val intent = Intent(activity, CheckInTEL::class.java)
-                                    override fun onFailure(
-                                        call: Call<ScanRootModel>,
-                                        t: Throwable
-                                    ) {
-                                        showBackPressed()
-                                        loadingDialog?.dismiss()
-                                        isScan = true
-                                    }
-
-                                    override fun onResponse(
-                                        call: Call<ScanRootModel>,
-                                        response: Response<ScanRootModel>
-                                    ) {
-                                        loadingDialog?.dismiss()
-                                        when {
-                                            response.code() == 200 -> {
-                                                onPause()
-                                                SuccessDialogFragment.newInstance(type)
-                                                    .show(activity.supportFragmentManager, "show")
-                                            }
-                                            response.code() == 400 -> {
-                                                intent.putExtras(
-                                                    Bundle().apply {
-                                                        putString(
-                                                            KEY_ERROR_CHECK_IN_TEL,
-                                                            "This QRCode Used"
-                                                        )
-                                                    }
-                                                )
-                                                OldQrDialogFragment().show(
-                                                    activity.supportFragmentManager,
-                                                    "show"
-                                                )
-                                            }
-                                            else -> {
-                                                Toast.makeText(
-                                                    context,
-                                                    "ไม่สามารถสแกนเพื่อระบุตำแหน่งได้",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                                showBackPressed()
-                                                isScan = true
-                                            }
-                                        }
-
-                                    }
-                                })
-                            } else {
-                                loadingDialog?.dismiss()
-                                MockDialogFragment().show(activity.supportFragmentManager, "show")
-                            }
+                    fusedLocationClient.lastLocation?.addOnSuccessListener { location: Location? ->
+                        if (location?.isFromMockProvider == false) {
+                            postCheckIn(result, location.latitude, location.longitude)
+                        } else {
+                            openDialogMockLocation()
                         }
+                    }
                 } else {
-                    Toast.makeText(activity, "กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง", Toast.LENGTH_LONG)
-                        .show()
+                    showToastMessage("กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง")
                     activity.finishAffinity()
                 }
             }
@@ -208,8 +137,126 @@ class ScanQrFragment : Fragment() {
         super.onResume()
     }
 
+    fun postCheckIn(
+            result: String,
+            latitude: Double,
+            longitude: Double
+    ) {
+        val loadingDialog = ProgressDialog.show(
+                context,
+                "Checking Qr code",
+                "please wait...",
+                true,
+                false
+        )
+        checkInResponse.postCheckIn(
+                arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
+                result,
+                null,
+                latitude.toString(),
+                longitude.toString()
+        ).subscribe({
+            loadingDialog?.dismiss()
+            when {
+                it.code() == 200 -> {
+                    onPause()
+                    scanCompleteOpenDialogSuccess()
+                }
+                it.code() == 400 -> {
+                    scanErrorBadRequest()
+                }
+                else -> {
+                    errorScan()
+                    isScan = true
+                }
+            }
+        }, {
+            // error
+            loadingDialog?.dismiss()
+            errorScan()
+            isScan = true
+        }).addTo(compositeDisposable)
+    }
+
     override fun onPause() {
         scanner_fragment?.pause()
         super.onPause()
+    }
+
+    fun openScanManual() {
+        replaceFragmentInActivity(
+                R.id.fragment,
+                ManualCheckInFragment.newInstance(arguments),
+                ManualCheckInFragment.TAG,
+                true
+        )
+    }
+
+    fun openDialogMockLocation() {
+        activity?.supportFragmentManager?.also {
+            MockDialogFragment().show(
+                    it,
+                    MockDialogFragment.TAG
+            )
+        }
+    }
+
+    fun showToastMessage(message: String?) {
+        Toast.makeText(
+                context,
+                message,
+                Toast.LENGTH_LONG
+        ).show()
+    }
+
+    fun errorScan() {
+        showToastMessage("ไม่สามารถสแกนเพื่อระบุตำแหน่งได้")
+        enableBack()
+    }
+
+    fun disableBack() {
+        this.back_page.visibility = View.GONE
+    }
+
+    fun enableBack() {
+        this.back_page.visibility = View.VISIBLE
+    }
+
+    fun scanCompleteOpenDialogSuccess() {
+        activity?.supportFragmentManager?.let { supportFragmentManager ->
+            SuccessDialogFragment.newInstance(arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString())
+                    .show(
+                            supportFragmentManager,
+                            SuccessDialogFragment.TAG
+                    )
+        } ?: run {
+            scanCompleteNotOpenDialogSuccess()
+        }
+    }
+
+    fun scanCompleteNotOpenDialogSuccess() {
+        activity?.setResult(
+                Activity.RESULT_OK,
+                Intent(activity, CheckInTEL::class.java).putExtras(
+                        Bundle().apply {
+                            this.putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL, "success")
+                        }
+                ))
+        activity?.finish()
+    }
+
+    fun scanErrorBadRequest() {
+        activity?.supportFragmentManager?.also { supportFragmentManager ->
+            OldQrDialogFragment().show(
+                    supportFragmentManager,
+                    OldQrDialogFragment.TAG
+            )
+        }
+        errorScan()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        compositeDisposable.clear()
     }
 }

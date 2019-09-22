@@ -16,26 +16,31 @@ class NearByActivity : AppCompatActivity() {
         private var mMessageListener: MessageListener? = null
     }
 
+    interface NearByCallback {
+        fun onFoundNearBy(hubId: String? = "")
+        fun onLostNearBy(hubId: String? = "")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_near_by)
 
         supportFragmentManager.beginTransaction().add(R.id.frag_nearby, NearByFindingFragment())
-            .commit()
+                .commit()
     }
 
     fun itemNearBy(activity: Activity, itemListener: NearByCallback) {
         mMessageListener = object : MessageListener() {
             override fun onFound(message: Message?) {
                 val content = message?.content?.toString(
-                    Charsets.UTF_8
+                        Charsets.UTF_8
                 )
                 itemListener.onFoundNearBy(content)
             }
 
             override fun onLost(message: Message?) {
                 val content = message?.content?.toString(
-                    Charsets.UTF_8
+                        Charsets.UTF_8
                 )
                 itemListener.onLostNearBy(content)
             }
@@ -51,15 +56,6 @@ class NearByActivity : AppCompatActivity() {
             Nearby.getMessagesClient(this).unsubscribe(ml)
             NearByFindingFragment.showView = true
         }
-        CheckInTEL.checkInTEL?.onActivityResult(
-            CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-            Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
-        )
         finish()
-    }
-
-    interface NearByCallback {
-        fun onFoundNearBy(hubId: String? = "")
-        fun onLostNearBy(hubId: String? = "")
     }
 }

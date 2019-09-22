@@ -10,11 +10,14 @@ import kotlinx.android.synthetic.main.fragment_mock_dialog.*
 
 class MockDialogFragment : DialogFragment() {
 
+    companion object {
+        const val TAG = "MockDialogFragment"
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_mock_dialog, container, false)
     }
 
@@ -22,7 +25,7 @@ class MockDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         onPause()
         scanAgain.setOnClickListener {
-            dialog.cancel()
+            dialog?.cancel()
             ScanQrFragment.isScan = true
             onResume()
         }
@@ -32,6 +35,6 @@ class MockDialogFragment : DialogFragment() {
         super.onStart()
         val width = ViewGroup.LayoutParams.WRAP_CONTENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
-        dialog.window?.setLayout(width, height)
+        dialog?.window?.setLayout(width, height)
     }
 }

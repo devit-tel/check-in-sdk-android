@@ -19,8 +19,8 @@ class NearByFindingFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_near_by_finding, container, false)
@@ -39,9 +39,9 @@ class NearByFindingFragment : Fragment() {
                 override fun onFoundNearBy(hubId: String?) {
                     if (showView) {
                         activity.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.frag_nearby, NearByHubFragment())
-                            ?.addToBackStack(null)
-                            ?.commit()
+                                ?.replace(R.id.frag_nearby, NearByHubFragment())
+                                ?.addToBackStack(null)
+                                ?.commit()
                         showView = false
                     }
                 }

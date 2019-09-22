@@ -18,10 +18,14 @@ import kotlinx.android.synthetic.main.fragment_stock_dialog.*
 
 class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocationClickListener {
 
+    companion object {
+        const val TAG = "StockDialogFragment"
+    }
+
     private var doSomething: ((item: HubInDataModel) -> Unit)? = null
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_stock_dialog, container, false)
     }
@@ -36,7 +40,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
     }
 
     private fun getRetrofit() {
-        CheckInTEL.checkInTEL?.hubGenerater(object : ArrayListGenericCallback<HubInDataModel> {
+        CheckInTEL.checkInTEL?.hubGenerator(object : ArrayListGenericCallback<HubInDataModel> {
             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 activity?.also {
                     recycleView?.layoutManager = LinearLayoutManager(it)
@@ -52,7 +56,11 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         })
     }
 
-    override fun onItemLocationClick(item: HubInDataModel, oldRadioButton: RadioButton?, newRadioButton: RadioButton?) {
+    override fun onItemLocationClick(
+            item: HubInDataModel,
+            oldRadioButton: RadioButton?,
+            newRadioButton: RadioButton?
+    ) {
         oldRadioButton?.isChecked = false
         newRadioButton?.isChecked = true
         activity?.let {
@@ -64,7 +72,7 @@ class StockDialogFragment : BottomSheetDialogFragment(), HubAdapter.OnItemLocati
         }
     }
 
-    fun setOnItemLocationClick(doSomething: ((item: HubInDataModel) -> Unit)? = null) { // save stucture from stock to value name doSomething
-        this.doSomething = doSomething  //save class who call this function
+    fun setOnItemLocationClick(doSomething: ((item: HubInDataModel) -> Unit)? = null) {
+        this.doSomething = doSomething
     }
 }

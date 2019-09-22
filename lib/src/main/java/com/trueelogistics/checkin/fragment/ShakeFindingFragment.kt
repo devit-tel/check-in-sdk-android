@@ -1,7 +1,5 @@
 package com.trueelogistics.checkin.fragment
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,18 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.activity.ShakeActivity
-import com.trueelogistics.checkin.handler.CheckInTEL
 import kotlinx.android.synthetic.main.fragment_shake_finding.*
 
 class ShakeFindingFragment : Fragment() {
 
     private var shakeAnimation: AnimationDrawable? = null
-    companion object{
+
+    companion object {
         var showView = true
     }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shake_finding, container, false)
@@ -35,18 +34,20 @@ class ShakeFindingFragment : Fragment() {
         }
         nearByAnimation()
         activity?.let {
-            ShakeActivity().itemShake(it, object : ShakeActivity.ShakeCallback {
-                override fun onFound(hubId: String?, hubName: String?) {
-                    if (showView) {
-                        it.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.fragment_shake, ShakeHubFragment())
-                            ?.addToBackStack(null)
-                            ?.commit()
-                        showView = false
-                    }
-                }
-
-            })
+            if (it is ShakeActivity) {
+                it.itemShake(
+                        object : ShakeActivity.ShakeCallback {
+                            override fun onFound(hubId: String?, hubName: String?) {
+                                if (showView) {
+                                    it.supportFragmentManager.beginTransaction()
+                                            .replace(R.id.fragment_shake, ShakeHubFragment())
+                                            .addToBackStack(null)
+                                            .commit()
+                                    showView = false
+                                }
+                            }
+                        })
+            }
         }
     }
 
@@ -57,3 +58,4 @@ class ShakeFindingFragment : Fragment() {
         shakeAnimation?.start()
     }
 }
+

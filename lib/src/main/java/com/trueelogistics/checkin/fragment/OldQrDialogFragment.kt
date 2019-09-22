@@ -10,11 +10,14 @@ import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
 class OldQrDialogFragment : DialogFragment() {
 
+    companion object {
+        const val TAG = "OldQrDialogFragment"
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_old_qr_dialog, container, false)
     }
 
@@ -22,7 +25,7 @@ class OldQrDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         onPause()
         scanAgain.setOnClickListener {
-            dialog.cancel()
+            dialog?.cancel()
             ScanQrFragment.isScan = true
             onResume()
         }
@@ -32,7 +35,7 @@ class OldQrDialogFragment : DialogFragment() {
         super.onStart()
         val width = ViewGroup.LayoutParams.WRAP_CONTENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
-        dialog.window?.setLayout(width, height)
+        dialog?.window?.setLayout(width, height)
     }
-
 }
+

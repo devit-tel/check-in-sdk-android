@@ -26,8 +26,8 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = GenerateHubAdapter(this)
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_near_by_hub, container, false)
@@ -55,8 +55,8 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
     }
 
     fun getHubNameFromService(hubId: String, foundItem: Boolean) {
-        CheckInTEL.checkInTEL?.hubGenerater(object :
-            ArrayListGenericCallback<HubInDataModel> {
+        CheckInTEL.checkInTEL?.hubGenerator(object :
+                ArrayListGenericCallback<HubInDataModel> {
             override fun onResponse(dataModel: ArrayList<HubInDataModel>?) {
                 var hubNameFromService: String? = ""
                 dataModel?.forEach {
@@ -71,19 +71,21 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
 
             override fun onFailure(message: String?) {
                 Toast.makeText(
-                    activity, " name of Hub onFailure : $message "
-                    , Toast.LENGTH_LONG
+                        activity, " name of Hub onFailure : $message "
+                        , Toast.LENGTH_LONG
                 ).show()
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
-                    Bundle().apply {
-                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " get nameHub onFailure : $message ")
-                    }
+                        Bundle().apply {
+                            putString(
+                                    CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                    , " get nameHub onFailure : $message "
+                            )
+                        }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.RESULT_OK, intent
+                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                        Activity.RESULT_OK, intent
                 )
             }
 
@@ -127,20 +129,24 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 }
                 nearByDialog.checkinType = "NEARBY"
                 nearByDialog.typeFromLastCheckIn = newType
-                nearByDialog.show(activity?.supportFragmentManager, "show")
+                activity?.supportFragmentManager?.also {
+                    nearByDialog.show(it, "show")
+                }
             }
 
             override fun onFailure(message: String?) {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
-                    Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " getLastCheck.onFail : $message ")
-                    }
+                        Bundle().apply {
+                            putString(
+                                    CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                    , " getLastCheck.onFail : $message "
+                            )
+                        }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.BIND_NOT_FOREGROUND, intent
+                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                        Activity.BIND_NOT_FOREGROUND, intent
                 )
             }
 
