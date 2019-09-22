@@ -70,7 +70,7 @@ class ScanQrActivity : AppCompatActivity() {
                         }
                     )
                 )
-                finish()
+                finishAffinity()
             }
             .ask()
     }
