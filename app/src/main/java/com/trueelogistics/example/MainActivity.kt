@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
                 override fun onCancel() {
                     showToastMessage("Cancel")
                 }
-
             }
         )
     }
