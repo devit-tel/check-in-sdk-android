@@ -6,7 +6,6 @@ import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
-import android.os.Bundle
 import android.util.Base64
 import com.trueelogistics.checkin.activity.MainScanQrActivity
 import com.trueelogistics.checkin.activity.NearByActivity
@@ -278,14 +277,11 @@ class CheckInTEL {
         checkInTELCallBack: CheckInTELCallBack
     ) {
         this.checkInTELCallBack = checkInTELCallBack
-        val intent = Intent(activity, ScanQrActivity::class.java)
-        intent.putExtras(
-            Bundle().apply {
-                putString("type", typeCheckIn)
-                putBoolean("disable", onDisableBack)
-            }
+        ScanQrActivity.startActivityForResult(
+            activity, KEY_REQUEST_CODE_CHECK_IN_TEL,
+            typeCheckIn,
+            onDisableBack
         )
-        activity.startActivityForResult(intent, KEY_REQUEST_CODE_CHECK_IN_TEL)
     }
 
     fun openMainScanQrCode(

@@ -15,10 +15,37 @@ import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_I
 
 class ScanQrActivity : AppCompatActivity() {
 
+    companion object {
+        const val KEY_TYPE = "KEY_TYPE_SCAN_QR"
+        const val KEY_DISABLE_BACK = "KEY_DISABLE_BACK"
+        fun startActivityForResult(
+            activity: Activity?,
+            requestCode: Int,
+            typeCheckIn: String?,
+            onDisableBack: Boolean
+        ) {
+            activity?.startActivityForResult(
+                Intent(activity, ScanQrActivity::class.java).apply {
+                    this.putExtras(
+                        Bundle().apply {
+                            putString(KEY_TYPE, typeCheckIn)
+                            putBoolean(KEY_DISABLE_BACK, onDisableBack)
+                        }
+                    )
+                },
+                requestCode
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_qr)
-        KotlinPermissions.with(this) // where this is an FragmentActivity instance
+        bindingData()
+    }
+
+    fun bindingData() {
+        KotlinPermissions.with(this)
             .permissions(
                 Manifest.permission.CAMERA,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -49,17 +76,8 @@ class ScanQrActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val currentFrag = this.supportFragmentManager.fragments[0].javaClass
-        val scanQr = ScanQrFragment::class.java
-        val disable = intent.getBooleanExtra("disable", false)
-        if (currentFrag != scanQr) {
+        if (intent.getBooleanExtra("disable", false)) {
             super.onBackPressed()
-        } else if (ScanQrFragment.cancelFirstCheckIn || !disable) {
-            CheckInTEL.checkInTEL?.onActivityResult(
-                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL
-                , Activity.RESULT_CANCELED, Intent(this, CheckInTEL::class.java)
-            )
-            finish()
         }
     }
 }
