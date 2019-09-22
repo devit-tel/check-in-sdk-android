@@ -2,6 +2,8 @@ package com.trueelogistics.checkin.api
 
 
 import com.trueelogistics.checkin.BuildConfig.DEBUG
+import com.trueelogistics.checkin.enums.EnvironmentType
+import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.HeaderModel
 import com.trueelogistics.checkin.utils.Constant.Companion.SERVICE_TIMEOUT
 import okhttp3.OkHttpClient
@@ -16,7 +18,10 @@ class RetrofitConnection {
     companion object {
 
         fun create(
-            baseUrl: String = "BASE_URL",
+            baseUrl: String = if (CheckInTEL.environmentType == EnvironmentType.Production.value)
+                "http://api.sendit.asia"
+            else
+                "http://api.staging.sendit.asia",
             needHeader: Boolean = true,
             moreHeader: ArrayList<HeaderModel>? = null,
             token: String? = null
