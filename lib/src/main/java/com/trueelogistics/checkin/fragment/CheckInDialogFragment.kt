@@ -19,8 +19,6 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.model.GenerateItemHubModel
 import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.service.RetrofitGenerater
-import com.trueelogistics.checkin.service.ScanQrService
 import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 import retrofit2.Call

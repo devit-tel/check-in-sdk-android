@@ -24,16 +24,9 @@ import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
-import com.trueelogistics.checkin.handler.CheckInTEL.Companion.KEY_ERROR_CHECK_IN_TEL
-import com.trueelogistics.checkin.model.ScanRootModel
-import com.trueelogistics.checkin.service.RetrofitGenerater
-import com.trueelogistics.checkin.service.ScanQrService
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ScanQrFragment : Fragment() {
 
