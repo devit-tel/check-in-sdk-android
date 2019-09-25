@@ -2,7 +2,6 @@ package com.trueelogistics.checkin.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -17,6 +16,7 @@ import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.BaseDialogProgress
 import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
@@ -42,6 +42,14 @@ class ScanQrFragment : Fragment() {
     private val checkInResponse = CheckInRepository.instance
     private var compositeDisposable = CompositeDisposable()
     private var isScan = true
+    private var baseDialogProcess: BaseDialogProgress? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.also {
+            baseDialogProcess = BaseDialogProgress(it)
+        }
+    }
 
     private val callback = object : BarcodeCallback {
         override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
@@ -108,8 +116,10 @@ class ScanQrFragment : Fragment() {
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                 ) {
+                    baseDialogProcess?.show()
                     CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
                         override fun onLocationUpdate(location: Location) {
+                            baseDialogProcess?.dismiss()
                             if (!location.isFromMockProvider) {
                                 postCheckIn(result, location.latitude, location.longitude)
                             } else {
@@ -119,11 +129,13 @@ class ScanQrFragment : Fragment() {
                         }
 
                         override fun onLocationTimeout() {
+                            baseDialogProcess?.dismiss()
                             isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                         }
 
                         override fun onLocationError() {
+                            baseDialogProcess?.dismiss()
                             isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                         }
@@ -147,13 +159,7 @@ class ScanQrFragment : Fragment() {
             latitude: Double,
             longitude: Double
     ) {
-        val loadingDialog = ProgressDialog.show(
-                context,
-                "Checking Qr code",
-                "please wait...",
-                true,
-                false
-        )
+        baseDialogProcess?.show()
         checkInResponse.postCheckIn(
                 arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
                 result,
@@ -161,7 +167,7 @@ class ScanQrFragment : Fragment() {
                 latitude.toString(),
                 longitude.toString()
         ).subscribe({
-            loadingDialog?.dismiss()
+            baseDialogProcess?.dismiss()
             when {
                 it.code() == 200 -> {
                     onPause()
@@ -178,7 +184,7 @@ class ScanQrFragment : Fragment() {
             }
         }, {
             // error
-            loadingDialog?.dismiss()
+            baseDialogProcess?.dismiss()
             errorScan()
             isScan = true
         }).addTo(compositeDisposable)

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -25,10 +24,12 @@ class MainScanQrActivity : AppCompatActivity() {
 
     private var adapter = HistoryStaffAdapter()
     private var isCallOpenScan = false
+    private var baseDialogProcess: BaseDialogProgress? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_scan_qr)
+        baseDialogProcess = BaseDialogProgress(this)
         bindingData()
         getHistoryToday()
     }
@@ -60,12 +61,13 @@ class MainScanQrActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         getHistoryToday()
-        checkButton()
     }
 
     private fun getHistoryToday() {
+        baseDialogProcess?.show()
         CheckInTEL.checkInTEL?.getHistory(object : ArrayListGenericCallback<HistoryInDataModel> {
             override fun onResponse(dataModel: ArrayList<HistoryInDataModel>?) {
+                baseDialogProcess?.dismiss()
                 adapter.items.clear()
                 adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
@@ -75,11 +77,13 @@ class MainScanQrActivity : AppCompatActivity() {
                 } else {
                     hideEmptyData()
                 }
+                checkButton()
             }
 
             override fun onFailure(message: String?) {
                 showToastMessage(message)
                 hideEmptyData()
+                checkButton()
             }
         })
     }
@@ -105,8 +109,10 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     private fun checkButton() {
+        baseDialogProcess?.show()
         CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
             override fun onResponse(type: String?, today: Boolean) {
+                baseDialogProcess?.dismiss()
                 if (type == CheckInTELType.CheckIn.value || type == CheckInTELType.CheckBetween.value) {
                     showLastCheckIn()
                 } else if (type == CheckInTELType.CheckOut.value || type == CheckInTELType.CheckOutOverTime.value) {
@@ -119,6 +125,7 @@ class MainScanQrActivity : AppCompatActivity() {
             }
 
             override fun onFailure(message: String?) {
+                baseDialogProcess?.dismiss()
                 showToastMessage(message)
                 disableCheckIn()
             }
@@ -126,16 +133,16 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     fun showLastCheckOut() {
-        checkBetBtn.visibility = View.GONE
-        checkOutBtn.visibility = View.GONE
+        checkBetBtn.visibility = GONE
+        checkOutBtn.visibility = GONE
         disableButtonCheckInBetween()
         disableButtonCheckOut()
     }
 
     fun showLastCheckIn() {
-        checkInBtn.visibility = View.VISIBLE
-        checkBetBtn.visibility = View.VISIBLE
-        checkOutBtn.visibility = View.VISIBLE
+        checkInBtn.visibility = VISIBLE
+        checkBetBtn.visibility = VISIBLE
+        checkOutBtn.visibility = VISIBLE
         enableCheckIn()
     }
 

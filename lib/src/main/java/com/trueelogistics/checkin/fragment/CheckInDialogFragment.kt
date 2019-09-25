@@ -2,7 +2,6 @@ package com.trueelogistics.checkin.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -12,28 +11,40 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.BaseDialogProgress
 import com.trueelogistics.checkin.api.RetrofitGenerator
+import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.CheckLocationHandler
 import com.trueelogistics.checkin.model.GenerateItemHubModel
-import com.trueelogistics.checkin.model.ScanRootModel
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
-import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class CheckInDialogFragment : BottomSheetDialogFragment() {
 
-    companion object{
+    companion object {
         const val TAG = "CheckInDialogFragment"
     }
 
     var item: GenerateItemHubModel? = null
     var typeFromLastCheckIn: String? = null
     var checkinType: String? = null
+    private val checkInResponse = CheckInRepository.instance
+    private var compositeDisposable = CompositeDisposable()
+    private var baseDialogProcess: BaseDialogProgress? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.also {
+            baseDialogProcess = BaseDialogProgress(it)
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -129,7 +140,6 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
 
     private fun checkLocation(type: String, hub_id: String) {
         val retrofit = RetrofitGenerator().build(true).create(com.trueelogistics.checkin.api.service.ScanQrService::class.java)
-        val loadingDialog = ProgressDialog.show(context, "$type Processing", "please wait...")
         activity?.let { activity ->
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(
@@ -137,106 +147,29 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
                     )
                     == PackageManager.PERMISSION_GRANTED
             ) {
-                fusedLocationClient.lastLocation
-                        ?.addOnSuccessListener { location: Location? ->
-                            if (location?.isFromMockProvider == false) {
-                                val latitude = location.latitude
-                                val longitude = location.longitude
-                                val call = retrofit.getData(
-                                        type, "", hub_id, checkinType
-                                        , latitude.toString(), longitude.toString()
-                                )
-                                call.enqueue(object : Callback<ScanRootModel> {
-                                    val intent = Intent(activity, CheckInTEL::class.java)
-                                    override fun onFailure(call: Call<ScanRootModel>, t: Throwable) {
-                                        //stop dialog and start camera
-                                        loadingDialog.dismiss()
-
-                                        intent.putExtras(
-                                                Bundle().apply {
-                                                    putString(
-                                                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                            , t.message
-                                                    )
-                                                }
-                                        )
-                                        CheckInTEL.checkInTEL?.onActivityResult(
-                                                CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                                                Activity.RESULT_OK, intent
-                                        )
-                                        ScanQrFragment.cancelFirstCheckIn = true
-
-                                    }
-
-                                    override fun onResponse(
-                                            call: Call<ScanRootModel>,
-                                            response: Response<ScanRootModel>
-                                    ) {
-                                        //stop dialog
-                                        loadingDialog.dismiss()
-                                        when {
-                                            response.code() == 200 -> {
-                                                SuccessDialogFragment.newInstance(type)
-                                                        .show(activity.supportFragmentManager, "show")
-                                            }
-                                            response.code() == 400 -> {
-                                                onPause()
-                                                intent.putExtras(
-                                                        Bundle().apply {
-                                                            putString(
-                                                                    CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                                    , getString(R.string.wrong_locationId)
-                                                            )
-                                                        }
-                                                )
-                                                CheckInTEL.checkInTEL?.onActivityResult(
-                                                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                                                        Activity.RESULT_OK, intent
-                                                )
-                                                OldQrDialogFragment().fail_text.visibility = View.GONE
-                                                OldQrDialogFragment().show(
-                                                        activity.supportFragmentManager,
-                                                        "show"
-                                                )
-                                            }
-                                            else -> {
-                                                ScanQrFragment.cancelFirstCheckIn = true
-                                                intent.putExtras(
-                                                        Bundle().apply {
-                                                            putString(
-                                                                    CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                                    ,
-                                                                    "${response.code()} : ${response.message()}"
-                                                            )
-                                                        }
-                                                )
-                                                CheckInTEL.checkInTEL?.onActivityResult(
-                                                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                                                        Activity.RESULT_OK, intent
-                                                )
-                                            }
-                                        }
-                                    }
-                                })
-                            } else {
-                                loadingDialog.dismiss()
-                                MockDialogFragment()
-                                        .show(activity.supportFragmentManager, "show")
-                                val intent = Intent(activity, CheckInTEL::class.java)
-                                intent.putExtras(
-                                        Bundle().apply {
-                                            putString(
-                                                    CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                                                    , "GPS is Mock !!"
-                                            )
-                                        }
-                                )
-                                CheckInTEL.checkInTEL?.onActivityResult(
-                                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                                        Activity.RESULT_OK, intent
-                                )
-                            }
+                baseDialogProcess?.show()
+                CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
+                    override fun onLocationUpdate(location: Location) {
+                        baseDialogProcess?.dismiss()
+                        if (!location.isFromMockProvider) {
+                            postCheckIn(location, type, hub_id)
+                        } else {
+                            openDialogMockLocation()
                         }
+                    }
+
+                    override fun onLocationTimeout() {
+                        baseDialogProcess?.dismiss()
+                        showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                    }
+
+                    override fun onLocationError() {
+                        baseDialogProcess?.dismiss()
+                        showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                    }
+
+                })
+
             } else {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
@@ -253,5 +186,89 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
                 )
             }
         }
+    }
+
+
+    fun postCheckIn(location: Location, type: String, hubID: String) {
+        baseDialogProcess?.show()
+        checkInResponse.postCheckIn(
+                type = type,
+                qrcodeUniqueKey = null,
+                locationId = hubID,
+                latitude = location.latitude.toString(),
+                longitude = location.longitude.toString()
+        ).subscribe({
+            baseDialogProcess?.dismiss()
+            when {
+                it.code() == 200 -> {
+                    scanCompleteOpenDialogSuccess(type)
+                }
+                it.code() == 400 -> {
+                    scanErrorBadRequest()
+                }
+                else -> {
+                    errorScan()
+                }
+            }
+        }, {
+            // error
+            baseDialogProcess?.dismiss()
+            errorScan()
+        }).addTo(compositeDisposable)
+    }
+
+    fun openDialogMockLocation() {
+        activity?.supportFragmentManager?.also {
+            MockDialogFragment()
+                    .show(
+                            it,
+                            MockDialogFragment.TAG
+                    )
+        }
+    }
+
+    fun scanCompleteOpenDialogSuccess(type: String) {
+        activity?.supportFragmentManager?.let { supportFragmentManager ->
+            SuccessDialogFragment.newInstance(type)
+                    .show(
+                            supportFragmentManager,
+                            SuccessDialogFragment.TAG
+                    )
+        } ?: run {
+            scanCompleteNotOpenDialogSuccess()
+        }
+    }
+
+    fun scanCompleteNotOpenDialogSuccess() {
+        activity?.setResult(
+                Activity.RESULT_OK,
+                Intent(activity, CheckInTEL::class.java).putExtras(
+                        Bundle().apply {
+                            this.putString(CheckInTEL.KEY_RESULT_CHECK_IN_TEL, "success")
+                        }
+                ))
+        activity?.finish()
+    }
+
+    fun scanErrorBadRequest() {
+        activity?.supportFragmentManager?.also { supportFragmentManager ->
+            OldQrDialogFragment().show(
+                    supportFragmentManager,
+                    OldQrDialogFragment.TAG
+            )
+        }
+        errorScan()
+    }
+
+    fun errorScan() {
+        showToastMessage("ไม่สามารถสแกนเพื่อระบุตำแหน่งได้")
+    }
+
+    fun showToastMessage(message: String?) {
+        Toast.makeText(
+                context,
+                message,
+                Toast.LENGTH_LONG
+        ).show()
     }
 }

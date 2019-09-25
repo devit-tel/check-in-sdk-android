@@ -2,7 +2,6 @@ package com.trueelogistics.checkin.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -13,8 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.location.LocationServices
 import com.trueelogistics.checkin.R
+import com.trueelogistics.checkin.activity.BaseDialogProgress
 import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInErrorType
@@ -39,6 +38,14 @@ class ManualCheckInFragment : Fragment() {
 
     private val checkInResponse = CheckInRepository.instance
     private var compositeDisposable = CompositeDisposable()
+    private var baseDialogProcess: BaseDialogProgress? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.also {
+            baseDialogProcess = BaseDialogProgress(it)
+        }
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -76,21 +83,16 @@ class ManualCheckInFragment : Fragment() {
     }
 
     private fun checkLocation(type: String, hub_id: String) {
-
-        val loadingDialog = ProgressDialog.show(
-                context,
-                "$type Processing",
-                "please wait..."
-        )
-
         activity?.let { activity ->
             if (ContextCompat.checkSelfPermission(
                             activity, Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                     == PackageManager.PERMISSION_GRANTED
             ) {
+                baseDialogProcess?.show()
                 CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
                     override fun onLocationUpdate(location: Location) {
+                        baseDialogProcess?.dismiss()
                         if (!location.isFromMockProvider) {
                             postCheckIn(location, type, hub_id)
                         } else {
@@ -99,10 +101,12 @@ class ManualCheckInFragment : Fragment() {
                     }
 
                     override fun onLocationTimeout() {
+                        baseDialogProcess?.dismiss()
                         showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                     }
 
                     override fun onLocationError() {
+                        baseDialogProcess?.dismiss()
                         showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                     }
                 })
@@ -113,21 +117,15 @@ class ManualCheckInFragment : Fragment() {
     }
 
     fun postCheckIn(location: Location, type: String, hubID: String) {
-
-        val loadingDialog = ProgressDialog.show(
-                context,
-                "$type Processing",
-                "please wait..."
-        )
-
+        baseDialogProcess?.show()
         checkInResponse.postCheckIn(
-                arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
-                type, "",
-                hubID,
-                location.latitude.toString(),
-                location.longitude.toString()
+                type = type,
+                qrcodeUniqueKey = null,
+                locationId = hubID,
+                latitude = location.latitude.toString(),
+                longitude = location.longitude.toString()
         ).subscribe({
-            loadingDialog?.dismiss()
+            baseDialogProcess?.dismiss()
             when {
                 it.code() == 200 -> {
                     scanCompleteOpenDialogSuccess()
@@ -141,7 +139,7 @@ class ManualCheckInFragment : Fragment() {
             }
         }, {
             // error
-            loadingDialog?.dismiss()
+            baseDialogProcess?.dismiss()
             errorScan()
         }).addTo(compositeDisposable)
     }
