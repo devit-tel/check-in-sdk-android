@@ -165,7 +165,7 @@ class CheckInTEL {
                 it.body()?.let { historyTodayModel ->
                     getCheckOverTime(historyTodayModel, typeCallback)
                 } ?: run {
-                    typeCallback.onFailure("Data empty")
+                    typeCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                 }
             } else {
                 typeCallback.onFailure(it.message())
@@ -212,7 +212,7 @@ class CheckInTEL {
                         }
                     }
                 } ?: run {
-                    typeCallback.onFailure("Data empty")
+                    typeCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)
                 }
             } else {
                 typeCallback.onFailure(it.message())
@@ -227,7 +227,7 @@ class CheckInTEL {
         repository.getLastCheckInHistory().subscribe({
             if (it.code() == 200) {
                 it.body()?.data?.let { historyList ->
-                    if (historyList.isNullOrEmpty()) {
+                    if (!historyList.isNullOrEmpty()) {
                         arrayListGenericCallback.onResponse(historyList)
                     } else {
                         arrayListGenericCallback.onFailure(CheckInErrorType.DATA_EMPTY_ERROR.message)

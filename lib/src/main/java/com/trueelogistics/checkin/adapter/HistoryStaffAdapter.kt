@@ -33,7 +33,7 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val time = view.timeCheckIn
             val typeScan = view.type_scan
             when (val eventType = items[position].eventType ?: "old") {
-                CheckInTELType.CheckIn.value ->{
+                CheckInTELType.CheckIn.value -> {
                     view.iconTypeCheckIn.setImageResource(R.drawable.ic_check_in)
                     type.text = view.context.getString(R.string.full_checkin_text)
                 }
@@ -63,7 +63,10 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     view.context.getString(R.string.auto_text)
                 }
                 else -> {
-                    items[position].checkinType.toString()
+                    if (items[position].checkinType.isNullOrEmpty())
+                        ""
+                    else
+                        items[position].checkinType.toString()
                 }
             }
         }

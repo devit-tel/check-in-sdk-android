@@ -6,6 +6,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.trueelogistics.checkin.R
 import com.trueelogistics.checkin.adapter.HistoryStaffAdapter
@@ -28,7 +30,6 @@ class MainScanQrActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_scan_qr)
         bindingData()
-        checkButton()
         getHistoryToday()
     }
 
@@ -69,10 +70,16 @@ class MainScanQrActivity : AppCompatActivity() {
                 adapter.items.addAll(dataModel ?: arrayListOf())
                 adapter.notifyDataSetChanged()
                 historyRecycle.scrollToPosition((dataModel?.size)?.minus(1) ?: 0)
+                if (adapter.items.isEmpty()) {
+                    showEmptyData()
+                } else {
+                    hideEmptyData()
+                }
             }
 
             override fun onFailure(message: String?) {
                 showToastMessage(message)
+                hideEmptyData()
             }
         })
     }
@@ -210,6 +217,14 @@ class MainScanQrActivity : AppCompatActivity() {
                 message
                 , Toast.LENGTH_LONG
         ).show()
+    }
+
+    fun showEmptyData() {
+        picCheckIn.visibility = VISIBLE
+    }
+
+    fun hideEmptyData() {
+        picCheckIn.visibility = GONE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
