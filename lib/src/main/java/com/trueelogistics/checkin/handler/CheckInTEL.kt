@@ -203,19 +203,19 @@ class CheckInTEL {
                             typeCallback.onResponse(lastDatePick.eventType ?: "", true)
                         } else {
                             if (checkOverTimeModel?.data == true) {
-                                typeCallback.onResponse(CheckInTELType.CheckOut.value, false)
+                                typeCallback.onResponse(CheckInTELType.CheckOutOverTime.value, false)
                             } else {
                                 typeCallback.onResponse(
-                                    CheckInTELType.CheckOutOverTime.value,
+                                    CheckInTELType.CheckOut.value,
                                     false
                                 )
                             }
                         }
                     } else {
                         if (checkOverTimeModel?.data == true) {
-                            typeCallback.onResponse(CheckInTELType.CheckOut.value, false)
-                        } else {
                             typeCallback.onResponse(CheckInTELType.CheckOutOverTime.value, false)
+                        } else {
+                            typeCallback.onResponse(CheckInTELType.CheckOut.value, false)
                         }
                     }
                 } else {
