@@ -34,7 +34,7 @@ class CheckLocationHandler {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult?.lastLocation?.also { location ->
                 if (isRequestLocation) {
-                    checkInLocationListener?.onLocationUpdate(location)
+                    updateLocation(location)
                 }
             }
         }
@@ -53,12 +53,12 @@ class CheckLocationHandler {
         Handler().postDelayed({
             if (!isResponseLocation) {
                 isRequestLocation = false
-                isRequestLocation = false
+                isResponseLocation = false
 
                 this.checkInLocationListener?.onLocationTimeout()
             } else {
                 isRequestLocation = false
-                isRequestLocation = false
+                isResponseLocation = false
             }
         }, 10000)
         googleApiClient?.connect()
@@ -118,5 +118,12 @@ class CheckLocationHandler {
                 }
             }
         }
+    }
+
+    fun updateLocation(location: Location) {
+        isResponseLocation = true
+        isRequestLocation = false
+        client?.removeLocationUpdates(callbackLocation)
+        checkInLocationListener?.onLocationUpdate(location)
     }
 }
