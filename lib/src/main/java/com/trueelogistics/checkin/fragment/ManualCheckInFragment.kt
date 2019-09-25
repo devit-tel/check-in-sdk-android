@@ -84,8 +84,6 @@ class ManualCheckInFragment : Fragment() {
         )
 
         activity?.let { activity ->
-            val fusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(activity)
             if (ContextCompat.checkSelfPermission(
                             activity, Manifest.permission.ACCESS_COARSE_LOCATION
                     )

@@ -45,7 +45,6 @@ class SuccessDialogFragment : DialogFragment() {
         isCancelable = false
         confirm.setOnClickListener {
             onResume()
-            ScanQrFragment.isScan = true
             activity?.setResult(Activity.RESULT_OK,
                     Intent(activity, CheckInTEL::class.java).putExtras(
                             Bundle().apply {

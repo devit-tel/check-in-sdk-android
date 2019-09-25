@@ -50,7 +50,8 @@ class ScanQrActivity : AppCompatActivity() {
         KotlinPermissions.with(this)
                 .permissions(
                         Manifest.permission.CAMERA,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
                 ).onAccepted {
                     replaceFragmentInActivity(
                             R.id.fragment,

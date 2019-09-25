@@ -32,7 +32,8 @@ class ShakeActivity : AppCompatActivity() {
         ActivityCompat.requestPermissions(this, permissions, 0)
         KotlinPermissions.with(this)
                 .permissions(
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
                 ).onAccepted {
                     supportFragmentManager.beginTransaction()
                             .add(R.id.fragment_shake, ShakeFindingFragment()).commit()

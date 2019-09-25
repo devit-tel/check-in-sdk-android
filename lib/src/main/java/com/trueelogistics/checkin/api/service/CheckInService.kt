@@ -30,6 +30,7 @@ interface CheckInService {
         @Query("limit") limit: Int? = null
     ): Observable<Response<HistoryRootModel>>
 
+    @POST("/check-in/v1/history/create")
     @FormUrlEncoded
     fun postCheckIn(
         @Field("type") type: String,

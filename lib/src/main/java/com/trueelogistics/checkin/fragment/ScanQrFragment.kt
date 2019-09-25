@@ -31,7 +31,6 @@ class ScanQrFragment : Fragment() {
 
     companion object {
         const val TAG = "ScanQrFragment"
-        var isScan = true
         var cancelFirstCheckIn = false
         fun newInstance(bundle: Bundle? = Bundle()): ScanQrFragment {
             val fragment = ScanQrFragment()
@@ -42,6 +41,7 @@ class ScanQrFragment : Fragment() {
 
     private val checkInResponse = CheckInRepository.instance
     private var compositeDisposable = CompositeDisposable()
+    private var isScan = true
 
     private val callback = object : BarcodeCallback {
         override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
@@ -68,6 +68,7 @@ class ScanQrFragment : Fragment() {
     }
 
     fun bindingData() {
+        isScan = true
         setDisableBackPage()
         type_check_in.text = when (arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString()) {
             CheckInTELType.CheckIn.value -> {
@@ -112,19 +113,23 @@ class ScanQrFragment : Fragment() {
                             if (!location.isFromMockProvider) {
                                 postCheckIn(result, location.latitude, location.longitude)
                             } else {
+                                isScan = true
                                 openDialogMockLocation()
                             }
                         }
 
                         override fun onLocationTimeout() {
+                            isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                         }
 
                         override fun onLocationError() {
+                            isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                         }
                     })
                 } else {
+                    isScan = true
                     showToastMessage("กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง")
                     activity.finishAffinity()
                 }
@@ -164,6 +169,7 @@ class ScanQrFragment : Fragment() {
                 }
                 it.code() == 400 -> {
                     scanErrorBadRequest()
+                    isScan = true
                 }
                 else -> {
                     errorScan()

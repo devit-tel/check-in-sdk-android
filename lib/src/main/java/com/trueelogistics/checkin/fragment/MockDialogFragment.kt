@@ -26,7 +26,6 @@ class MockDialogFragment : DialogFragment() {
         onPause()
         scanAgain.setOnClickListener {
             dialog?.cancel()
-            ScanQrFragment.isScan = true
             onResume()
         }
     }
