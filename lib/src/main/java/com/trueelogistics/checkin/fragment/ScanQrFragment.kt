@@ -13,8 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -24,6 +22,7 @@ import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.CheckLocationHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_scan_qrcode.*
@@ -102,21 +101,29 @@ class ScanQrFragment : Fragment() {
     private fun checkLocation(result: String) {
         if (isScan) {
             isScan = false
-            var fusedLocationClient: FusedLocationProviderClient
             activity?.let { activity ->
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
                 if (ContextCompat.checkSelfPermission(
                                 activity,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    fusedLocationClient.lastLocation?.addOnSuccessListener { location: Location? ->
-                        if (location?.isFromMockProvider == false) {
-                            postCheckIn(result, location.latitude, location.longitude)
-                        } else {
-                            openDialogMockLocation()
+                    CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
+                        override fun onLocationUpdate(location: Location) {
+                            if (!location.isFromMockProvider) {
+                                postCheckIn(result, location.latitude, location.longitude)
+                            } else {
+                                openDialogMockLocation()
+                            }
                         }
-                    }
+
+                        override fun onLocationTimeout() {
+                            showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                        }
+
+                        override fun onLocationError() {
+                            showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                        }
+                    })
                 } else {
                     showToastMessage("กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง")
                     activity.finishAffinity()

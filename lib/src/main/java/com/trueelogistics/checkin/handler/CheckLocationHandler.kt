@@ -10,14 +10,13 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
-import com.trueelogistics.checkin.api.repository.CheckInRepository
 
 class CheckLocationHandler {
 
     companion object {
         const val REQUEST_CHECK_SETTINGS = 545
         @get:Synchronized
-        val instance = CheckInRepository()
+        val instance = CheckLocationHandler()
     }
 
     interface CheckInLocationListener {

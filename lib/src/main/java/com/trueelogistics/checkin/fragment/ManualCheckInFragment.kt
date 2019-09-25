@@ -20,6 +20,7 @@ import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInErrorType
 import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
+import com.trueelogistics.checkin.handler.CheckLocationHandler
 import com.trueelogistics.checkin.model.HubInDataModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -90,15 +91,23 @@ class ManualCheckInFragment : Fragment() {
                     )
                     == PackageManager.PERMISSION_GRANTED
             ) {
-                fusedLocationClient.lastLocation
-                        ?.addOnSuccessListener { location: Location? ->
-                            loadingDialog.dismiss()
-                            if (location?.isFromMockProvider == false) {
-                                postCheckIn(location, type, hub_id)
-                            } else {
-                                openDialogMockLocation()
-                            }
+                CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
+                    override fun onLocationUpdate(location: Location) {
+                        if (!location.isFromMockProvider) {
+                            postCheckIn(location, type, hub_id)
+                        } else {
+                            openDialogMockLocation()
                         }
+                    }
+
+                    override fun onLocationTimeout() {
+                        showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                    }
+
+                    override fun onLocationError() {
+                        showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                    }
+                })
             } else {
                 showToastMessage(CheckInErrorType.PERMISSION_DENIED_ERROR.message)
             }
