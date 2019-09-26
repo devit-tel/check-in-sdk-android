@@ -133,6 +133,7 @@ class MainScanQrActivity : AppCompatActivity() {
     }
 
     fun showLastCheckOut() {
+        enableButtonCheckIn()
         checkBetBtn.visibility = GONE
         checkOutBtn.visibility = GONE
         disableButtonCheckInBetween()
