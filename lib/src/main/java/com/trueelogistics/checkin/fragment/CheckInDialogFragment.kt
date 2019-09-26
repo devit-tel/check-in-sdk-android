@@ -21,6 +21,7 @@ import com.trueelogistics.checkin.enums.CheckInTELType
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckLocationHandler
 import com.trueelogistics.checkin.model.GenerateItemHubModel
+import com.trueelogistics.checkin.enums.HistoryStaffType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_checkin_dialog.*
@@ -195,6 +196,7 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
                 type = type,
                 qrcodeUniqueKey = null,
                 locationId = hubID,
+                checkinType = HistoryStaffType.MANUAL.name,
                 latitude = location.latitude.toString(),
                 longitude = location.longitude.toString()
         ).subscribe({

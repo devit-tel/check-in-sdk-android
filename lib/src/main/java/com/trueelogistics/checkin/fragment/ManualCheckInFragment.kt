@@ -22,6 +22,7 @@ import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckLocationHandler
 import com.trueelogistics.checkin.model.HubInDataModel
 import io.reactivex.disposables.CompositeDisposable
+import com.trueelogistics.checkin.enums.HistoryStaffType
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_manaul_checkin.*
 
@@ -122,6 +123,7 @@ class ManualCheckInFragment : Fragment() {
                 type = type,
                 qrcodeUniqueKey = null,
                 locationId = hubID,
+                checkinType = HistoryStaffType.MANUAL.name,
                 latitude = location.latitude.toString(),
                 longitude = location.longitude.toString()
         ).subscribe({

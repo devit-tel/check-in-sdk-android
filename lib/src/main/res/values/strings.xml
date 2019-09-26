@@ -53,4 +53,7 @@
 	<string name="submit_text"> ตกลง </string>
 	<string name="cancel_text">ยกเลิก</string>
 	<string name="try_again"> ลองอีกครั้ง </string>
+	<string name="statusManual">Manual</string>
+	<string name="statusAuto">Auto</string>
+	<string name="statusNormal">Normal</string>
 </resources>

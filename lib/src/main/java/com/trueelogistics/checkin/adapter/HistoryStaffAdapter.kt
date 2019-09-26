@@ -54,17 +54,17 @@ class HistoryStaffAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             time.text = items[position].updatedAt?.formatISO("HH:mm")
             typeScan.text = when (items[position].checkinType) {
                 "NORMAL" -> {
-                    view.context.getString(R.string.camera_text)
+                    view.context.getString(R.string.statusNormal)
                 }
                 "MANUAL" -> {
-                    view.context.getString(R.string.manual_text)
+                    view.context.getString(R.string.statusManual)
                 }
                 "AUTO" -> {
-                    view.context.getString(R.string.auto_text)
+                    view.context.getString(R.string.statusAuto)
                 }
                 else -> {
                     if (items[position].checkinType.isNullOrEmpty())
-                        ""
+                        view.context.getString(R.string.statusManual)
                     else
                         items[position].checkinType.toString()
                 }
