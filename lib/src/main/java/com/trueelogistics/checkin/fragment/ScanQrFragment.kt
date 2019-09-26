@@ -21,6 +21,7 @@ import com.trueelogistics.checkin.activity.BaseDialogProgress
 import com.trueelogistics.checkin.activity.ScanQrActivity
 import com.trueelogistics.checkin.api.repository.CheckInRepository
 import com.trueelogistics.checkin.enums.CheckInTELType
+import com.trueelogistics.checkin.enums.HistoryStaffType
 import com.trueelogistics.checkin.extensions.replaceFragmentInActivity
 import com.trueelogistics.checkin.handler.CheckInTEL
 import com.trueelogistics.checkin.handler.CheckLocationHandler
@@ -170,6 +171,7 @@ class ScanQrFragment : Fragment() {
                 type = arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
                 qrcodeUniqueKey = result,
                 locationId = null,
+                checkinType = HistoryStaffType.NORMAL.name,
                 latitude = latitude.toString(),
                 longitude = longitude.toString()
         ).subscribe({
