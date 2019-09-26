@@ -12,6 +12,36 @@ class MockDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG = "MockDialogFragment"
+        private var onPositiveDialogListener: MockDialogListener? = null
+        private var isCancelable: Boolean? = true
+        fun newInstance(): MockDialogFragment {
+            val dialogFragment = MockDialogFragment()
+            dialogFragment.isCancelable = isCancelable ?: true
+            dialogFragment.setOnPositiveDialogListener(onPositiveDialogListener)
+            return dialogFragment
+        }
+
+        fun setOnPositiveDialogListener(onPositiveDialogListener: MockDialogListener? = null) =
+                MockDialogFragment.apply {
+                    this.onPositiveDialogListener = onPositiveDialogListener
+                }
+
+        fun setCancelable(isCancelable: Boolean? = true) =
+                MockDialogFragment.apply {
+                    this.isCancelable = isCancelable
+                }
+
+        fun build() = newInstance()
+    }
+
+    private var onPositiveDialogListener: MockDialogListener? = null
+
+    interface MockDialogListener {
+        fun onPositive(dialog: MockDialogFragment?)
+    }
+
+    fun setOnPositiveDialogListener(onPositiveDialogListener: MockDialogListener? = null) {
+        this.onPositiveDialogListener = onPositiveDialogListener
     }
 
     override fun onCreateView(
@@ -25,8 +55,7 @@ class MockDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         onPause()
         scanAgain.setOnClickListener {
-            dialog?.cancel()
-            onResume()
+            onPositiveDialogListener?.onPositive(this)
         }
     }
 

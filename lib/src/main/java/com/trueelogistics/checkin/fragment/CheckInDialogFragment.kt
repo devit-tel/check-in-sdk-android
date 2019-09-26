@@ -219,7 +219,14 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
 
     fun openDialogMockLocation() {
         activity?.supportFragmentManager?.also {
-            MockDialogFragment()
+            MockDialogFragment
+                    .setOnPositiveDialogListener(object : MockDialogFragment.MockDialogListener {
+                        override fun onPositive(dialog: MockDialogFragment?) {
+                            dialog?.dismiss()
+                        }
+                    })
+                    .setCancelable(false)
+                    .build()
                     .show(
                             it,
                             MockDialogFragment.TAG
@@ -251,13 +258,18 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
     }
 
     fun scanErrorBadRequest() {
-        activity?.supportFragmentManager?.also { supportFragmentManager ->
-            OldQrDialogFragment().show(
-                    supportFragmentManager,
-                    OldQrDialogFragment.TAG
-            )
+        activity?.supportFragmentManager?.let {
+            OldQrDialogFragment
+                    .setOnPositiveDialogListener(
+                            object : OldQrDialogFragment.OldQrDialogListener {
+                                override fun onPositive(dialog: OldQrDialogFragment?) {
+                                    dialog?.dismiss()
+                                }
+                            }
+                    )
+                    .setCancelable(false)
+                    .build().show(it, OldQrDialogFragment.TAG)
         }
-        errorScan()
     }
 
     fun errorScan() {

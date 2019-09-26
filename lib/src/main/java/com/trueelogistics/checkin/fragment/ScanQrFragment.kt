@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class ScanQrFragment : Fragment() {
 
     companion object {
         const val TAG = "ScanQrFragment"
+        const val REQUESTCODE_DIALOG = 352
         var cancelFirstCheckIn = false
         fun newInstance(bundle: Bundle? = Bundle()): ScanQrFragment {
             val fragment = ScanQrFragment()
@@ -43,6 +45,7 @@ class ScanQrFragment : Fragment() {
     private var compositeDisposable = CompositeDisposable()
     private var isScan = true
     private var baseDialogProcess: BaseDialogProgress? = null
+    private var isShowDialog = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,25 +126,23 @@ class ScanQrFragment : Fragment() {
                             if (!location.isFromMockProvider) {
                                 postCheckIn(result, location.latitude, location.longitude)
                             } else {
-                                isScan = true
                                 openDialogMockLocation()
                             }
                         }
 
                         override fun onLocationTimeout() {
                             baseDialogProcess?.dismiss()
-                            isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                            waitEnableScan()
                         }
 
                         override fun onLocationError() {
                             baseDialogProcess?.dismiss()
-                            isScan = true
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                            waitEnableScan()
                         }
                     })
                 } else {
-                    isScan = true
                     showToastMessage("กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง")
                     activity.finishAffinity()
                 }
@@ -152,6 +153,11 @@ class ScanQrFragment : Fragment() {
     override fun onResume() {
         scanner_fragment?.resume()
         super.onResume()
+    }
+
+    override fun onPause() {
+        scanner_fragment?.pause()
+        super.onPause()
     }
 
     fun postCheckIn(
@@ -175,24 +181,18 @@ class ScanQrFragment : Fragment() {
                 }
                 it.code() == 400 -> {
                     scanErrorBadRequest()
-                    isScan = true
                 }
                 else -> {
                     errorScan()
-                    isScan = true
+                    waitEnableScan()
                 }
             }
         }, {
             // error
             baseDialogProcess?.dismiss()
             errorScan()
-            isScan = true
+            waitEnableScan()
         }).addTo(compositeDisposable)
-    }
-
-    override fun onPause() {
-        scanner_fragment?.pause()
-        super.onPause()
     }
 
     fun openScanManual() {
@@ -206,10 +206,19 @@ class ScanQrFragment : Fragment() {
 
     fun openDialogMockLocation() {
         activity?.supportFragmentManager?.also {
-            MockDialogFragment().show(
-                    it,
-                    MockDialogFragment.TAG
-            )
+            MockDialogFragment
+                    .setOnPositiveDialogListener(object : MockDialogFragment.MockDialogListener {
+                        override fun onPositive(dialog: MockDialogFragment?) {
+                            dialog?.dismiss()
+                            waitEnableScan()
+                        }
+                    })
+                    .setCancelable(false)
+                    .build()
+                    .show(
+                            it,
+                            MockDialogFragment.TAG
+                    )
         }
     }
 
@@ -235,6 +244,7 @@ class ScanQrFragment : Fragment() {
     }
 
     fun scanCompleteOpenDialogSuccess() {
+        isShowDialog = true
         activity?.supportFragmentManager?.let { supportFragmentManager ->
             SuccessDialogFragment.newInstance(arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString())
                     .show(
@@ -247,6 +257,7 @@ class ScanQrFragment : Fragment() {
     }
 
     fun scanCompleteNotOpenDialogSuccess() {
+        isShowDialog = true
         activity?.setResult(
                 Activity.RESULT_OK,
                 Intent(activity, CheckInTEL::class.java).putExtras(
@@ -258,17 +269,29 @@ class ScanQrFragment : Fragment() {
     }
 
     fun scanErrorBadRequest() {
-        activity?.supportFragmentManager?.also { supportFragmentManager ->
-            OldQrDialogFragment().show(
-                    supportFragmentManager,
-                    OldQrDialogFragment.TAG
-            )
+        activity?.supportFragmentManager?.let {
+            OldQrDialogFragment
+                    .setOnPositiveDialogListener(
+                            object : OldQrDialogFragment.OldQrDialogListener {
+                                override fun onPositive(dialog: OldQrDialogFragment?) {
+                                    dialog?.dismiss()
+                                    waitEnableScan()
+                                }
+                            }
+                    )
+                    .setCancelable(false)
+                    .build().show(it, OldQrDialogFragment.TAG)
         }
-        errorScan()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         compositeDisposable.clear()
+    }
+
+    fun waitEnableScan() {
+        Handler().postDelayed({
+            isScan = true
+        }, 3000)
     }
 }

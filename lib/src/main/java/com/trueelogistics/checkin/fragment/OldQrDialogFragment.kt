@@ -8,10 +8,41 @@ import android.view.ViewGroup
 import com.trueelogistics.checkin.R
 import kotlinx.android.synthetic.main.fragment_old_qr_dialog.*
 
+
 class OldQrDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG = "OldQrDialogFragment"
+        private var onPositiveDialogListener: OldQrDialogListener? = null
+        private var isCancelable: Boolean? = true
+        fun newInstance(): OldQrDialogFragment {
+            val dialogFragment = OldQrDialogFragment()
+            dialogFragment.isCancelable = isCancelable ?: true
+            dialogFragment.setOnPositiveDialogListener(onPositiveDialogListener)
+            return dialogFragment
+        }
+
+        fun setOnPositiveDialogListener(onPositiveDialogListener: OldQrDialogListener? = null) =
+                OldQrDialogFragment.apply {
+                    this.onPositiveDialogListener = onPositiveDialogListener
+                }
+
+        fun setCancelable(isCancelable: Boolean? = true) =
+                OldQrDialogFragment.apply {
+                    this.isCancelable = isCancelable
+                }
+
+        fun build() = newInstance()
+    }
+
+    private var onPositiveDialogListener: OldQrDialogListener? = null
+
+    interface OldQrDialogListener {
+        fun onPositive(dialog: OldQrDialogFragment?)
+    }
+
+    fun setOnPositiveDialogListener(onPositiveDialogListener: OldQrDialogListener? = null) {
+        this.onPositiveDialogListener = onPositiveDialogListener
     }
 
     override fun onCreateView(
@@ -23,10 +54,8 @@ class OldQrDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onPause()
         scanAgain.setOnClickListener {
-            dialog?.cancel()
-            onResume()
+            onPositiveDialogListener?.onPositive(this)
         }
     }
 

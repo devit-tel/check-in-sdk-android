@@ -30,6 +30,7 @@ class CheckLocationHandler {
     private var isResponseLocation = false
     private var googleApiClient: GoogleApiClient? = null
     private var client: FusedLocationProviderClient? = null
+    var handler = Handler()
     private val callbackLocation = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult?.lastLocation?.also { location ->
@@ -38,6 +39,9 @@ class CheckLocationHandler {
                 }
             }
         }
+    }
+    private val callbackTimeOut = Runnable {
+        this.checkInLocationListener?.onLocationTimeout()
     }
 
     fun requestLocation(activity: Activity, checkInLocationListener: CheckInLocationListener) {
@@ -50,17 +54,12 @@ class CheckLocationHandler {
                     .build()
         }
         isRequestLocation = true
-        Handler().postDelayed({
-            if (!isResponseLocation) {
-                isRequestLocation = false
-                isResponseLocation = false
-
-                this.checkInLocationListener?.onLocationTimeout()
-            } else {
-                isRequestLocation = false
-                isResponseLocation = false
-            }
-        }, 10000)
+        try {
+            handler.removeCallbacks(callbackTimeOut)
+            handler.postDelayed(callbackTimeOut, 10000)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         googleApiClient?.connect()
         checkLocationSettingsRequest(activity)
     }
@@ -121,6 +120,11 @@ class CheckLocationHandler {
     }
 
     fun updateLocation(location: Location) {
+        try {
+            handler.removeCallbacks(callbackTimeOut)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         isResponseLocation = true
         isRequestLocation = false
         client?.removeLocationUpdates(callbackLocation)
