@@ -167,11 +167,11 @@ class ScanQrFragment : Fragment() {
     ) {
         baseDialogProcess?.show()
         checkInResponse.postCheckIn(
-                arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
-                result,
-                null,
-                latitude.toString(),
-                longitude.toString()
+                type = arguments?.getString(ScanQrActivity.KEY_TYPE_SCAN_QR).toString(),
+                qrcodeUniqueKey = result,
+                locationId = null,
+                latitude = latitude.toString(),
+                longitude = longitude.toString()
         ).subscribe({
             baseDialogProcess?.dismiss()
             when {
