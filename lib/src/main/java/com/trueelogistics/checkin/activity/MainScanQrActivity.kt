@@ -191,7 +191,8 @@ class MainScanQrActivity : AppCompatActivity() {
                 )
                 intent.putExtras(
                     Bundle().apply {
-                    putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                    putString(
+                        CheckInTEL.KEY_ERROR_CHECK_IN_TEL
                         , "getLastHistory.onFail : $message")
                 })
                 CheckInTEL.checkInTEL?.onActivityResult(

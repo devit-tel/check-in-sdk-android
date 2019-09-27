@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_near_by_hub.*
 
 class NearByHubFragment : Fragment(), OnClickItemCallback {
     private var adapter = GenerateHubAdapter(this)
-
+    private var nearByDialog: CheckInDialogFragment? = null //
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +35,7 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        nearByDialog = CheckInDialogFragment()
 
         back_page.setOnClickListener {
             activity?.onBackPressed()
@@ -77,8 +78,10 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
                 val intent = Intent(activity, CheckInTEL::class.java)
                 intent.putExtras(
                     Bundle().apply {
-                        putString(CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " get nameHub onFailure : $message ")
+                        putString(
+                            CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                            , " get nameHub onFailure : $message "
+                        )
                     }
                 )
                 CheckInTEL.checkInTEL?.onActivityResult(
@@ -113,37 +116,40 @@ class NearByHubFragment : Fragment(), OnClickItemCallback {
     }
 
     override fun onClickItem(dataModel: GenerateItemHubModel) {
-        val nearByDialog = CheckInDialogFragment()
-        nearByDialog.item = dataModel
-        CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
-            override fun onResponse(type: String?, today: Boolean) {
-                val newType = when (type) {
-                    CheckInTELType.CheckOut.value, CheckInTELType.CheckOutOverTime.value -> {
-                        CheckInTELType.CheckIn.value
+        if (nearByDialog?.isAdded == false) {
+            nearByDialog?.item = dataModel
+            CheckInTEL.checkInTEL?.getLastCheckInHistory(object : TypeCallback {
+                override fun onResponse(type: String?, today: Boolean) {
+                    val newType = when (type) {
+                        CheckInTELType.CheckOut.value, CheckInTELType.CheckOutOverTime.value -> {
+                            CheckInTELType.CheckIn.value
+                        }
+                        else -> {
+                            CheckInTELType.CheckBetween.value
+                        }
                     }
-                    else -> {
-                        CheckInTELType.CheckBetween.value
-                    }
+                    nearByDialog?.checkinType = "NEARBY"
+                    nearByDialog?.typeFromLastCheckIn = newType
+                    nearByDialog?.show(activity?.supportFragmentManager, "show")
                 }
-                nearByDialog.checkinType = "NEARBY"
-                nearByDialog.typeFromLastCheckIn = newType
-                nearByDialog.show(activity?.supportFragmentManager, "show")
-            }
 
-            override fun onFailure(message: String?) {
-                val intent = Intent(activity, CheckInTEL::class.java)
-                intent.putExtras(
-                    Bundle().apply {
-                        putString( CheckInTEL.KEY_ERROR_CHECK_IN_TEL
-                            , " getLastCheck.onFail : $message ")
-                    }
-                )
-                CheckInTEL.checkInTEL?.onActivityResult(
-                    CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
-                    Activity.BIND_NOT_FOREGROUND, intent
-                )
-            }
+                override fun onFailure(message: String?) {
+                    val intent = Intent(activity, CheckInTEL::class.java)
+                    intent.putExtras(
+                        Bundle().apply {
+                            putString(
+                                CheckInTEL.KEY_ERROR_CHECK_IN_TEL
+                                , "getLastCheck.onFail : $message "
+                            )
+                        }
+                    )
+                    CheckInTEL.checkInTEL?.onActivityResult(
+                        CheckInTEL.KEY_REQUEST_CODE_CHECK_IN_TEL,
+                        Activity.RESULT_OK, intent
+                    )
+                }
 
-        })
+            })
+        }
     }
 }
