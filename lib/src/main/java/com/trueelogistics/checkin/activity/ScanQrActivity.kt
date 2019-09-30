@@ -77,7 +77,7 @@ class ScanQrActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!intent.getBooleanExtra(KEY_DISABLE_BACK, false)) {
+        if (!intent.getBooleanExtra(KEY_DISABLE_BACK, false) || supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         }
     }
