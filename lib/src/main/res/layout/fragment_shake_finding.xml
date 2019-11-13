@@ -7,7 +7,7 @@
 		android:layout_height="match_parent"
 		tools:context=".fragment.ShakeFindingFragment">
 
-	<android.support.design.widget.CollapsingToolbarLayout
+	<com.google.android.material.appbar.CollapsingToolbarLayout
 			android:layout_height="?android:attr/actionBarSize"
 			android:layout_width="match_parent">
 		<ImageView
@@ -18,7 +18,7 @@
 				android:layout_height="match_parent"
 				android:layout_width="wrap_content"
 				tools:ignore="ContentDescription"/>
-	</android.support.design.widget.CollapsingToolbarLayout>
+	</com.google.android.material.appbar.CollapsingToolbarLayout>
 	<FrameLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
