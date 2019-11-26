@@ -8,7 +8,7 @@
 	<string name="refresh">Refresh</string>
 	<string name="time">time</string>
 
-	<string name="scan_check_text">แสกนเพื่อเช็คอิน</string>
+	<string name="scan_check_text">สแกนเพื่อเช็คอิน</string>
 	<string name="problem_press_text">หากการแสกนมีปัญหา กรุณากด</string>
 	<string name="self_check_text">ลงชื่อด้วยตัวเอง</string>
 
