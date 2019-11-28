@@ -9,7 +9,7 @@
 	<string name="time">time</string>
 
 	<string name="scan_check_text">สแกนเพื่อเช็คอิน</string>
-	<string name="problem_press_text">หากการแสกนมีปัญหา กรุณากด</string>
+	<string name="problem_press_text">หากการสแกนมีปัญหา กรุณากด</string>
 	<string name="self_check_text">ลงชื่อด้วยตัวเอง</string>
 
 	<string name="confirm_text">ยืนยัน</string>
@@ -32,7 +32,7 @@
 	<string name="littleMinute">น.</string>
 	<string name="qrUsed">QR code นี้ถูกใช้ไปแล้ว</string>
 	<string name="notWorking">ไม่สามารถใช้งานได้</string>
-	<string name="scanAgain">แสกนอีกครั้ง</string>
+	<string name="scanAgain">สแกนอีกครั้ง</string>
 	<string name="historyCheckIn">ประวัติการเข้างาน</string>
 	<string name="dateFormate">DD-MMMM-YYYY</string>
 	<string name="example_user_name">Usernamme surname</string>
