@@ -85,11 +85,8 @@ class ManualCheckInFragment : Fragment() {
 
     private fun checkLocation(type: String, hub_id: String) {
         activity?.let { activity ->
-            if (ContextCompat.checkSelfPermission(
-                            activity, Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                    == PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
                 baseDialogProcess?.show()
                 CheckLocationHandler.instance.requestLocation(activity, object : CheckLocationHandler.CheckInLocationListener {
                     override fun onLocationUpdate(location: Location) {
@@ -109,6 +106,10 @@ class ManualCheckInFragment : Fragment() {
                     override fun onLocationError() {
                         baseDialogProcess?.dismiss()
                         showToastMessage("ไม่สามารถระบุตำแหน่งได้")
+                    }
+
+                    override fun dismissProgress() {
+                        baseDialogProcess?.dismiss()
                     }
                 })
             } else {

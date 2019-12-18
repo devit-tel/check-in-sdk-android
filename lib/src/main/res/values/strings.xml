@@ -56,4 +56,7 @@
 	<string name="statusManual">Manual</string>
 	<string name="statusAuto">Auto</string>
 	<string name="statusNormal">Normal</string>
+	<string name="stringDialogMessageWarningGPS">กรุณาเปิด GPS บนมือถือของคุณ</string>
+	<string name="stringDialogTitleWarning">แจ้งเตือน</string>
+	<string name="stringTurnOn">เปิด</string>
 </resources>

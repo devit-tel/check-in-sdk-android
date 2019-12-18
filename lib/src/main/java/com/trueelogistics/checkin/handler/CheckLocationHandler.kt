@@ -2,14 +2,21 @@ package com.trueelogistics.checkin.handler
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.IntentSender
 import android.location.Location
+import android.location.LocationManager
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import com.trueelogistics.checkin.R
 
 class CheckLocationHandler {
 
@@ -23,8 +30,10 @@ class CheckLocationHandler {
         fun onLocationUpdate(location: Location)
         fun onLocationTimeout()
         fun onLocationError()
+        fun dismissProgress()
     }
 
+    private var gps: AlertDialog.Builder? = null
     private var checkInLocationListener: CheckInLocationListener? = null
     private var isRequestLocation = false
     private var isResponseLocation = false
@@ -109,10 +118,16 @@ class CheckLocationHandler {
         task.addOnFailureListener { exception ->
             if (exception is ResolvableApiException) {
                 try {
-                    exception.startResolutionForResult(
-                            activity,
-                            REQUEST_CHECK_SETTINGS
-                    )
+
+                    val manager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    if (!(manager.isProviderEnabled(LocationManager.GPS_PROVIDER) || manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
+                        alertGPSDialog(activity,
+                                android.R.drawable.ic_dialog_alert,
+                                activity.getString(R.string.stringDialogTitleWarning),
+                                activity.getString(R.string.stringDialogMessageWarningGPS),
+                                R.string.stringTurnOn)
+                        this.checkInLocationListener?.dismissProgress()
+                    }
                 } catch (sendEx: IntentSender.SendIntentException) {
                 }
             }
@@ -129,5 +144,27 @@ class CheckLocationHandler {
         isRequestLocation = false
         client?.removeLocationUpdates(callbackLocation)
         checkInLocationListener?.onLocationUpdate(location)
+    }
+
+    private fun alertGPSDialog(context: Context, resIcon: Int, title: String?, message: String?, positiveButton: Int) {
+        val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (gps != null || manager.isProviderEnabled(LocationManager.GPS_PROVIDER) || manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            return
+        }
+        gps = AlertDialog.Builder(context)
+        gps?.setIcon(resIcon)
+        gps?.setTitle(title)
+        gps?.setMessage(message)
+        gps?.setCancelable(false)
+        gps?.setPositiveButton(positiveButton) { _, _ ->
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            context.startActivity(intent)
+        }
+        gps?.setOnDismissListener { dialog ->
+            dialog.dismiss()
+            gps = null
+        }
+        val dialog: AlertDialog = gps!!.create()
+        dialog.show()
     }
 }

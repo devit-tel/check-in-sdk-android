@@ -142,8 +142,13 @@ class ScanQrFragment : Fragment() {
                             showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                             waitEnableScan()
                         }
+
+                        override fun dismissProgress() {
+                            baseDialogProcess?.dismiss()
+                        }
                     })
                 } else {
+                    baseDialogProcess?.dismiss()
                     showToastMessage("กรุณาเปิดใช้สิทธิเพื่อระบุตำแหน่ง")
                     activity.finishAffinity()
                 }

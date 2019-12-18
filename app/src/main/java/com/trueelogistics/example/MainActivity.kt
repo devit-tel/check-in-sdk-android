@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindingData() {
-        CheckInTEL.userId = "8888888888888"
+        CheckInTEL.userId = "9999999999991"
         btnCheckLastHistory.setOnClickListener { historyCheckIn() }
         btnGetAllHistory.setOnClickListener { allHistoryCheckIN() }
         btnMainCheckIn.setOnClickListener { mainCheckIn() }
