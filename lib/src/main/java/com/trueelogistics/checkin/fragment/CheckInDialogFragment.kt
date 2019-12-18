@@ -169,6 +169,10 @@ class CheckInDialogFragment : BottomSheetDialogFragment() {
                         showToastMessage("ไม่สามารถระบุตำแหน่งได้")
                     }
 
+                    override fun dismissProgress() {
+                        baseDialogProcess?.dismiss()
+                    }
+
                 })
 
             } else {
