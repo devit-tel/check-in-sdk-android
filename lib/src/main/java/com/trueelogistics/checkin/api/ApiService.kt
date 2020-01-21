@@ -12,7 +12,9 @@ class ApiService {
 
         fun checkInService(
             baseUrl: String = if (CheckInTEL.environmentType == EnvironmentType.Production.value)
-                "http://api.sendit.asia"
+                //TODO use when API Production Launch
+//                "http://api.sendit.asia"
+                "http://api.staging.sendit.asia"
             else
                 "http://api.staging.sendit.asia",
             needHeader: Boolean = true,
